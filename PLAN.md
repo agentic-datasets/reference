@@ -27,6 +27,10 @@ of an execution record, not on the wording of an apology.
 
 ## M2 — Conformance suite
 
+**Now specified in [CONFORMANCE.md](CONFORMANCE.md) as AD-001 … AD-015.** M2 is
+implementing it, not designing it. AD-003 through AD-006 first: if those hold, a
+misbehaving model cannot cause a policy violation, only a bad answer.
+
 - [ ] Deterministic contract tests: policy verdicts, no LLM, no tolerance
 - [ ] Graph routing: every admission arm, parametrised
 - [ ] Negative paths — the interesting half:

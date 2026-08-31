@@ -94,13 +94,22 @@ docs/                 architecture; see docs/ARCHITECTURE.md
 - `dk-semantic-discovery-engine` — `VOLUME_SPEC`, descriptor semantics
 - `dk-agentic-datasets` — topic scratchpad, not an implementation home
 
-## Two ports, one control plane
+## Three ports, one control plane
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — LangChain / LangGraph / MCP /
   LangSmith. §1–38 transcribed; §39 truncated in the source.
 - [`docs/ARCHITECTURE-LLAMAINDEX.md`](docs/ARCHITECTURE-LLAMAINDEX.md) —
   LlamaIndex Workflows / QueryEngineTool / ObjectIndex / MCP / native
   evaluators. §1–83, complete.
+- [`docs/ARCHITECTURE-ADK.md`](docs/ARCHITECTURE-ADK.md) — Google ADK 2.0 Graph
+  Workflows / Function Tools / `McpToolset` / A2A / plugins / conformance
+  replay. §1–116. **Written from the published documentation, not from use** —
+  unlike the other two, and its status block says so.
+
+And [`CONFORMANCE.md`](CONFORMANCE.md) — **AD-001 … AD-015**, the fifteen
+assertions any implementation must satisfy in any framework. Three documents
+that agree with each other prove nothing; a suite that passes against three
+runtimes with different primitives is a result.
 
 Both are **design, not deployment**, and both say so on their first screen.
 
