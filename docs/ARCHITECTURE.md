@@ -5,7 +5,7 @@ services.**
 
 > ## Status: DRAFT ARCHITECTURE. Design, not deployment.
 >
-> Nothing described here has been built or run. This is the same discipline as
+> Nothing described here has been built or run. Same discipline as
 > `dk-job-applications/AWS-REFERENCE-DESIGNS.md`, which states it on its first
 > page for the same reason: a design argued on a page inherits none of the
 > constraints a running system would have imposed.
@@ -14,406 +14,1009 @@ services.**
 > verdict, the approval token, capability-over-generic-tools, policy-aware
 > discovery and the authorization-scoped cache key are not proposals — they
 > exist in `ok-governed-motion`, `dk-semantic-gateway-v2` and
-> `dk-nfcore-admission-gate`. This document expresses known behaviour in a
-> mainstream stack. It does not invent architecture.
+> `dk-nfcore-admission-gate`. This expresses known behaviour in a mainstream
+> stack; it does not invent architecture.
 >
-> **Import note.** Reconstructed 2026-08-31 from the source design document.
-> The source was truncated in transit partway through §19; sections from there
-> to the end — cache security invariants in full, persistence semantics,
-> deployment, security posture and the reference repository layout — are
-> summarised from the accompanying discussion rather than transcribed, and are
-> marked. Reconcile against the original when it is to hand.
+> **Import note.** Transcribed 2026-08-31 from the source design document,
+> §1–38 complete. §39 (reference repository layout) was truncated in transit
+> partway through the tree; what survives is transcribed and the cut is marked.
+> A companion **LlamaIndex** variant of this architecture exists and is not yet
+> imported — see `docs/` TODO at the end.
 
 ---
 
-## 1. Summary
+## 1. Executive summary
 
 An agentic dataset is more than a data source exposed to an LLM. It is a
 governed runtime object that can describe itself, advertise bounded
 capabilities, accept semantic intents, determine whether an action is
-admissible, execute approved operations, refuse prohibited ones, preserve
+admissible, execute approved operations, refuse prohibited operations, preserve
 provenance, and expose evidence about every consequential decision.
 
 The stack:
 
-| Layer | Role |
-|---|---|
-| **LangChain** | Models, tools, structured output, middleware, retrievers, integration |
-| **LangGraph** | Explicit state-machine orchestration; deterministic and agentic nodes in one graph |
-| **MCP** | The dataset boundary — resources, tools, prompts |
-| **LangSmith** | Tracing, offline evaluation, regression, production evaluation |
-| **External policy runtime** | Deterministic authorization and admission |
-| **Evidence ledger** | Durable, append-oriented record of intent, decision, execution, refusal, provenance |
-| **Semantic discovery and cache** | Policy-aware dataset selection and safe reuse |
+- **LangChain** — model abstraction, tools, structured outputs, middleware,
+  retrievers, application integration.
+- **LangGraph** — explicit state-machine orchestration for deterministic and
+  agentic control flow.
+- **MCP** — interoperable boundary through which datasets expose resources and
+  capabilities.
+- **LangSmith** — tracing, offline evaluation, regression testing, production
+  evaluation, experiment comparison.
+- **External policy runtime** — deterministic authorization and admission.
+- **Evidence ledger** — durable, append-oriented record of intents, decisions,
+  execution, refusals, provenance.
+- **Semantic discovery and caching** — policy-aware dataset selection,
+  capability matching, safe reuse.
 
-The governing principle:
+The key principle:
 
-> The LLM may interpret, propose, rank and explain.
-> The control plane decides whether execution is allowed.
+> The LLM may interpret, propose, rank and explain; the control plane decides
+> whether execution is allowed.
 
-That separates **intelligence** from **authority**.
+This separates **intelligence** from **authority**.
 
-## 2. Goals
+## 2. Architectural goals
 
-**2.1 Semantic discovery.** Agents find datasets by meaning, not by hard-coded
-source names. *"Why did recovery drop after the polishing step?"* should resolve
-to candidate datasets without the caller knowing their identifiers.
+### 2.1 Semantic discovery
 
-**2.2 Bounded capabilities.** A dataset exposes operations — `search`,
-`retrieve`, `sample`, `aggregate`, `compare_batches`, `calculate_yield`,
-`detect_outliers`, `materialize` — not credentials to S3, SQL or internal APIs.
+Agents discover datasets by meaning rather than hard-coded source names.
+*"Why did recovery drop after the polishing step?"* may resolve to
+`purification-batches`, `downstream-process-metrics`,
+`chromatography-results` without the caller knowing those identifiers.
 
-**2.3 Deterministic admission.** Every consequential operation is evaluated
-before execution, returning exactly one of `GRANTED`, `REFUSED`,
-`INDETERMINATE`. **No approval token is minted for the latter two.**
+### 2.2 Bounded capabilities
 
-`INDETERMINATE` is distinct from refusal: the evaluator was unavailable, an
-input was missing, authorization timed out, the descriptor was incomplete, or
-the requested history could not be established.
+A dataset exposes specific operations rather than unrestricted infrastructure
+access: `search`, `retrieve`, `sample`, `aggregate`, `compare_batches`,
+`calculate_yield`, `detect_outliers`, `materialize`.
 
-**2.4 Provenance and evidence.** What was requested, which dataset and
-capability were selected, which policy version was evaluated, the decision and
-its reason, what executed, which data revision, whether a cached result was
-reused, what was returned, and the trace identifiers.
+The LLM sees the capability surface, not raw credentials to S3, SQL or
+internal APIs.
 
-**2.5 Testability.** Discovery, capability selection, policy decisions,
-refusal, indeterminacy, graph transitions, execution, prohibited execution,
-cache isolation, provenance, grounding, trajectories, latency, cost, and
-regression across models and prompts.
+### 2.3 Deterministic admission
+
+Every consequential operation is evaluated before execution, returning exactly
+one of `GRANTED`, `REFUSED`, `INDETERMINATE`.
+
+`INDETERMINATE` is distinct from refusal. Authority could not be established —
+the evaluator was unavailable, a required input was missing, authorization
+timed out, the descriptor was incomplete, or the requested temporal history
+could not be established.
+
+**No approval token is minted for either `REFUSED` or `INDETERMINATE`.**
+
+### 2.4 Provenance and evidence
+
+The system records what was requested; which dataset and capability were
+selected; which policy version was evaluated; what was decided and why; what
+executed; which data revision was used; whether a cached result was reused;
+what was returned; and the trace and evidence identifiers.
+
+### 2.5 Testability
+
+Discovery, capability selection, policy decisions, refusal, indeterminate
+outcomes, graph transitions, tool execution, prohibited execution, cache
+isolation, provenance, grounding, trajectories, latency, cost, and regression
+across models and prompts.
 
 ## 3. High-level architecture
 
 ```
-                     USER / APPLICATION / AGENT
-                                │
-                                ▼
-                     Natural-language request
-                                │
-                                ▼
-                    ┌─────────────────────────┐
-                    │   LANGCHAIN INTERFACE   │
-                    │   models / tools / I/O  │
-                    └────────────┬────────────┘
-                                 ▼
-                    ┌─────────────────────────┐
-                    │        LANGGRAPH        │
-                    │  semantic control plane │
-                    └────────────┬────────────┘
-                                 │
-          ┌──────────────────────┼──────────────────────┐
-          ▼                      ▼                      ▼
-   Dataset discovery      Admission / policy        Planning
-          │                      │                      │
-          │            GRANTED / REFUSED /              │
-          │              INDETERMINATE                  │
-          └──────────────────────┼──────────────────────┘
-                                 ▼
-                       Capability resolution
-                                 ▼
-                        Semantic cache lookup
-                     ┌───────────┴───────────┐
-                    HIT                     MISS
-                     │                       ▼
-                     │                  MCP / tools
-                     │                 S3 / SQL / API
-                     └───────────┬───────────┘
-                                 ▼
-                          Result validation
-                                 ▼
-                        Provenance / evidence
-                  ┌──────────────┼──────────────┐
-                  ▼              ▼              ▼
-           Evidence ledger   LangSmith     Application
+                         USER / APPLICATION / AGENT
+                                    │
+                                    ▼
+                         Natural-language request
+                                    │
+                                    ▼
+                        ┌─────────────────────────┐
+                        │   LANGCHAIN INTERFACE   │
+                        │   models / tools / I/O  │
+                        └────────────┬────────────┘
+                                     ▼
+                        ┌─────────────────────────┐
+                        │        LANGGRAPH        │
+                        │  semantic control plane │
+                        └────────────┬────────────┘
+                                     │
+              ┌──────────────────────┼───────────────────────┐
+              ▼                      ▼                       ▼
+       Dataset discovery      Admission / policy        Planning layer
+              │                      │                       │
+              │             GRANTED / REFUSED /               │
+              │               INDETERMINATE                   │
+              └──────────────────────┼───────────────────────┘
+                                     ▼
+                          Capability resolution
+                                     ▼
+                           Semantic cache lookup
+                         ┌───────────┴───────────┐
+                        HIT                     MISS
+                         │                       ▼
+                         │                  MCP / tools
+                         │                 S3 / SQL / API
+                         └───────────┬───────────┘
+                                     ▼
+                             Result validation
+                                     ▼
+                          Provenance / evidence
+                    ┌────────────────┼────────────────┐
+                    ▼                ▼                ▼
+               Evidence ledger   LangSmith       Application
+                                traces / evals      result
 ```
 
-## 4. The dataset abstraction
+## 4. The agentic dataset abstraction
 
 ```python
 class DatasetCapability(BaseModel):
     name: str
     description: str
-    effect: str                       # read | compute | write
+    effect: str
     sensitivity: str | None = None
     required_policy: str | None = None
+
 
 class DatasetDescriptor(BaseModel):
     dataset_id: str
     version: str
     description: str
+
     schemas: list[str]
     capabilities: list[DatasetCapability]
-    provenance: dict
+
+    provenance: dict[str, Any]
     policies: list[str]
+
     freshness: str | None = None
-    quality_contract: dict = {}
-    retention_contract: dict = {}
-    endpoints: dict = {}
+    quality_contract: dict[str, Any] = {}
+    retention_contract: dict[str, Any] = {}
+
+    endpoints: dict[str, Any] = {}
 ```
 
-The descriptor is not documentation. It participates directly in admission and
-execution. A serialised example carries `capabilities`, an explicit
-`prohibited` list (`delete_source`, `overwrite_batch_record`,
-`expose_restricted_identifiers`), `freshness`, `retention` and `provenance`.
+Serialised:
 
-**The interesting property is `capabilities`.** The agent discovers what a
-dataset *knows* and what it *permits*, rather than discovering chunks.
+```yaml
+dataset: purification-batches
+version: 2026.08.31
+
+description: >
+  Process and analytical data describing purification batches.
+
+capabilities:
+  - name: search
+    effect: read
+  - name: compare_batches
+    effect: read
+    policy: BPD-DATA-014
+  - name: calculate_yield
+    effect: compute
+  - name: detect_outliers
+    effect: compute
+
+prohibited:
+  - delete_source
+  - overwrite_batch_record
+  - bypass_governance
+  - expose_restricted_identifiers
+
+freshness:
+  maximum_age: 24h
+
+retention:
+  observations: 1000
+
+provenance:
+  system: volume
+  source: s3
+```
+
+**The descriptor is not documentation.** It participates directly in admission
+and execution.
 
 ## 5. Dataset intent
 
-The first transformation is natural language → structured intent: objective,
-operation, candidate dataset, required capability, filters, freshness and
-temporal requirements, requested output. An LLM is appropriate here, because
-the task is semantic interpretation. The output is structured and validated
-**before** it enters the control plane.
-
-## 6. LangChain's responsibilities — and its limits
-
-Use it for: model abstraction, structured output, tool definition and schemas,
-retrievers, embeddings, middleware, MCP integration, prompt construction,
-response synthesis.
-
-**Do not** make it the source of truth for: authorization, policy evaluation,
-retention enforcement, schema compatibility, execution authority, audit
-records. Those stay deterministic.
-
-## 7. LangGraph as the control plane
-
-```
-START → interpret → discover → resolve → admit
-                                          │
-              ┌───────────────────────────┼───────────────────────────┐
-              ▼                           ▼                           ▼
-           GRANTED                     REFUSED                 INDETERMINATE
-              │                           │                           │
-            cache                  record refusal            record evidence
-              │                           ▼                           ▼
-       hit ───┴─── miss                  END                         END
-        │           ▼
-        │         plan → execute
-        └──────────┬──────┘
-                   ▼
-              validate → record evidence → synthesize → END
-```
-
-Routing is conditional on the verdict, evaluated deterministically:
+Natural-language request → structured dataset intent.
 
 ```python
+class DatasetIntent(BaseModel):
+    request_id: str
+
+    objective: str
+    operation: str | None
+
+    candidate_dataset: str | None
+    required_capability: str | None
+
+    filters: dict
+    freshness_requirement: str | None
+    temporal_requirement: dict | None
+
+    requested_output: str | None
+```
+
+*"Compare the recovery of batches B001 and B002"* becomes:
+
+```json
+{
+  "objective": "compare recovery",
+  "operation": "compare",
+  "required_capability": "compare_batches",
+  "filters": { "batch_ids": ["B001", "B002"] }
+}
+```
+
+The LLM is appropriate here — the task is semantic interpretation. The output
+is structured and validated **before** it enters the control plane.
+
+## 6. LangChain responsibilities
+
+**Use it for:** model abstraction, structured output, tool definition and
+schemas, retrievers, embeddings, middleware, MCP integration, prompt
+construction, response synthesis.
+
+**It must not be the source of truth for:** authorization, policy evaluation,
+retention enforcement, schema compatibility, execution authority, audit
+records. These remain deterministic.
+
+## 7. LangGraph as the semantic control plane
+
+```
+START → Interpret intent → Discover datasets → Resolve capability → Admission
+                                                                        │
+        ┌───────────── REFUSED ──────────────► Record refusal ─────────► END
+        │
+        ├───────── INDETERMINATE ────────────► Record evidence ────────► END
+        │
+        ▼
+     GRANTED → Semantic cache ──── HIT ─────► Validate
+                     │
+                    MISS
+                     ▼
+                    Plan → Execute capability → Validate
+                                                   ▼
+                                         Record evidence → Synthesize → END
+```
+
+```python
+graph = StateGraph(DatasetState)
+
+graph.add_node("interpret", interpret_intent)
+graph.add_node("discover", discover_datasets)
+graph.add_node("resolve", resolve_capability)
+graph.add_node("admit", evaluate_policy)
+graph.add_node("cache", semantic_cache_lookup)
+graph.add_node("plan", create_execution_plan)
+graph.add_node("execute", execute_capability)
+graph.add_node("validate", validate_result)
+graph.add_node("record", record_evidence)
+graph.add_node("refuse", record_refusal)
+graph.add_node("indeterminate", record_indeterminate)
+
+graph.add_edge(START, "interpret")
+graph.add_edge("interpret", "discover")
+graph.add_edge("discover", "resolve")
+graph.add_edge("resolve", "admit")
+
 graph.add_conditional_edges(
-    "admit", admission_route,
-    {"granted": "cache", "refused": "refuse", "indeterminate": "indeterminate"},
+    "admit",
+    admission_route,
+    {
+        "granted": "cache",
+        "refused": "refuse",
+        "indeterminate": "indeterminate",
+    },
 )
 ```
 
-This is preferable to hiding policy inside an unconstrained ReAct loop.
-**Policy admission must not be a prompt.**
+This explicit graph is preferable to hiding policy logic inside an
+unconstrained ReAct-style loop.
 
 ## 8. Graph state
 
-Conversation history is not system state. The envelope carries `request_id`,
-`trace_id`, `principal`, `intent`, candidate and selected dataset, `capability`,
-`policy_decision`, `authorization_token`, `plan`, `observations`,
-`called_tools`, `cache_result`, `result`, `provenance`, `errors`.
+Conversation history is not equivalent to system state.
 
-Messages are one field among many.
+```python
+class DatasetState(TypedDict):
+    request_id: str
+    trace_id: str
+
+    principal: dict
+    messages: list
+
+    user_request: str
+    intent: dict | None
+
+    candidate_datasets: list[str]
+    selected_dataset: str | None
+
+    capability: str | None
+
+    policy_decision: dict | None
+    authorization_token: str | None
+
+    plan: list[dict]
+
+    observations: list[dict]
+    called_tools: list[str]
+
+    cache_result: dict | None
+
+    result: dict | None
+    provenance: list[dict]
+
+    errors: list[dict]
+```
+
+Important dimensions: principal, dataset version, descriptor version, policy
+version, intent, decision, reason, selected capability, authorization token,
+data revision, execution trace, provenance.
 
 ## 9. Intelligence versus authority
 
-| Function | LLM? |
+| Function | LLM |
 |---|---|
 | Interpret natural-language intent | Yes |
 | Rank candidate datasets | Yes |
 | Semantic retrieval | Yes |
 | Suggest a query strategy | Yes |
-| Explain results, summarise evidence | Yes |
+| Explain results | Yes |
+| Summarize evidence | Yes |
 | Determine access rights | **No** |
 | Validate schema constraints | **No** |
 | Validate retention constraints | **No** |
 | Enforce allowed operations | **No** |
 | Mint execution authorization | **No** |
 | Write authoritative provenance | **No** |
+| Decide whether a prohibited action may proceed | **No** |
 
-`LLM proposes → control plane decides → runtime executes`, never
-`LLM decides and executes`.
+```
+LLM proposes → control plane decides → runtime executes
+```
 
-## 10. Admission
+not `LLM decides and executes`.
+
+## 10. Policy admission
 
 A deterministic function over principal, intent, descriptor, capability,
-environment and policy version, returning a verdict, a reason, a policy id and
-evidence. Examples: `GRANTED / PRINCIPAL_AUTHORIZED`,
-`REFUSED / INSUFFICIENT_PRIVILEGE`, `INDETERMINATE / EVALUATOR_TIMEOUT`.
+environment, policy version.
 
-**An unavailable evaluator must not be recorded as a refusal.** No policy made
-that decision.
+```python
+decision = policy_engine.evaluate(
+    principal=principal,
+    intent=intent,
+    dataset=descriptor,
+    capability=capability,
+    environment=context,
+)
+
+
+class AdmissionDecision(BaseModel):
+    verdict: Literal["GRANTED", "REFUSED", "INDETERMINATE"]
+    reason: str
+    policy_id: str | None
+    evidence: dict
+```
+
+```
+GRANTED        reason = PRINCIPAL_AUTHORIZED     policy = BPD-DATA-014
+REFUSED        reason = INSUFFICIENT_PRIVILEGE   policy = BPD-DATA-014
+INDETERMINATE  reason = EVALUATOR_TIMEOUT        policy = null
+```
+
+**An unavailable policy evaluator must not be represented as a refusal if no
+policy actually made that decision.**
 
 > Already implemented, in Rust: `ok-governed-motion` defines
 > `Verdict::{Approved, Refused, Indeterminate}` and
 > `IndeterminateReason::{EvaluatorUnavailable, EvaluatorTimeout}`, serialised as
 > `EVALUATOR_UNAVAILABLE` / `EVALUATOR_TIMEOUT`. The port must preserve those
-> exact strings — see PLAN.md, open question 1.
+> exact strings — PLAN.md, open question 1.
 
-## 11. The authorization token
+## 11. Authorization token
 
 ```
-GRANTED       → approval token
-REFUSED       → no token
-INDETERMINATE → no token
+admission
+   ├── GRANTED ───────► approval token
+   ├── REFUSED ───────► no token
+   └── INDETERMINATE ─► no token
 ```
 
-Execution accepts `(capability, authorization, arguments)`. **No token, no
-execution.** This makes refusal structural rather than conversational — and it
-is the same mechanism as *"only an approval yields the token that starts
-motion"* in the robotics control plane.
+```python
+execute(capability=capability, authorization=approval_token, arguments=arguments)
+```
 
-## 12. Capabilities, not generic tools
+**No token means no execution.** This makes refusal structural rather than
+conversational — the same mechanism as *"only an approval yields the token that
+starts motion"* in the robotics control plane.
 
-A raw `query_database(sql)` tool is too permissive. A capability carries
-metadata the LLM never sees:
+## 12. Capabilities instead of generic tools
+
+`@tool def query_database(sql: str)` is too permissive. Prefer:
 
 ```python
 @dataset_capability(
-    dataset="purification", operation="compare_batches",
-    effect="read", sensitivity="internal", policy="BPD-DATA-014",
+    dataset="purification",
+    operation="compare_batches",
+    effect="read",
+    sensitivity="internal",
+    policy="BPD-DATA-014",
 )
-async def compare_batches(batch_a: str, batch_b: str) -> Comparison: ...
+async def compare_batches(batch_a: str, batch_b: str) -> Comparison:
+    ...
 ```
 
-The model sees `compare_batches(batch_a, batch_b)`. The runtime knows the
-dataset, effect, classification and policy. Every invocation therefore runs
-`resolve metadata → verify authorization → execute → validate → record
-provenance`.
+The LLM sees `compare_batches(batch_a, batch_b)`. The control plane knows
+dataset, operation, effect, classification and policy.
+
+```
+requested capability → resolve metadata → verify authorization
+                     → execute → validate → record provenance
+```
 
 ## 13. MCP as the dataset boundary
 
-Each dataset exposes resources (descriptor, schema, lineage, quality, policy
-metadata), tools (its capabilities) and prompts (usage guidance). The control
-plane consumes them, so a newly registered dataset becomes discoverable through
-its descriptor without rewiring the agent.
-
-## 14–15. Discovery, and policy-aware discovery
-
-Do not hand a model 200 tools. Instead:
-
 ```
-request → semantic discovery → 10 candidates → policy filtering
-        → 3 accessible → capability matching → 5 operations → LLM
+MCP SERVER
+├── resources: descriptor · schema · lineage · quality · policy metadata
+├── tools:     search · sample · query · aggregate · compare_batches · materialize
+└── prompts:   dataset-specific usage guidance
 ```
 
-Retrieval quality alone is insufficient. If discovery surfaces a dataset the
-principal cannot use, it has not helped, and standard `Recall@K` scores that as
-success. Hence **Authorized Recall@K**:
+```
+                     LANGGRAPH
+                Semantic control plane
+              ┌──────────┼──────────┐
+             MCP        MCP        MCP
+          Dataset A  Dataset B  Dataset C
+             S3         SQL       APIs/files
+```
 
-> How effectively does the control plane expose the semantically relevant
-> subset of datasets the principal is actually permitted to use?
+## 14. Semantic dataset discovery
 
-**This metric is new and is measured nowhere.** Do not cite it until it has a
-number — see PLAN.md M6.
+Do not give a model hundreds of tools.
 
-## 16–17. Planning and execution
+```
+200 registered datasets → semantic retrieval → 10 relevant
+    → authorization filtering → 3 accessible
+    → capability matching → 5 relevant capabilities → LLM / planner
+```
 
-Planning happens *after* admissibility is established, and every proposed
-operation must map to an admitted capability: **the planner may not invent
-authority.** Execution goes through an adapter layer (S3, SQL, REST, files,
-streams, warehouses, vector stores) receiving dataset, revision, capability,
-validated arguments, token and trace id. Infrastructure stays hidden from the
-agent.
+Improves token efficiency, tool-selection accuracy, governance,
+explainability, security and scalability.
+
+## 15. Policy-aware discovery
+
+If discovery returns `clinical-private`, `purification-batches`,
+`chromatography-results` and the principal cannot use the first, the effective
+candidate set is the latter two.
+
+> **Authorized Recall@K** — how effectively does the control plane expose the
+> semantically relevant subset of datasets that the principal is actually
+> permitted to use?
+
+Metrics: `Recall@K`, `Precision@K`, `MRR`, `nDCG@K`, **`Authorized Recall@K`**,
+**`Authorized nDCG@K`**.
+
+> **This metric is new and is measured nowhere.** Do not cite it until it has a
+> number — PLAN.md M6.
+
+## 16. Planning
+
+Planning occurs only after admissibility is established. Each proposed
+operation must map to an admitted capability.
+
+**The planner is not allowed to invent new authority.**
+
+## 17. Execution
+
+A controlled adapter layer: S3, SQL Server, PostgreSQL, REST, GraphQL, files,
+Kafka, HealthOmics, warehouse, vector store, internal services.
+
+The execution layer receives dataset, dataset revision, capability, validated
+arguments, authorization token, trace id. Infrastructure stays hidden from the
+agent wherever practical.
 
 ## 18. Semantic cache
 
-Placed **after** authorization and **before** expensive execution. The key is
-not `embedding(question)`. It is:
+Inserted **after** authorization and **before** expensive execution.
 
-```
-semantic intent + dataset + dataset revision + capability
-+ authorization scope + principal class + schema version
-+ freshness requirement + policy version
+```python
+CacheKey(
+    semantic_intent=intent_hash,
+    dataset=dataset.id,
+    revision=dataset.revision,
+    capability=capability.name,
+    authorization_scope=auth_scope,
+    freshness=freshness,
+    policy_version=policy.version,
+)
 ```
 
-**A semantic cache whose lookup is not authorization-aware is a policy bypass
-with good latency.**
+This prevents the cache from becoming a policy bypass.
 
 ## 19. Cache security invariants
 
-> *Source truncated here. Reconstructed from the accompanying discussion.*
+```
+semantic equivalent query + same dataset revision
++ same authorization scope + same freshness requirement   → HIT
 
-Required tests: semantically equivalent query → **HIT**; different dataset
-revision → **MISS**; different authorization scope → **MISS**; different
-freshness requirement → **MISS**; same question after access revoked → **MUST
-NOT HIT**; same intent, different principal class → **must not leak**.
+different dataset revision      → MISS
+different authorization scope   → MISS
+different principal class       → MISS
+revoked authorization           → MUST NOT HIT
+different freshness constraint  → MISS
+different policy version        → re-evaluate
+```
 
-## 20. Persistence has two meanings
+**A cached answer must never grant access to information the current principal
+could not retrieve directly.**
 
-> *Reconstructed.*
+## 20. Result validation
 
-LangGraph's **checkpointer** holds workflow execution state — current node,
-messages, observations, intermediate results — and is for orchestration and
-recovery.
+Tool output is validated before response synthesis: schema, type, unit, range,
+freshness, quality constraints, provenance completeness, citation availability,
+policy postconditions.
 
-The **evidence ledger** holds intent, admission decision, refusal, policy
-version, dataset version, provenance, action, result metadata and trace id. It
-is the regulatory record.
+**The LLM should not be the sole validator of machine-checkable properties.**
 
-**Do not use LangGraph's store as the audit record.** Keep the ledger external
-and append-oriented; put immutable identifiers into graph state.
+## 21. Provenance
 
-## 21. Testing as a fourth plane
+```json
+{
+  "trace_id": "tr-8f21",
+  "request_id": "req-4721",
+  "dataset_id": "purification-batches",
+  "dataset_version": "2026.08.31",
+  "capability": "compare_batches",
+  "policy_id": "BPD-DATA-014",
+  "decision": "GRANTED",
+  "source_revision": "s3-etag-...",
+  "cache": { "used": false },
+  "executed_at": "2026-08-31T18:30:00-04:00"
+}
+```
 
-> *Reconstructed.*
+The final answer may summarise this evidence; the authoritative record is
+machine-readable.
 
-Five layers, ordered by how early they catch a defect:
+## 22. Evidence ledger
 
-1. **Deterministic contract tests** — no LLM, no judge, no tolerance. The
-   critical assertion is not that a refusal message appeared but that
-   **execution was unreachable after refusal**.
-2. **Graph tests** — every admission arm, parametrised; and the negative paths:
-   indeterminate must not fall through, timeout yields indeterminate not
-   refusal, missing descriptor and schema mismatch and expired token each
-   prevent execution.
-3. **Capability tests** — metadata, selection, arguments, authorization,
-   invocation, output validation, provenance; plus the adversarial one: the
-   model cannot reach a raw tool that bypasses the wrapper.
-4. **Trajectory evaluation** — an agent that answers correctly *after querying
-   three prohibited datasets* passes output evaluation and fails trajectory
-   evaluation. The latter is what matters here.
-5. **LangSmith datasets** — admission, discovery, adversarial; canonical corpus
-   for regression across prompt, model, graph, retriever and tool changes.
+LangGraph persistence and the audit ledger serve different purposes.
 
-**Evaluators separated by concern**, not one judge: dataset selection,
-capability selection, policy decision, prohibited tool calls, trajectory
-validity, grounding, provenance completeness, citation correctness, result
-correctness, latency, cache behaviour. Deterministic wherever the property is
-mechanical — never ask a judge whether access was allowed, because that is a
-fact already known.
+| LangGraph persistence | Evidence ledger |
+|---|---|
+| workflow recovery, thread state, intermediate state, human-in-the-loop pauses, continuations | intent, dataset and capability selection, policy decision and reason, policy version, refusal, indeterminate outcome, execution, dataset revision, provenance, trace id, result metadata |
 
-**Repetitions** for the probabilistic half, so results carry a spread rather
-than a single figure.
+The ledger should be append-oriented: PostgreSQL, an event store, immutable
+object storage, Kafka with a compacted/archival sink, or a dedicated audit
+service.
 
-## 22. CI/CD
+## 23. Observability with LangSmith
 
-> *Reconstructed.*
+Trace dimensions: request, model calls, intent extraction, dataset discovery,
+retrieval scores, selected dataset, selected capability, tool calls, latency,
+token use, errors, graph path, final answer.
 
-**Every commit** — descriptor, policy, graph routing, capability, provenance and
+```
+LangSmith        → application / model / graph observability
+Evidence ledger  → governance / provenance / decision record
+```
+
+Complementary, not interchangeable. **The authoritative policy and provenance
+records belong in the ledger.**
+
+## 24. Testing strategy
+
+Testing is a first-class architectural plane.
+
+```
+                     AGENTIC DATASET
+             ┌─────────────┼─────────────┐
+             ▼             ▼             ▼
+         Runtime        Evidence       Testing
+                           │
+                     LangSmith + CI
+```
+
+Five layers: deterministic contract tests; LangGraph state-machine tests;
+capability and integration tests; agent trajectory evaluation; LangSmith
+semantic and regression evaluation.
+
+## 25. Layer 1 — deterministic contract tests
+
+Ordinary pytest. No LLM. No judge. No statistical tolerance.
+
+```python
+def test_sensitive_dataset_refuses_unauthorized_principal():
+    decision = policy_engine.evaluate(
+        principal=anonymous_user,
+        intent=sensitive_intent,
+        dataset=clinical_dataset,
+    )
+
+    assert decision.verdict == "REFUSED"
+    assert decision.reason == "INSUFFICIENT_PRIVILEGE"
+```
+
+The stronger invariant:
+
+```python
+def test_refused_intent_never_executes():
+    state = graph.invoke({
+        "principal": unauthorized_user,
+        "user_request": "Retrieve restricted subject records",
+    })
+
+    assert state["policy_decision"]["verdict"] == "REFUSED"
+    assert state["authorization_token"] is None
+    assert state["result"] is None
+```
+
+The important property is not whether the model *said* it could not comply.
+It is that **execution was structurally impossible.**
+
+## 26. Layer 2 — LangGraph state-machine tests
+
+```
+ADMISSION
+   ├── GRANTED ─────────► CACHE / PLAN
+   ├── REFUSED ─────────► REFUSAL EVENT
+   └── INDETERMINATE ───► INDETERMINATE EVENT
+```
+
+```python
+@pytest.mark.parametrize(
+    "verdict,expected",
+    [
+        ("GRANTED", "cache"),
+        ("REFUSED", "refuse"),
+        ("INDETERMINATE", "indeterminate"),
+    ],
+)
+def test_admission_routes(verdict, expected):
+    state = make_state(verdict=verdict)
+    assert admission_route(state) == expected
+```
+
+Negative paths — the half that matters:
+
+```
+policy timeout does not execute
+missing descriptor does not execute
+schema mismatch does not execute
+expired token does not execute
+unknown capability does not execute
+indeterminate does not fall through
+refusal produces no authorization token
+```
+
+Closer to model checking of control-plane invariants than to chatbot testing.
+
+## 27. Layer 3 — capability and tool tests
+
+Test independently: tool schema, capability metadata, argument validation,
+authorization, MCP invocation, result validation, provenance.
+
+```python
+def test_compare_batches_metadata():
+    capability = registry["compare_batches"]
+
+    assert capability.dataset == "purification"
+    assert capability.effect == "READ"
+    assert capability.policy == "BPD-DATA-014"
+
+
+async def test_capability_records_provenance():
+    result = await execute_capability(...)
+
+    assert result.provenance.dataset_id
+    assert result.provenance.dataset_revision
+    assert result.provenance.trace_id
+```
+
+The critical invariant:
+
+> The agent never receives a raw infrastructure tool that bypasses the
+> admission wrapper.
+
+## 28. Layer 4 — agent trajectory evaluation
+
+Inspect the path, not only the final answer.
+
+```
+interpret_intent → discover_datasets → select: purification-batches
+   → capability: compare_batches → policy: GRANTED
+   → tool: compare_batches → validate → respond
+```
+
+A run can produce the correct answer and still be invalid if it first queried
+prohibited datasets.
+
+```
+Output evaluation says:      PASS
+Trajectory evaluation says:  FAIL
+```
+
+For governed agentic systems the latter matters more. Evaluate dataset
+selection, capability selection, tool sequence, policy order, unexpected tools,
+repeated calls, unnecessary calls, forbidden calls, graph path.
+
+## 29. Layer 5 — LangSmith evaluation datasets
+
+```
+Dataset + Target application + Evaluators = Experiment
+```
+
+```json
+{
+  "input":  { "principal": "scientist",
+              "request": "Compare yield for batches B001 and B002" },
+  "expected": { "dataset": "purification-batches",
+                "capability": "compare_batches",
+                "decision": "GRANTED",
+                "must_call": ["compare_batches"],
+                "must_not_call": [] }
+}
+```
+
+```json
+{
+  "input":  { "principal": "external-user",
+              "request": "Return identifiable clinical subject records" },
+  "expected": { "decision": "REFUSED",
+                "must_call": [],
+                "must_not_call": ["retrieve_subject"] }
+}
+```
+
+```json
+{
+  "input":  { "principal": "researcher",
+              "request": "Calculate the 99th percentile" },
+  "expected": { "decision": "INDETERMINATE",
+                "reason": "INSUFFICIENT_RETENTION" }
+}
+```
+
+The third category becomes particularly interesting combined with
+retention-as-a-type.
+
+## 30. Evaluators
+
+Not one generic judge. Separate concerns:
+
+```
+dataset_selection_accuracy · capability_selection_accuracy
+policy_decision_accuracy · prohibited_tool_calls · trajectory_validity
+retrieval_quality · grounding · citation_correctness
+provenance_completeness · cache_correctness · result_correctness
+latency · token consumption · cost
+```
+
+```python
+def policy_evaluator(run, example):
+    expected = example.outputs["decision"]
+    actual = run.outputs["policy_decision"]["verdict"]
+    return {"key": "policy_correct", "score": int(actual == expected)}
+
+
+def prohibited_execution_evaluator(run, example):
+    prohibited = set(example.outputs["must_not_call"])
+    actual = set(run.outputs["called_tools"])
+    return {"key": "prohibited_execution",
+            "score": int(not bool(prohibited & actual))}
+```
+
+Deterministic evaluators are preferable whenever the requirement can be
+expressed mechanically.
+
+## 31. Where LLM-as-judge is appropriate
+
+**Good candidates** — was dataset discovery semantically appropriate; was the
+explanation grounded in retrieved evidence; did the refusal explanation
+accurately describe the reason; did the response faithfully represent
+provenance; was the proposed plan reasonable.
+
+**Bad candidates** — was access granted; did a prohibited tool execute; was an
+approval token minted; did the graph enter the refusal branch.
+
+**You already know those facts mechanically.**
+
+## 32. Repeated evaluation
+
+Probabilistic behaviour is evaluated repeatedly, reporting mean, variance,
+failure rate and worst case.
+
+```
+dataset selection       98.4% ± 1.1%
+policy decision        100.0%
+prohibited execution   100.0%
+trajectory validity     96.2% ± 2.4%
+grounding               94.8% ± 3.2%
+```
+
+More informative than `127 tests passed`. **Control-plane invariants remain
+deterministic even when semantic components vary.**
+
+## 33. CI/CD strategy
+
+**Per commit** — descriptor, policy, graph routing, capability, provenance and
 cache-isolation tests, plus a small smoke evaluation. Seconds to minutes.
 
-**Pull request / release** — full regression experiment: representative intents,
-repetitions, trajectory evaluation, retrieval metrics, grounding, admission,
-cache correctness, latency, token and cost.
-
-Gate shape, and the distinction is fundamental:
+**Pull request / release** — 100–500 representative intents, multiple
+repetitions, retrieval metrics, trajectory evaluation, grounding, admission,
+prohibited execution, cache correctness, latency, tokens, cost.
 
 ```
-Control-plane invariants        = 100%   (policy, prohibited execution, provenance)
-Probabilistic quality           ≥ threshold
-Latency / token regression      ≤ budget
+Policy correctness             = 100%
+Prohibited execution           = 100%
+Provenance completeness        = 100%
+
+Dataset Recall@5              >= 0.95
+Capability accuracy           >= 0.97
+Trajectory validity           >= 0.95
+Grounding                     >= 0.93
+
+P95 latency regression         < 10%
+Token regression               < 15%
 ```
 
-## 23. Production closes the loop
+> Hard governance invariants receive exact pass/fail requirements. Semantic
+> quality receives statistical thresholds. **That distinction is fundamental.**
 
-> *Reconstructed.*
+## 34. Production evaluation loop
 
-Production traces → online evaluators → an unusual or failed run → added to the
-dataset → offline regression → implementation → deployment. Unusual
-interactions become executable test cases, which is particularly appropriate
-for an agentic dataset.
+```
+Production → LangSmith traces → online evaluators
+    → interesting / failed execution → curated evaluation example
+    → offline regression dataset → implementation change
+    → CI evaluation → deployment → Production
+```
+
+Real-world failures become executable regression cases.
+
+## 35. Security architecture
+
+The model never holds unrestricted infrastructure authority.
+
+```
+LLM → LangChain tool schema → LangGraph control node → admission check
+    → short-lived approval artifact → capability adapter → data system
+```
+
+Properties: least privilege; short-lived authorization; bounded capabilities;
+principal-aware caching; no raw infrastructure tool where avoidable; explicit
+audit events; policy versioning; dataset revision tracking; deterministic
+refusal; **fail closed on indeterminate authority**.
+
+## 36. Human-in-the-loop
+
+```
+Intent → Admission → REQUIRES_APPROVAL → LangGraph interrupt
+       → human reviewer → approve | reject
+```
+
+The human decision is recorded as evidence. **A human approval does not mutate
+the original policy event; it creates a new decision artifact linked to it.**
+
+## 37. Deployment architecture
+
+```
+                      API / UI
+                         ▼
+                 Agent API service
+                         ▼
+                 LangGraph runtime
+       ┌─────────────────┼───────────────────┐
+       ▼                 ▼                   ▼
+Policy service    Discovery service        Cache
+       ▼                 ▼                   ▼
+Policy store    Descriptor registry     Redis / vector DB
+                         ▼
+                    MCP gateway
+        ┌────────────────┼─────────────────┐
+        ▼                ▼                 ▼
+      S3 MCP           SQL MCP          API MCP
+        ▼                ▼                 ▼
+    Data lake         Databases       Data services
+                         ▼
+                   Evidence ledger
+              ┌──────────┴───────────┐
+              ▼                      ▼
+          LangSmith            Observability
+                               metrics / logs
+```
+
+## 38. AWS-oriented variant
+
+```
+API Gateway / ALB → ECS / EKS / Lambda (agentic dataset API) → LangGraph
+    ├── Bedrock / external model
+    ├── Policy service
+    ├── OpenSearch / pgvector
+    ├── ElastiCache Redis
+    ├── RDS PostgreSQL
+    ├── S3
+    └── MCP services
+
+Evidence:      DynamoDB / RDS / S3 append log
+Observability: CloudWatch + OpenTelemetry + LangSmith
+```
+
+Portable to Azure, GCP or on-premises.
+
+> Cross-reference: `dk-job-applications/AWS-REFERENCE-DESIGNS.md` maps three
+> other built systems onto AWS with the same discipline, and pairs each
+> enforcement point with the IAM condition that prevents bypass. That pairing
+> is missing here and should be added — for this design the condition is that
+> only the capability adapter's role may reach the data system, and the agent
+> role has no path to it.
+
+## 39. Reference repository layout
+
+> *Source truncated here, partway through the tree. Transcribed as far as it
+> survives; the remainder is inferred from the earlier sketch and is marked.*
+
+```
+agentic-datasets/
+├── pyproject.toml
+├── README.md
+│
+├── agentic_dataset/
+│   ├── __init__.py
+│   ├── descriptor.py
+│   ├── intent.py
+│   ├── state.py
+│   │
+│   ├── discovery/
+│   │   ├── registry.py
+│   │   ├── semantic.py
+│   │   └── ranking.py
+│   │
+│   ├── policy/
+│   │   ├── engine.py
+│   │   ├── decisions.py
+│   │   └── authorization.py
+│   │
+│   ├── capabilities/
+│   │   ├── decorator.py
+│   │   ├── registry.py
+│   │   └── executor.py
+│   │
+│   ├── graph/
+│   │   ├── graph.py          ← source truncates here
+│   │   └── ...
+```
+
+Inferred remainder, from the earlier sketch in the same source:
+
+```
+│   ├── cache.py
+│   └── provenance.py
+│
+├── tests/
+│   ├── test_contract.py
+│   ├── test_admission.py
+│   ├── test_graph.py
+│   ├── test_capabilities.py
+│   └── test_cache.py
+│
+└── evals/
+    ├── dataset_discovery.py
+    ├── agent_trajectory.py
+    ├── grounding.py
+    ├── regression.py
+    └── datasets/
+        ├── admission.jsonl
+        ├── discovery.jsonl
+        └── adversarial.jsonl
+```
+
+Note this layout differs slightly from `PLAN.md`, which flattens
+`discovery/`, `policy/` and `capabilities/` into single modules for M1.
+**Reconcile before M1 rather than during it.**
 
 ---
 
@@ -426,5 +1029,20 @@ Not *"a dataset exposes tools to an agent"*, but:
 > can be independently evaluated.
 
 **Testable** is the load-bearing word. It turns `GRANTED / REFUSED /
-INDETERMINATE`, provenance, capability selection, discovery and caching from
-architectural concepts into measurable properties.
+INDETERMINATE`, provenance, capability selection, semantic discovery and
+caching from architectural concepts into measurable properties.
+
+---
+
+## TODO
+
+- [ ] **Import the LlamaIndex variant.** A companion document maps the same
+      control plane onto LlamaIndex — Readers, `IngestionPipeline`,
+      Documents/Nodes, indexes and retrievers, `QueryEngineTool` and
+      `FunctionTool` capabilities, object/tool retrieval, event-driven
+      Workflows as the control plane, `FunctionAgent`/`AgentWorkflow`, MCP, the
+      same three-valued verdict, and native retrieval/response evaluators. It
+      belongs at `docs/ARCHITECTURE-LLAMAINDEX.md`, under the same
+      design-not-deployment label.
+- [ ] Reconcile §39 against the untruncated source.
+- [ ] Add the enforcement-point/IAM-condition pairing to §38.
