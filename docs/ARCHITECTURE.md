@@ -17,6 +17,14 @@ services.**
 > `dk-nfcore-admission-gate`. This expresses known behaviour in a mainstream
 > stack; it does not invent architecture.
 >
+>
+> **What is experience and what is design.** The framework bindings —
+> where state lives, how capabilities are declared, how evaluation runs —
+> come from team production work with these frameworks. **The
+> agentic-dataset control plane layered on top of them has not been
+> built.** Keep the two apart: the frameworks are experience, this
+> document is architecture.
+>
 > **Import note.** Transcribed 2026-08-31 from the source design document,
 > §1–38 complete. §39 (reference repository layout) was truncated in transit
 > partway through the tree; what survives is transcribed and the cut is marked.

@@ -11,6 +11,14 @@ services.**
 > is framework-independent, and two independent expressions of it demonstrate
 > that in a way one cannot.
 >
+>
+> **What is experience and what is design.** The framework bindings —
+> where state lives, how capabilities are declared, how evaluation runs —
+> come from team production work with these frameworks. **The
+> agentic-dataset control plane layered on top of them has not been
+> built.** Keep the two apart: the frameworks are experience, this
+> document is architecture.
+>
 > **Encoding note.** The source arrived with box-drawing characters mangled
 > (UTF-8 read as Latin-1). Diagrams have been re-rendered from their evident
 > intent rather than transcribed; content is otherwise faithful. §1–83 complete.
