@@ -20,8 +20,8 @@ services.**
 > **Import note.** Transcribed 2026-08-31 from the source design document,
 > §1–38 complete. §39 (reference repository layout) was truncated in transit
 > partway through the tree; what survives is transcribed and the cut is marked.
-> A companion **LlamaIndex** variant of this architecture exists and is not yet
-> imported — see `docs/` TODO at the end.
+> A companion **LlamaIndex** variant is imported at
+> [`ARCHITECTURE-LLAMAINDEX.md`](ARCHITECTURE-LLAMAINDEX.md) and is complete.
 
 ---
 
@@ -1036,13 +1036,10 @@ caching from architectural concepts into measurable properties.
 
 ## TODO
 
-- [ ] **Import the LlamaIndex variant.** A companion document maps the same
-      control plane onto LlamaIndex — Readers, `IngestionPipeline`,
-      Documents/Nodes, indexes and retrievers, `QueryEngineTool` and
-      `FunctionTool` capabilities, object/tool retrieval, event-driven
-      Workflows as the control plane, `FunctionAgent`/`AgentWorkflow`, MCP, the
-      same three-valued verdict, and native retrieval/response evaluators. It
-      belongs at `docs/ARCHITECTURE-LLAMAINDEX.md`, under the same
-      design-not-deployment label.
+- [x] **LlamaIndex variant imported** —
+      [`ARCHITECTURE-LLAMAINDEX.md`](ARCHITECTURE-LLAMAINDEX.md), §1–83
+      complete. It describes the *same* control plane on a different stack, and
+      its §68 repository layout is more complete than §39 here; prefer that one
+      where the two disagree.
 - [ ] Reconcile §39 against the untruncated source.
 - [ ] Add the enforcement-point/IAM-condition pairing to §38.

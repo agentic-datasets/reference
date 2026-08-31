@@ -94,4 +94,25 @@ docs/                 architecture; see docs/ARCHITECTURE.md
 - `dk-semantic-discovery-engine` — `VOLUME_SPEC`, descriptor semantics
 - `dk-agentic-datasets` — topic scratchpad, not an implementation home
 
+## Two ports, one control plane
+
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — LangChain / LangGraph / MCP /
+  LangSmith. §1–38 transcribed; §39 truncated in the source.
+- [`docs/ARCHITECTURE-LLAMAINDEX.md`](docs/ARCHITECTURE-LLAMAINDEX.md) —
+  LlamaIndex Workflows / QueryEngineTool / ObjectIndex / MCP / native
+  evaluators. §1–83, complete.
+
+Both are **design, not deployment**, and both say so on their first screen.
+
+The frameworks differ in where state lives, how capabilities are declared and
+how evaluation runs. The descriptor, the three-valued verdict, the
+authorization artifact, policy-aware discovery, the authorization-scoped cache
+key and the evidence ledger are **identical in both**.
+
+That is the argument this repository exists to make: **the governance model is
+not a property of a framework.** A claim that survives being expressed twice,
+in two ecosystems with different primitives, is a claim about the problem
+rather than about the tooling. Build M1 on one; keep the other current enough
+to prove the point.
+
 See [PLAN.md](PLAN.md) for milestones and the open questions.
