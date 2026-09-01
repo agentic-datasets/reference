@@ -1,0 +1,268 @@
+{
+  "queries": [
+    {
+      "query": "what do the batch records tell us about recovery",
+      "domain": "purification",
+      "relevant": [
+        "purification-batch-records",
+        "purification-step-yields",
+        "purification-buffer-conditions",
+        "purification-load-challenges",
+        "purification-elution-pools"
+      ]
+    },
+    {
+      "query": "what do the step yields tell us about recovery",
+      "domain": "purification",
+      "relevant": [
+        "purification-batch-records",
+        "purification-step-yields",
+        "purification-buffer-conditions",
+        "purification-load-challenges",
+        "purification-elution-pools"
+      ]
+    },
+    {
+      "query": "what do the buffer conditions tell us about recovery",
+      "domain": "purification",
+      "relevant": [
+        "purification-batch-records",
+        "purification-step-yields",
+        "purification-buffer-conditions",
+        "purification-load-challenges",
+        "purification-elution-pools"
+      ]
+    },
+    {
+      "query": "what do the peak tables tell us about column",
+      "domain": "chromatography",
+      "relevant": [
+        "chromatography-peak-tables",
+        "chromatography-column-performance",
+        "chromatography-gradient-profiles",
+        "chromatography-pooling-decisions",
+        "chromatography-resolution-trends"
+      ]
+    },
+    {
+      "query": "what do the column performance tell us about column",
+      "domain": "chromatography",
+      "relevant": [
+        "chromatography-peak-tables",
+        "chromatography-column-performance",
+        "chromatography-gradient-profiles",
+        "chromatography-pooling-decisions",
+        "chromatography-resolution-trends"
+      ]
+    },
+    {
+      "query": "what do the gradient profiles tell us about column",
+      "domain": "chromatography",
+      "relevant": [
+        "chromatography-peak-tables",
+        "chromatography-column-performance",
+        "chromatography-gradient-profiles",
+        "chromatography-pooling-decisions",
+        "chromatography-resolution-trends"
+      ]
+    },
+    {
+      "query": "what do the viability curves tell us about bioreactor",
+      "domain": "fermentation",
+      "relevant": [
+        "fermentation-viability-curves",
+        "fermentation-titer-profiles",
+        "fermentation-feed-schedules",
+        "fermentation-oxygen-transfer",
+        "fermentation-harvest-criteria"
+      ]
+    },
+    {
+      "query": "what do the titer profiles tell us about bioreactor",
+      "domain": "fermentation",
+      "relevant": [
+        "fermentation-viability-curves",
+        "fermentation-titer-profiles",
+        "fermentation-feed-schedules",
+        "fermentation-oxygen-transfer",
+        "fermentation-harvest-criteria"
+      ]
+    },
+    {
+      "query": "what do the feed schedules tell us about bioreactor",
+      "domain": "fermentation",
+      "relevant": [
+        "fermentation-viability-curves",
+        "fermentation-titer-profiles",
+        "fermentation-feed-schedules",
+        "fermentation-oxygen-transfer",
+        "fermentation-harvest-criteria"
+      ]
+    },
+    {
+      "query": "what do the potency assays tell us about analytical",
+      "domain": "analytics",
+      "relevant": [
+        "analytics-potency-assays",
+        "analytics-purity-results",
+        "analytics-impurity-profiles",
+        "analytics-release-testing",
+        "analytics-specification-limits"
+      ]
+    },
+    {
+      "query": "what do the purity results tell us about analytical",
+      "domain": "analytics",
+      "relevant": [
+        "analytics-potency-assays",
+        "analytics-purity-results",
+        "analytics-impurity-profiles",
+        "analytics-release-testing",
+        "analytics-specification-limits"
+      ]
+    },
+    {
+      "query": "what do the impurity profiles tell us about analytical",
+      "domain": "analytics",
+      "relevant": [
+        "analytics-potency-assays",
+        "analytics-purity-results",
+        "analytics-impurity-profiles",
+        "analytics-release-testing",
+        "analytics-specification-limits"
+      ]
+    },
+    {
+      "query": "what do the subject observations tell us about subject",
+      "domain": "clinical",
+      "relevant": [
+        "clinical-subject-observations",
+        "clinical-endpoint-summaries",
+        "clinical-adverse-events",
+        "clinical-dose-cohorts",
+        "clinical-visit-schedules"
+      ]
+    },
+    {
+      "query": "what do the endpoint summaries tell us about subject",
+      "domain": "clinical",
+      "relevant": [
+        "clinical-subject-observations",
+        "clinical-endpoint-summaries",
+        "clinical-adverse-events",
+        "clinical-dose-cohorts",
+        "clinical-visit-schedules"
+      ]
+    },
+    {
+      "query": "what do the adverse events tell us about subject",
+      "domain": "clinical",
+      "relevant": [
+        "clinical-subject-observations",
+        "clinical-endpoint-summaries",
+        "clinical-adverse-events",
+        "clinical-dose-cohorts",
+        "clinical-visit-schedules"
+      ]
+    },
+    {
+      "query": "what do the lot inventory tell us about inventory",
+      "domain": "supply",
+      "relevant": [
+        "supply-lot-inventory",
+        "supply-shipment-tracking",
+        "supply-cold-chain-excursions",
+        "supply-warehouse-stock",
+        "supply-logistics-routes"
+      ]
+    },
+    {
+      "query": "what do the shipment tracking tell us about inventory",
+      "domain": "supply",
+      "relevant": [
+        "supply-lot-inventory",
+        "supply-shipment-tracking",
+        "supply-cold-chain-excursions",
+        "supply-warehouse-stock",
+        "supply-logistics-routes"
+      ]
+    },
+    {
+      "query": "what do the cold chain excursions tell us about inventory",
+      "domain": "supply",
+      "relevant": [
+        "supply-lot-inventory",
+        "supply-shipment-tracking",
+        "supply-cold-chain-excursions",
+        "supply-warehouse-stock",
+        "supply-logistics-routes"
+      ]
+    },
+    {
+      "query": "what do the calibration records tell us about calibration",
+      "domain": "equipment",
+      "relevant": [
+        "equipment-calibration-records",
+        "equipment-maintenance-logs",
+        "equipment-downtime-events",
+        "equipment-asset-utilisation",
+        "equipment-sensor-streams"
+      ]
+    },
+    {
+      "query": "what do the maintenance logs tell us about calibration",
+      "domain": "equipment",
+      "relevant": [
+        "equipment-calibration-records",
+        "equipment-maintenance-logs",
+        "equipment-downtime-events",
+        "equipment-asset-utilisation",
+        "equipment-sensor-streams"
+      ]
+    },
+    {
+      "query": "what do the downtime events tell us about calibration",
+      "domain": "equipment",
+      "relevant": [
+        "equipment-calibration-records",
+        "equipment-maintenance-logs",
+        "equipment-downtime-events",
+        "equipment-asset-utilisation",
+        "equipment-sensor-streams"
+      ]
+    },
+    {
+      "query": "what do the deviations tell us about deviation",
+      "domain": "quality",
+      "relevant": [
+        "quality-deviations",
+        "quality-capa-records",
+        "quality-audit-findings",
+        "quality-complaints",
+        "quality-batch-disposition"
+      ]
+    },
+    {
+      "query": "what do the CAPA records tell us about deviation",
+      "domain": "quality",
+      "relevant": [
+        "quality-deviations",
+        "quality-capa-records",
+        "quality-audit-findings",
+        "quality-complaints",
+        "quality-batch-disposition"
+      ]
+    },
+    {
+      "query": "what do the audit findings tell us about deviation",
+      "domain": "quality",
+      "relevant": [
+        "quality-deviations",
+        "quality-capa-records",
+        "quality-audit-findings",
+        "quality-complaints",
+        "quality-batch-disposition"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2084 @@
+{
+  "datasets": [
+    {
+      "dataset": "purification-batch-records",
+      "domain": "purification",
+      "version": "2026.09.01",
+      "revision": "rev-purification-01",
+      "schema_version": "1",
+      "description": "Batch records for purification: purification recovery yield elution buffer capture polish load.",
+      "schemas": [
+        "batch_records"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over batch records in purification"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over batch records in purification"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over batch records in purification"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over batch records in purification"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-PURI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "purification-step-yields",
+      "domain": "purification",
+      "version": "2026.09.01",
+      "revision": "rev-purification-02",
+      "schema_version": "1",
+      "description": "Step yields for purification: purification recovery yield elution buffer capture polish load.",
+      "schemas": [
+        "step_yields"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over step yields in purification"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over step yields in purification"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over step yields in purification"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over step yields in purification"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-PURI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "purification-buffer-conditions",
+      "domain": "purification",
+      "version": "2026.09.01",
+      "revision": "rev-purification-03",
+      "schema_version": "1",
+      "description": "Buffer conditions for purification: purification recovery yield elution buffer capture polish load.",
+      "schemas": [
+        "buffer_conditions"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over buffer conditions in purification"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over buffer conditions in purification"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over buffer conditions in purification"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over buffer conditions in purification"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-PURI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "purification-load-challenges",
+      "domain": "purification",
+      "version": "2026.09.01",
+      "revision": "rev-purification-04",
+      "schema_version": "1",
+      "description": "Load challenges for purification: purification recovery yield elution buffer capture polish load.",
+      "schemas": [
+        "load_challenges"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over load challenges in purification"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over load challenges in purification"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over load challenges in purification"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over load challenges in purification"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-PURI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "purification-elution-pools",
+      "domain": "purification",
+      "version": "2026.09.01",
+      "revision": "rev-purification-05",
+      "schema_version": "1",
+      "description": "Elution pools for purification: purification recovery yield elution buffer capture polish load.",
+      "schemas": [
+        "elution_pools"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over elution pools in purification"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over elution pools in purification"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over elution pools in purification"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over elution pools in purification"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-PURI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "chromatography-peak-tables",
+      "domain": "chromatography",
+      "version": "2026.09.01",
+      "revision": "rev-chromatography-01",
+      "schema_version": "1",
+      "description": "Peak tables for chromatography: chromatography column peak resolution retention gradient pooling.",
+      "schemas": [
+        "peak_tables"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over peak tables in chromatography"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over peak tables in chromatography"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over peak tables in chromatography"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over peak tables in chromatography"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CHRO-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "chromatography-column-performance",
+      "domain": "chromatography",
+      "version": "2026.09.01",
+      "revision": "rev-chromatography-02",
+      "schema_version": "1",
+      "description": "Column performance for chromatography: chromatography column peak resolution retention gradient pooling.",
+      "schemas": [
+        "column_performance"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over column performance in chromatography"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over column performance in chromatography"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over column performance in chromatography"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over column performance in chromatography"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CHRO-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "chromatography-gradient-profiles",
+      "domain": "chromatography",
+      "version": "2026.09.01",
+      "revision": "rev-chromatography-03",
+      "schema_version": "1",
+      "description": "Gradient profiles for chromatography: chromatography column peak resolution retention gradient pooling.",
+      "schemas": [
+        "gradient_profiles"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over gradient profiles in chromatography"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over gradient profiles in chromatography"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over gradient profiles in chromatography"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over gradient profiles in chromatography"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CHRO-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "chromatography-pooling-decisions",
+      "domain": "chromatography",
+      "version": "2026.09.01",
+      "revision": "rev-chromatography-04",
+      "schema_version": "1",
+      "description": "Pooling decisions for chromatography: chromatography column peak resolution retention gradient pooling.",
+      "schemas": [
+        "pooling_decisions"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over pooling decisions in chromatography"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over pooling decisions in chromatography"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over pooling decisions in chromatography"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over pooling decisions in chromatography"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CHRO-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "chromatography-resolution-trends",
+      "domain": "chromatography",
+      "version": "2026.09.01",
+      "revision": "rev-chromatography-05",
+      "schema_version": "1",
+      "description": "Resolution trends for chromatography: chromatography column peak resolution retention gradient pooling.",
+      "schemas": [
+        "resolution_trends"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over resolution trends in chromatography"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over resolution trends in chromatography"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over resolution trends in chromatography"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over resolution trends in chromatography"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CHRO-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "fermentation-viability-curves",
+      "domain": "fermentation",
+      "version": "2026.09.01",
+      "revision": "rev-fermentation-01",
+      "schema_version": "1",
+      "description": "Viability curves for fermentation: fermentation bioreactor viability titer feed dissolved oxygen.",
+      "schemas": [
+        "viability_curves"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over viability curves in fermentation"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over viability curves in fermentation"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over viability curves in fermentation"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over viability curves in fermentation"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-FERM-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "fermentation-titer-profiles",
+      "domain": "fermentation",
+      "version": "2026.09.01",
+      "revision": "rev-fermentation-02",
+      "schema_version": "1",
+      "description": "Titer profiles for fermentation: fermentation bioreactor viability titer feed dissolved oxygen.",
+      "schemas": [
+        "titer_profiles"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over titer profiles in fermentation"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over titer profiles in fermentation"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over titer profiles in fermentation"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over titer profiles in fermentation"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-FERM-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "fermentation-feed-schedules",
+      "domain": "fermentation",
+      "version": "2026.09.01",
+      "revision": "rev-fermentation-03",
+      "schema_version": "1",
+      "description": "Feed schedules for fermentation: fermentation bioreactor viability titer feed dissolved oxygen.",
+      "schemas": [
+        "feed_schedules"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over feed schedules in fermentation"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over feed schedules in fermentation"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over feed schedules in fermentation"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over feed schedules in fermentation"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-FERM-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "fermentation-oxygen-transfer",
+      "domain": "fermentation",
+      "version": "2026.09.01",
+      "revision": "rev-fermentation-04",
+      "schema_version": "1",
+      "description": "Oxygen transfer for fermentation: fermentation bioreactor viability titer feed dissolved oxygen.",
+      "schemas": [
+        "oxygen_transfer"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over oxygen transfer in fermentation"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over oxygen transfer in fermentation"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over oxygen transfer in fermentation"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over oxygen transfer in fermentation"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-FERM-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "fermentation-harvest-criteria",
+      "domain": "fermentation",
+      "version": "2026.09.01",
+      "revision": "rev-fermentation-05",
+      "schema_version": "1",
+      "description": "Harvest criteria for fermentation: fermentation bioreactor viability titer feed dissolved oxygen.",
+      "schemas": [
+        "harvest_criteria"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over harvest criteria in fermentation"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over harvest criteria in fermentation"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over harvest criteria in fermentation"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over harvest criteria in fermentation"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-FERM-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "analytics-potency-assays",
+      "domain": "analytics",
+      "version": "2026.09.01",
+      "revision": "rev-analytics-01",
+      "schema_version": "1",
+      "description": "Potency assays for analytics: assay analytical potency purity impurity release specification.",
+      "schemas": [
+        "potency_assays"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over potency assays in analytics"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over potency assays in analytics"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over potency assays in analytics"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over potency assays in analytics"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-ANAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "analytics-purity-results",
+      "domain": "analytics",
+      "version": "2026.09.01",
+      "revision": "rev-analytics-02",
+      "schema_version": "1",
+      "description": "Purity results for analytics: assay analytical potency purity impurity release specification.",
+      "schemas": [
+        "purity_results"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over purity results in analytics"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over purity results in analytics"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over purity results in analytics"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over purity results in analytics"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-ANAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "analytics-impurity-profiles",
+      "domain": "analytics",
+      "version": "2026.09.01",
+      "revision": "rev-analytics-03",
+      "schema_version": "1",
+      "description": "Impurity profiles for analytics: assay analytical potency purity impurity release specification.",
+      "schemas": [
+        "impurity_profiles"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over impurity profiles in analytics"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over impurity profiles in analytics"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over impurity profiles in analytics"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over impurity profiles in analytics"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-ANAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "analytics-release-testing",
+      "domain": "analytics",
+      "version": "2026.09.01",
+      "revision": "rev-analytics-04",
+      "schema_version": "1",
+      "description": "Release testing for analytics: assay analytical potency purity impurity release specification.",
+      "schemas": [
+        "release_testing"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over release testing in analytics"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over release testing in analytics"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over release testing in analytics"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over release testing in analytics"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-ANAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "analytics-specification-limits",
+      "domain": "analytics",
+      "version": "2026.09.01",
+      "revision": "rev-analytics-05",
+      "schema_version": "1",
+      "description": "Specification limits for analytics: assay analytical potency purity impurity release specification.",
+      "schemas": [
+        "specification_limits"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over specification limits in analytics"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over specification limits in analytics"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over specification limits in analytics"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over specification limits in analytics"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-ANAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "clinical-subject-observations",
+      "domain": "clinical",
+      "version": "2026.09.01",
+      "revision": "rev-clinical-01",
+      "schema_version": "1",
+      "description": "Subject observations for clinical: clinical subject endpoint adverse dose cohort visit.",
+      "schemas": [
+        "subject_observations"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "search over subject observations in clinical"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "aggregate over subject observations in clinical"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "compare over subject observations in clinical"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "summarize over subject observations in clinical"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CLIN-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "clinical-endpoint-summaries",
+      "domain": "clinical",
+      "version": "2026.09.01",
+      "revision": "rev-clinical-02",
+      "schema_version": "1",
+      "description": "Endpoint summaries for clinical: clinical subject endpoint adverse dose cohort visit.",
+      "schemas": [
+        "endpoint_summaries"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "search over endpoint summaries in clinical"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "aggregate over endpoint summaries in clinical"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "compare over endpoint summaries in clinical"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "summarize over endpoint summaries in clinical"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CLIN-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "clinical-adverse-events",
+      "domain": "clinical",
+      "version": "2026.09.01",
+      "revision": "rev-clinical-03",
+      "schema_version": "1",
+      "description": "Adverse events for clinical: clinical subject endpoint adverse dose cohort visit.",
+      "schemas": [
+        "adverse_events"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "search over adverse events in clinical"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "aggregate over adverse events in clinical"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "compare over adverse events in clinical"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "summarize over adverse events in clinical"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CLIN-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "clinical-dose-cohorts",
+      "domain": "clinical",
+      "version": "2026.09.01",
+      "revision": "rev-clinical-04",
+      "schema_version": "1",
+      "description": "Dose cohorts for clinical: clinical subject endpoint adverse dose cohort visit.",
+      "schemas": [
+        "dose_cohorts"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "search over dose cohorts in clinical"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "aggregate over dose cohorts in clinical"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "compare over dose cohorts in clinical"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "summarize over dose cohorts in clinical"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CLIN-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "clinical-visit-schedules",
+      "domain": "clinical",
+      "version": "2026.09.01",
+      "revision": "rev-clinical-05",
+      "schema_version": "1",
+      "description": "Visit schedules for clinical: clinical subject endpoint adverse dose cohort visit.",
+      "schemas": [
+        "visit_schedules"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "search over visit schedules in clinical"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "aggregate over visit schedules in clinical"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "restricted",
+          "description": "compare over visit schedules in clinical"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "restricted",
+          "description": "summarize over visit schedules in clinical"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-CLIN-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "supply-lot-inventory",
+      "domain": "supply",
+      "version": "2026.09.01",
+      "revision": "rev-supply-01",
+      "schema_version": "1",
+      "description": "Lot inventory for supply: supply inventory lot shipment warehouse cold chain logistics.",
+      "schemas": [
+        "lot_inventory"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over lot inventory in supply"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over lot inventory in supply"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over lot inventory in supply"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over lot inventory in supply"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-SUPP-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "supply-shipment-tracking",
+      "domain": "supply",
+      "version": "2026.09.01",
+      "revision": "rev-supply-02",
+      "schema_version": "1",
+      "description": "Shipment tracking for supply: supply inventory lot shipment warehouse cold chain logistics.",
+      "schemas": [
+        "shipment_tracking"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over shipment tracking in supply"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over shipment tracking in supply"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over shipment tracking in supply"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over shipment tracking in supply"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-SUPP-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "supply-cold-chain-excursions",
+      "domain": "supply",
+      "version": "2026.09.01",
+      "revision": "rev-supply-03",
+      "schema_version": "1",
+      "description": "Cold chain excursions for supply: supply inventory lot shipment warehouse cold chain logistics.",
+      "schemas": [
+        "cold_chain_excursions"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over cold chain excursions in supply"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over cold chain excursions in supply"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over cold chain excursions in supply"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over cold chain excursions in supply"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-SUPP-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "supply-warehouse-stock",
+      "domain": "supply",
+      "version": "2026.09.01",
+      "revision": "rev-supply-04",
+      "schema_version": "1",
+      "description": "Warehouse stock for supply: supply inventory lot shipment warehouse cold chain logistics.",
+      "schemas": [
+        "warehouse_stock"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over warehouse stock in supply"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over warehouse stock in supply"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over warehouse stock in supply"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over warehouse stock in supply"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-SUPP-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "supply-logistics-routes",
+      "domain": "supply",
+      "version": "2026.09.01",
+      "revision": "rev-supply-05",
+      "schema_version": "1",
+      "description": "Logistics routes for supply: supply inventory lot shipment warehouse cold chain logistics.",
+      "schemas": [
+        "logistics_routes"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over logistics routes in supply"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over logistics routes in supply"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over logistics routes in supply"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over logistics routes in supply"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-SUPP-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "equipment-calibration-records",
+      "domain": "equipment",
+      "version": "2026.09.01",
+      "revision": "rev-equipment-01",
+      "schema_version": "1",
+      "description": "Calibration records for equipment: equipment calibration maintenance asset downtime utilisation sensor.",
+      "schemas": [
+        "calibration_records"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over calibration records in equipment"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over calibration records in equipment"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over calibration records in equipment"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over calibration records in equipment"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-EQUI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "equipment-maintenance-logs",
+      "domain": "equipment",
+      "version": "2026.09.01",
+      "revision": "rev-equipment-02",
+      "schema_version": "1",
+      "description": "Maintenance logs for equipment: equipment calibration maintenance asset downtime utilisation sensor.",
+      "schemas": [
+        "maintenance_logs"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over maintenance logs in equipment"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over maintenance logs in equipment"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over maintenance logs in equipment"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over maintenance logs in equipment"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-EQUI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "equipment-downtime-events",
+      "domain": "equipment",
+      "version": "2026.09.01",
+      "revision": "rev-equipment-03",
+      "schema_version": "1",
+      "description": "Downtime events for equipment: equipment calibration maintenance asset downtime utilisation sensor.",
+      "schemas": [
+        "downtime_events"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over downtime events in equipment"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over downtime events in equipment"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over downtime events in equipment"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over downtime events in equipment"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-EQUI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "equipment-asset-utilisation",
+      "domain": "equipment",
+      "version": "2026.09.01",
+      "revision": "rev-equipment-04",
+      "schema_version": "1",
+      "description": "Asset utilisation for equipment: equipment calibration maintenance asset downtime utilisation sensor.",
+      "schemas": [
+        "asset_utilisation"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over asset utilisation in equipment"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over asset utilisation in equipment"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over asset utilisation in equipment"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over asset utilisation in equipment"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-EQUI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "equipment-sensor-streams",
+      "domain": "equipment",
+      "version": "2026.09.01",
+      "revision": "rev-equipment-05",
+      "schema_version": "1",
+      "description": "Sensor streams for equipment: equipment calibration maintenance asset downtime utilisation sensor.",
+      "schemas": [
+        "sensor_streams"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "search over sensor streams in equipment"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "aggregate over sensor streams in equipment"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "internal",
+          "description": "compare over sensor streams in equipment"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "internal",
+          "description": "summarize over sensor streams in equipment"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-EQUI-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "quality-deviations",
+      "domain": "quality",
+      "version": "2026.09.01",
+      "revision": "rev-quality-01",
+      "schema_version": "1",
+      "description": "Deviations for quality: quality deviation capa audit complaint change control batch disposition.",
+      "schemas": [
+        "deviations"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over deviations in quality"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over deviations in quality"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over deviations in quality"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over deviations in quality"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-QUAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "quality-capa-records",
+      "domain": "quality",
+      "version": "2026.09.01",
+      "revision": "rev-quality-02",
+      "schema_version": "1",
+      "description": "Capa records for quality: quality deviation capa audit complaint change control batch disposition.",
+      "schemas": [
+        "CAPA_records"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over CAPA records in quality"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over CAPA records in quality"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over CAPA records in quality"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over CAPA records in quality"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-QUAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "quality-audit-findings",
+      "domain": "quality",
+      "version": "2026.09.01",
+      "revision": "rev-quality-03",
+      "schema_version": "1",
+      "description": "Audit findings for quality: quality deviation capa audit complaint change control batch disposition.",
+      "schemas": [
+        "audit_findings"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over audit findings in quality"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over audit findings in quality"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over audit findings in quality"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over audit findings in quality"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-QUAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "quality-complaints",
+      "domain": "quality",
+      "version": "2026.09.01",
+      "revision": "rev-quality-04",
+      "schema_version": "1",
+      "description": "Complaints for quality: quality deviation capa audit complaint change control batch disposition.",
+      "schemas": [
+        "complaints"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over complaints in quality"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over complaints in quality"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over complaints in quality"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over complaints in quality"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-QUAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    },
+    {
+      "dataset": "quality-batch-disposition",
+      "domain": "quality",
+      "version": "2026.09.01",
+      "revision": "rev-quality-05",
+      "schema_version": "1",
+      "description": "Batch disposition for quality: quality deviation capa audit complaint change control batch disposition.",
+      "schemas": [
+        "batch_disposition"
+      ],
+      "capabilities": [
+        {
+          "name": "search",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "search over batch disposition in quality"
+        },
+        {
+          "name": "aggregate",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "aggregate over batch disposition in quality"
+        },
+        {
+          "name": "compare",
+          "effect": "read",
+          "sensitivity": "confidential",
+          "description": "compare over batch disposition in quality"
+        },
+        {
+          "name": "summarize",
+          "effect": "compute",
+          "sensitivity": "confidential",
+          "description": "summarize over batch disposition in quality"
+        }
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "policies": [
+        "POL-QUAL-001"
+      ],
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "age_s": 3600,
+      "provenance": {
+        "system": "volume",
+        "source": "synthetic"
+      }
+    }
+  ]
+}

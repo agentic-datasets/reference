@@ -1,0 +1,328 @@
+{
+  "profiles": {
+    "process-engineer": {
+      "principal_class": "process-engineer",
+      "clearance": "confidential",
+      "grants": {
+        "purification-batch-records": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "purification-step-yields": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "purification-buffer-conditions": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "purification-load-challenges": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "purification-elution-pools": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-peak-tables": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-column-performance": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-gradient-profiles": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-pooling-decisions": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-resolution-trends": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "fermentation-viability-curves": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "fermentation-titer-profiles": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "fermentation-feed-schedules": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "fermentation-oxygen-transfer": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "fermentation-harvest-criteria": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "equipment-calibration-records": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "equipment-maintenance-logs": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "equipment-downtime-events": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "equipment-asset-utilisation": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "equipment-sensor-streams": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ]
+      }
+    },
+    "analyst": {
+      "principal_class": "analyst",
+      "clearance": "confidential",
+      "grants": {
+        "chromatography-peak-tables": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-column-performance": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-gradient-profiles": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-pooling-decisions": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "chromatography-resolution-trends": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-potency-assays": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-purity-results": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-impurity-profiles": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-release-testing": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-specification-limits": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-deviations": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-capa-records": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-audit-findings": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-complaints": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-batch-disposition": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ]
+      }
+    },
+    "clinical-reviewer": {
+      "principal_class": "clinical-reviewer",
+      "clearance": "restricted",
+      "grants": {
+        "analytics-potency-assays": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-purity-results": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-impurity-profiles": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-release-testing": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "analytics-specification-limits": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "clinical-subject-observations": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "clinical-endpoint-summaries": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "clinical-adverse-events": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "clinical-dose-cohorts": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "clinical-visit-schedules": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ]
+      }
+    },
+    "external-auditor": {
+      "principal_class": "external-auditor",
+      "clearance": "internal",
+      "grants": {
+        "quality-deviations": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-capa-records": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-audit-findings": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-complaints": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ],
+        "quality-batch-disposition": [
+          "search",
+          "aggregate",
+          "compare",
+          "summarize"
+        ]
+      }
+    }
+  }
+}
