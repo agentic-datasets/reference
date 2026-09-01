@@ -1,0 +1,47 @@
+name: conformance
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  core-only:
+    # The core has no dependencies. This job exists to prove it: if an import
+    # of langgraph, llama_index, google.adk or mcp leaks out of adapters/,
+    # this is where it fails.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - name: no framework is installed
+        run: |
+          python - <<'PY'
+          import importlib.util as u
+          for m in ("langgraph", "llama_index", "google.adk", "mcp"):
+              assert u.find_spec(m) is None, f"{m} should not be installed in this job"
+          PY
+      - run: python -m agentic_dataset.conformance --local
+      - run: pytest -q
+
+  all-runtimes:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[all]"
+      - name: AD-001..AD-015, every runtime, both dataset boundaries
+        run: python -m agentic_dataset.conformance
+      - run: pytest -q
+      - name: evaluation and the M6 measurement
+        run: |
+          python evals/evaluate.py
+          python evals/authorized_recall.py

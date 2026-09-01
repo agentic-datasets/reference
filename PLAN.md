@@ -3,116 +3,134 @@
 Milestones are ordered so that **each one produces something that runs**. A
 milestone that only produces more design does not belong in this file.
 
+**M1 through M6 are done.** What each produced, and what it did not, is in
+[`docs/RESULTS.md`](docs/RESULTS.md).
+
 ---
 
-## M1 — The contract, and a graph that refuses (target: ~250 lines)
+## M1 — The contract, and a graph that refuses ✅
 
-The smallest thing that demonstrates the thesis end to end.
-
-- [ ] `DatasetDescriptor` and `DatasetCapability` as typed models
-- [ ] One synthetic dataset with a descriptor: 3 capabilities, 2 prohibited operations
-- [ ] `Verdict = Approved | Refused | Indeterminate`, with typed reasons,
+- [x] `DatasetDescriptor` and `DatasetCapability` as typed models
+- [x] Three synthetic datasets with descriptors: 8 capabilities, 9 prohibitions
+- [x] `Verdict = Approved | Refused | Indeterminate`, with typed reasons,
       ported from `ok-governed-motion` — same names, same serialised strings
-- [ ] Approval token: only `Approved` mints one; execution requires one
-- [ ] LangGraph: `interpret -> discover -> resolve -> admit -> {execute | refuse | indeterminate}`
-- [ ] Evidence record per decision, written to a local append-only file
+- [x] Approval token: only `Approved` mints one; execution requires one
+- [x] `interpret -> discover -> resolve -> admit -> {execute | refuse | indeterminate}`
+- [x] Evidence record per decision, written to a hash-chained append-only file
 
-**Done when** three transcripts exist: one granted and executed, one refused, one
-indeterminate — and in the latter two, no execution occurred and the evidence
-says why.
+**Done when** three transcripts exist: one granted and executed, one refused,
+one indeterminate — and in the latter two, no execution occurred and the
+evidence says why. All four runtimes produce all three.
 
-**The test that matters is not that a refusal message was produced.** It is that
-after a refusal there was no capability to execute with. Assert on the absence
-of an execution record, not on the wording of an apology.
+**The test that matters is not that a refusal message was produced.** It is
+that after a refusal there was no capability to execute with, which is asserted
+as `grant is None and tool_calls == mcp_calls == a2a_calls == []`.
 
-## M2 — Conformance suite
+## M2 — Conformance suite ✅
 
-**Now specified in [CONFORMANCE.md](CONFORMANCE.md) as AD-001 … AD-015.** M2 is
-implementing it, not designing it. AD-003 through AD-006 first: if those hold, a
-misbehaving model cannot cause a policy violation, only a bad answer.
+- [x] Deterministic contract tests: policy verdicts, no LLM, no tolerance
+- [x] Routing: every admission arm, in every runtime, parametrised
+- [x] Negative paths — indeterminate does not fall through to execution;
+      evaluator timeout yields indeterminate, not refusal; missing descriptor,
+      schema-version mismatch and expired token each prevent execution
+- [x] Capability metadata tests: dataset, effect, classification, policy id
+- [x] Adversarial: the model cannot reach a raw tool that bypasses the wrapper
 
-- [ ] Deterministic contract tests: policy verdicts, no LLM, no tolerance
-- [ ] Graph routing: every admission arm, parametrised
-- [ ] Negative paths — the interesting half:
-      indeterminate does not fall through to execution;
-      evaluator timeout yields indeterminate, not refusal;
-      missing descriptor prevents execution;
-      schema-version mismatch prevents execution;
-      expired token prevents execution
-- [ ] Capability metadata tests: dataset, effect, classification, policy id
-- [ ] Adversarial: the model cannot reach a raw tool that bypasses the wrapper
+**Done when** the suite fails if any invariant is removed. It did fail, six
+times, on this implementation — [`docs/FINDINGS.md`](docs/FINDINGS.md) F-004 …
+F-009. Two of those were visible only at the MCP boundary and two only under
+the async runtimes.
 
-**Done when** the suite fails if any invariant is removed. A suite that passes
-against a broken control plane is decoration.
+## M3 — MCP boundary ✅
 
-## M3 — MCP boundary
+- [x] Every dataset behind an MCP server: descriptor, schema, lineage and
+      policy as resources; capabilities as tools
+- [x] The control plane consumes it through a real client session
+- [x] A second dataset registered **without touching the graph** —
+      `tests/test_mcp_boundary.py`, and the entire conformance matrix is run a
+      second time with every dataset behind the boundary
 
-- [ ] One dataset behind an MCP server: descriptor, schema and lineage as
-      resources; capabilities as tools
-- [ ] Control plane consumes it through the LangChain MCP adapter
-- [ ] A second dataset registered **without touching the graph** — the point of
-      the boundary
+The far side verifies the grant for itself. A boundary whose far side trusts
+its callers is not a boundary.
 
-## M4 — Semantic cache, authorization-scoped
+## M4 — Semantic cache, authorization-scoped ✅
 
-- [ ] Cache key over intent **and** dataset revision, capability,
-      authorization scope, principal class, schema version, freshness, policy
-      version
-- [ ] Isolation tests: same question, different principal class -> different key
-- [ ] Revoked access must not hit
-- [ ] Hit rate reported, with the honest note that it is a property of the
-      traffic and not of the cache
+- [x] Key over intent **and** dataset revision, capability, authorization
+      scope, principal class, schema version, freshness, policy version
+- [x] Isolation tests, including one per key dimension: change it, get a
+      different key, or the dimension is not protecting anything
+- [x] Revoked access does not hit
+- [ ] **Hit rate not reported.** `SemanticCache.stats` computes it, and it is
+      not published anywhere, because on a fixture workload it would be a
+      property of the fixture. It is a property of the traffic, and there is no
+      traffic here.
 
 **This is the security-critical milestone.** A semantic cache whose lookup is
-not authorization-aware is a policy bypass with good latency.
+not authorization-aware is a policy bypass with good latency. The cache here is
+lexical, not semantic, and [`docs/FINDINGS.md`](docs/FINDINGS.md) says so:
+under-hitting costs latency, over-hitting crosses a principal boundary.
 
-## M5 — Evaluation
+## M5 — Evaluation ✅
 
-- [ ] LangSmith datasets: admission, discovery, adversarial
-- [ ] Separate evaluators, not one judge — dataset selection, capability
-      selection, policy decision, prohibited-tool calls, trajectory validity,
-      provenance completeness
-- [ ] Deterministic evaluators wherever the property is mechanical; LLM-judge
-      only for semantic questions
-- [ ] Repetitions, so the probabilistic numbers carry a spread rather than a
-      single figure
+- [x] Labelled datasets: admission, discovery, adversarial
+- [x] Separate evaluators, not one judge — dataset selection, capability
+      selection, policy decision, refusal reason, prohibited execution,
+      trajectory validity, provenance completeness
+- [x] Deterministic evaluators wherever the property is mechanical
+- [x] Repetitions — and the honest reading of them: every spread is zero
+      because the interpreter is deterministic, so repetition currently
+      measures nothing
+- [ ] **Groundedness not measured.** It needs a model-generated answer. This
+      build synthesises no prose, so the metric would score its own formatter.
+- [ ] **Not wired to LangSmith.** The evaluators are plain functions over
+      `RunResult`. Tracing is an integration, not a result, and adding it
+      would make the suite depend on a hosted service to produce a number.
 
-**Gate shape**: 100% required for control-plane invariants (policy correctness,
-prohibited execution, provenance). Thresholds for probabilistic quality.
+**Gate shape**: 100% required for control-plane invariants. Thresholds for
+probabilistic quality. Both hold — see [`docs/RESULTS.md`](docs/RESULTS.md) §3.
 
-## M6 — Authorized Recall@K
+## M6 — Authorized Recall@K ✅
 
-The one genuinely new idea, and currently measured nowhere.
+- [x] Defined precisely enough to be disagreed with — including the two edge
+      cases decided rather than left to fall out of the arithmetic
+- [x] Measured against plain Recall@K on the same corpus
+- [x] Gap reported
 
-Retrieval quality over the subset a principal may actually use, rather than
-over the corpus. Discovery that surfaces a dataset the caller cannot touch has
-not helped, and standard Recall@K scores it as a success.
+**At K=5, moving the authorization filter ahead of truncation takes Authorized
+Recall@5 from 0.853 to 0.960 (+0.107). Plain Recall@5 stays at 0.867 and cannot
+see the difference. 68.8% of what retrieval surfaces is unusable to the
+principal who asked.**
 
-- [ ] Define it precisely enough to be disagreed with
-- [ ] Measure it against plain Recall@K on the same corpus
-- [ ] Report the gap
-
-**Do not cite this metric anywhere until M6 has a number.**
+The corpus is synthetic and the relevance judgements are by construction, so
+the absolute numbers belong to that construction. The gap is a property of
+where the filter sits, which is what the metric was defined to isolate.
+[`docs/RESULTS.md`](docs/RESULTS.md) §2 carries the caveats.
 
 ---
 
-## Open questions
+## Open questions, and the answers taken
 
-1. **Reuse or reimplement the verdict types?** Porting to Python risks drift
-   from the Rust original. Binding to it is heavier but keeps one definition.
-   Leaning: reimplement, with a conformance test that asserts the serialised
-   strings match `ok-governed-motion` exactly.
-2. **Which policy runtime?** Cedar, OPA/Rego, or a small internal evaluator.
-   The architecture must not depend on the answer.
-3. **Is the evidence ledger in scope, or a dependency?** `VOLUME_SPEC` already
-   defines decision records. Preference is to depend on it rather than invent a
-   second format.
-4. **Public or private?** Private for now. A reference implementation is more
-   useful public, and that is a separate decision under the prefix policy —
-   `dk-` becomes `ok-` on a rename, not a copy.
-5. **Does this become a paper?** It is a systems artifact, not a result. It
-   would strengthen the existing descriptor papers rather than stand alone —
-   unless M6 produces a number, in which case the metric is the paper.
+1. **Reuse or reimplement the verdict types?** *Reimplemented*, with
+   `tests/test_verdict_parity.py` asserting the serialised strings and
+   rationales, and reading `ok-governed-motion`'s `policy.rs` directly when it
+   is checked out beside this repository. The Rust `Seal` — which makes
+   `Approved` unnameable outside its module — has no exact Python equivalent;
+   the module-private sentinel used instead makes forging an approval
+   deliberate rather than accidental, and `verdict.py` says so.
+2. **Which policy runtime?** *A small internal evaluator.* Everything outside
+   `PolicyEngine` sees a `Verdict`; replacing the body of `evaluate` with a
+   Rego call changes no other module and no assertion. The architecture does
+   not depend on the answer, which was the actual requirement.
+3. **Is the evidence ledger in scope, or a dependency?** *In scope, minimally.*
+   A hash-chained JSONL file, with `verify_chain` stating exactly what that
+   buys: truncation and in-place edits become detectable, and nothing more. A
+   real deployment substitutes an event store; `verify_chain` is what such a
+   store would have to keep true.
+4. **Public or private?** Open. The prefix policy makes `dk-` private and `ok-`
+   public, so publishing is a rename rather than a copy.
+5. **Does this become a paper?** M6 produced a number, which was the stated
+   condition. The number is from one synthetic corpus and one implementation —
+   enough to justify the measurement, not yet enough to be the paper.
 
 ## Not in scope
 
@@ -120,8 +138,14 @@ not helped, and standard Recall@K scores it as a success.
 - A production deployment
 - Anything requiring the current employer's systems, data or people
 
-## Provenance of this plan
+## What would strengthen the result
 
-Derived from an architecture document written 2026-08-31 mapping the published
-agentic-dataset control plane onto LangChain, LangGraph and MCP. That document
-is design; import it to `docs/ARCHITECTURE.md` and keep it labelled as such.
+In rough order of how much each would add:
+
+1. **A second implementation by someone else**, from `CONFORMANCE.md` alone.
+   The four ports here share one `ControlPlane`; independent agreement is the
+   experiment this artifact does not run.
+2. **A model in the loop**, so the statistical rows carry a spread and the
+   invariant rows can be watched not moving.
+3. **A harder discovery corpus**, where MRR is not 1.000.
+4. **An embedding-keyed cache**, behind the same authorization dimensions.

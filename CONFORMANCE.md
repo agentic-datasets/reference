@@ -3,11 +3,13 @@
 **Fifteen assertions that any implementation of the agentic-dataset model must
 satisfy, in any framework.**
 
-> ## Status: SPECIFIED, NOT IMPLEMENTED.
+> ## Status: IMPLEMENTED, AND PASSING IN EIGHT CONFIGURATIONS.
 >
-> No implementation of this suite exists yet. It is written down first so that
-> the three architecture ports in [`docs/`](docs/) can be judged against
-> something rather than against each other.
+> `src/agentic_dataset/conformance/` implements all fifteen. They pass against
+> four runtimes at two dataset boundaries — 120 assertion-runs, no failures,
+> and **no assertion had to be dropped as inexpressible**.
+>
+> Run it: `python -m agentic_dataset.conformance`
 >
 > Source: `docs/ARCHITECTURE-ADK.md` §107, generalised.
 
@@ -21,12 +23,20 @@ each other prove nothing — they were written by the same person from the same
 model.
 
 **A conformance suite is what makes the agreement checkable.** If the same
-fifteen assertions pass against three independent runtimes with different
-primitives, the claim *"the governance model is not a property of a framework"*
-stops being an argument and becomes a result.
+fifteen assertions pass against independent runtimes with different primitives,
+the claim *"the governance model is not a property of a framework"* stops being
+an argument and becomes a result.
 
 That is the difference between a design document and a research artifact, and
 it is the reason [`PLAN.md`](PLAN.md) M2 exists.
+
+**One qualification, stated here rather than in a footnote.** The four ports in
+this repository share a single `ControlPlane`. That is deliberate — an
+assertion that passed because each port re-implemented its own policy would be
+four experiments rather than one — but it means the result is about the model
+being *expressible* in four runtimes, not about four independent
+implementations agreeing. A second implementation written by someone else from
+this file alone is the experiment this artifact does not run.
 
 ---
 
@@ -85,12 +95,19 @@ exactly zero. It does not get averaged into a score.
 ## Gate shape
 
 ```
-AD-001 .. AD-015                = 100%     invariants, never averaged
-Authorized Recall@5            >= 0.95     statistical
-Capability selection accuracy  >= 0.97     statistical
-Trajectory validity            >= 0.95     statistical
-Groundedness                   >= 0.93     statistical
+                                  gate      measured
+AD-001 .. AD-015                = 100%      15/15 x 8 configurations
+Authorized Recall@5            >= 0.95      0.960  (filter before truncation)
+                                            0.853  (filter after truncation)
+Capability selection accuracy  >= 0.97      1.000
+Trajectory validity            >= 0.95      1.000
+Groundedness                   >= 0.93      not measured -- no model-generated
+                                            answer exists in this build
 ```
+
+The two Authorized Recall@5 rows are the same retriever and the same corpus,
+differing only in where the authorization filter sits. **The gate is a
+statement about filter placement, not about retrieval quality.**
 
 > Governance is tested as an invariant. Semantic quality is tested
 > statistically. Running the two through one number destroys both.
@@ -99,18 +116,26 @@ Groundedness                   >= 0.93     statistical
 
 ## Framework independence
 
-The suite must be implementable three times without changing an assertion:
+The suite is implemented once and run against every runtime without changing an
+assertion. What differs between them is only where control flows:
 
-| | LangGraph | LlamaIndex Workflows | ADK Graph Workflows |
-|---|---|---|---|
-| Where admission routes | conditional edge | typed event | graph node + route |
-| Where AD-006 is enforced | wrapper | capability wrapper | `before_tool_callback` |
-| Where AD-013 applies | subgraph / tool | MCP ToolSpec | `McpToolset` / A2A |
-| Where AD-008 is checked | cache key | cache key | cache key |
+| | Native | LangGraph | LlamaIndex Workflows | Google ADK |
+|---|---|---|---|---|
+| Where admission routes | a function call | conditional edge | typed event dispatch | graph node + before-tool callback |
+| Where AD-006 is enforced | capability wrapper | capability wrapper | capability wrapper | wrapper + `before_tool_callback` |
+| Where AD-013 applies | `DelegatedExecutor` | `DelegatedExecutor` | `DelegatedExecutor` | `DelegatedExecutor` / `FunctionTool` |
+| Where AD-008 is checked | cache key | cache key | cache key | cache key |
+| Result | 15/15 | 15/15 | 15/15 | 15/15 |
 
-**If an assertion cannot be expressed in one of the three, that is a finding
-about the assertion, not about the framework.** Record it rather than dropping
-it.
+Each of those is run twice: once against local capabilities, and once with
+every dataset behind a real MCP client session. That second axis earned its
+place — two of the six defects in [`docs/FINDINGS.md`](docs/FINDINGS.md) were
+visible only across the boundary, and two only under the async runtimes.
+
+**If an assertion cannot be expressed in one of the runtimes, that is a finding
+about the assertion, not about the framework.** None had to be dropped;
+`docs/FINDINGS.md` records the two places where the implementation departed
+from the architecture documents instead.
 
 ---
 
@@ -125,4 +150,9 @@ assert against, so a fourth implementation in a fourth domain does not quietly
 diverge.
 
 That is worth noting because it means **three of the fifteen assertions already
-have a passing implementation, in a language none of the three ports use.**
+have a passing implementation, in a language none of these ports use.**
+
+`tests/test_verdict_parity.py` closes that loop: it asserts the Python strings
+and rationales against the literals above, and reads `policy.rs` directly when
+`ok-governed-motion` is checked out beside this repository. The Rust and Python
+verdicts cannot drift without a test failing.

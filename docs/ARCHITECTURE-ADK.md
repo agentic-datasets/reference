@@ -3,6 +3,20 @@
 **Reference architecture for governed, observable, testable agentic data
 services.** Third port. Orchestration: ADK 2.0 Graph Workflows.
 
+> ## Superseded in part: an implementation now exists.
+>
+> This document is **design, and it predates the code**. `src/agentic_dataset/`
+> implements the control plane it describes, and
+> [`RESULTS.md`](RESULTS.md) reports what runs. Where the code
+> disagrees with this document, [`FINDINGS.md`](FINDINGS.md) says so and says
+> why; **this document has not been retrofitted to match**, because a design
+> quietly edited to agree with its implementation stops being evidence of
+> anything.
+>
+> The status block below is the one it was written with.
+
+---
+
 > ## Status: DRAFT ARCHITECTURE. Design, not deployment.
 >
 > **And unlike the other two ports, this one is written from the published
