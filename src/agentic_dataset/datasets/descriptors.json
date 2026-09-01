@@ -1,0 +1,85 @@
+{
+  "datasets": [
+    {
+      "dataset": "purification-batches",
+      "version": "2026.08.31",
+      "revision": "s3-etag-4c1f9a",
+      "schema_version": "3",
+      "description": "Process and analytical data describing purification batches: recovery, yield, step conditions and in-process controls for downstream chromatography.",
+      "schemas": ["batch_record", "in_process_control", "step_condition"],
+      "capabilities": [
+        {"name": "search", "effect": "read", "sensitivity": "internal",
+         "description": "find batches by free text over batch records",
+         "arguments": ["query"]},
+        {"name": "compare_batches", "effect": "read", "sensitivity": "internal",
+         "policy": "BPD-DATA-014",
+         "description": "compare recovery and step conditions across two batches",
+         "arguments": ["batch_a", "batch_b"]},
+        {"name": "calculate_yield", "effect": "compute", "sensitivity": "internal",
+         "description": "compute step yield and cumulative recovery for a batch",
+         "arguments": ["batch_id"]},
+        {"name": "detect_outliers", "effect": "compute", "sensitivity": "confidential",
+         "policy": "BPD-DATA-021",
+         "description": "flag anomalous batches against the historical distribution",
+         "arguments": ["metric"]}
+      ],
+      "prohibited": [
+        "delete_source",
+        "overwrite_batch_record",
+        "bypass_governance",
+        "expose_restricted_identifiers"
+      ],
+      "policies": ["BPD-DATA-014", "BPD-DATA-021"],
+      "freshness": {"maximum_age_s": 86400},
+      "age_s": 3600,
+      "quality": {"required_fields": ["batch_ids", "recovery"]},
+      "retention": {"observations": 1000},
+      "provenance": {"system": "volume", "source": "s3"},
+      "endpoints": {"mcp": "stdio://purification"}
+    },
+    {
+      "dataset": "chromatography-results",
+      "version": "2026.08.20",
+      "revision": "s3-etag-90ab21",
+      "schema_version": "2",
+      "description": "Chromatography run results: peak tables, resolution, pooling decisions and column performance across polishing steps.",
+      "schemas": ["peak_table", "column_performance"],
+      "capabilities": [
+        {"name": "search", "effect": "read", "sensitivity": "internal",
+         "description": "find chromatography runs by free text", "arguments": ["query"]},
+        {"name": "aggregate", "effect": "compute", "sensitivity": "internal",
+         "description": "aggregate peak metrics over runs", "arguments": ["metric"]}
+      ],
+      "prohibited": ["delete_source", "bypass_governance"],
+      "policies": ["BPD-DATA-014"],
+      "freshness": {"maximum_age_s": 86400},
+      "age_s": 172800,
+      "quality": {},
+      "retention": {"observations": 5000},
+      "provenance": {"system": "volume", "source": "s3"}
+    },
+    {
+      "dataset": "clinical-private",
+      "version": "2026.07.02",
+      "revision": "pg-lsn-00ff31",
+      "schema_version": "1",
+      "description": "Subject-level clinical observations including recovery endpoints. Restricted; identifiers are never exposed through any capability.",
+      "schemas": ["subject_observation"],
+      "capabilities": [
+        {"name": "search", "effect": "read", "sensitivity": "restricted",
+         "policy": "BPD-CLIN-002",
+         "description": "find subject observations by free text", "arguments": ["query"]},
+        {"name": "aggregate", "effect": "compute", "sensitivity": "restricted",
+         "policy": "BPD-CLIN-002",
+         "description": "aggregate endpoints across subjects", "arguments": ["metric"]}
+      ],
+      "prohibited": ["expose_restricted_identifiers", "materialize", "delete_source"],
+      "policies": ["BPD-CLIN-002"],
+      "freshness": {"maximum_age_s": 604800},
+      "age_s": 7200,
+      "quality": {},
+      "retention": {"observations": 200},
+      "provenance": {"system": "volume", "source": "postgres"}
+    }
+  ]
+}

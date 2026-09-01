@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-dataset-reference"
+version = "0.1.0"
+description = "Reference implementation and conformance suite for the agentic-dataset control plane"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "BSL-1.1 (code); CC-BY-NC-4.0 (docs) -- see LICENSE.md" }
+dependencies = []
+
+# The core control plane has no dependencies. That is load-bearing: if the
+# governance model needed a framework, the claim this repository exists to
+# make would be false. Framework ports are extras.
+[project.optional-dependencies]
+langgraph = ["langgraph>=1.0", "langchain-core>=1.0"]
+llamaindex = ["llama-index-core>=0.14"]
+adk = ["google-adk>=2.0"]
+mcp = ["mcp>=2.0"]
+dev = ["pytest>=8"]
+all = [
+    "langgraph>=1.0", "langchain-core>=1.0",
+    "llama-index-core>=0.14", "google-adk>=2.0", "mcp>=2.0", "pytest>=8",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"agentic_dataset.datasets" = ["*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
