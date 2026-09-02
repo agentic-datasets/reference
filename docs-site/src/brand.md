@@ -18,6 +18,7 @@ they do not each get their own.
 | `agentic-dataset-mark.svg` | canonical. Uses `currentColor`, so it inverts for dark backgrounds with no second asset |
 | `agentic-dataset-mark-{16,32,48,64,128,256,512}.png` | rasterised, transparent |
 | `favicon.ico` | 16/32/48 |
+| `agentic-dataset-mark-avatar-1024.png` | the mark on a flat white ground, opaque, for avatars and anywhere transparency or SVG is refused |
 
 ## Using it
 
@@ -30,6 +31,10 @@ Two shapes, no text, no gradient, monochrome. Keep it that way.
   Use a word instead.
 - The opening is the point. Do not close it, and do not move it to another edge
   — a gap on the right edge reads as the letter C, which is why it is on top.
+- Where transparency is not an option — a GitHub avatar composites onto the
+  page and a black-on-transparent mark disappears in dark themes — use the
+  white-ground raster above. A flat ground is not a recolour: the mark itself
+  is unchanged, and it carries the clear space of this section baked in.
 
 ## Licensing — read this, it is not the same as the rest of the repository
 
