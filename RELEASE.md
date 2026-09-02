@@ -150,6 +150,23 @@ them is discovered after a DOI has been minted.
       generated from the repository's own files; CI fails if the two drift.
 - [x] **Tagged `v0.1.0-rc.1`** so the candidate itself is citable and the
       changes external scrutiny produces can be diffed against it.
+- [x] **Tagged `v0.1.0-rc.2` 2026-09-02.** `rc.1` names a tree whose
+      `CITATION.cff` points at the personal namespace, which is no longer where
+      the repository is. A candidate exists to be cited, so the citable tag
+      should not require a redirect to resolve.
+
+      It also carries the first green `conformance` run. Every run of that
+      workflow since it was added had failed at its first step -- a guard using
+      `importlib.util.find_spec("google.adk")`, which raises rather than
+      returning `None` when `google` is absent, so it broke exactly when its
+      condition held. The two steps below it, which run the suite from an
+      unrelated directory with no implementation installed and export the
+      vectors, had therefore never executed. They are the clean-room evidence
+      for claim 3, and CI now reproduces 17/17 target detection and 15/15
+      coverage from an environment holding nothing but the harness.
+
+      The two package versions stay at `0.1.0rc1`: they are separate
+      distributions with their own numbering, and neither has been published.
 - [ ] **Re-check the paper publication status immediately before `v0.1.0`.**
       `docs-site/pages/citation.md` states all three conference papers are
       accepted for 2026 and none is yet in published proceedings. That is

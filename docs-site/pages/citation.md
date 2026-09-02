@@ -8,7 +8,7 @@ candidate, cite the tag and the commit:
 
 ```
 Chernov, A. (2026). Agentic Dataset Reference Implementation and
-Conformance Suite (v0.1.0-rc.1) [Computer software].
+Conformance Suite (v0.1.0-rc.2) [Computer software].
 https://github.com/agentic-datasets/reference
 ```
 
