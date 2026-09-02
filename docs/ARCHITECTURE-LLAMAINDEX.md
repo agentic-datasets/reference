@@ -989,8 +989,8 @@ Bedrock or external LLM, policy service, OpenSearch/pgvector, ElastiCache, RDS
 PostgreSQL, S3, MCP services. Evidence in RDS/DynamoDB/S3 immutable archive.
 Observability via CloudWatch + OpenTelemetry + LlamaIndex instrumentation.
 
-> **Gap, same as the LangChain port.** `dk-job-applications/AWS-REFERENCE-DESIGNS.md`
-> pairs every enforcement point with the IAM condition that prevents bypass.
+> **Gap, same as the LangChain port.** The companion AWS reference designs
+> pair every enforcement point with the IAM condition that prevents bypass.
 > Neither port states its condition yet. Here it is: **only the capability
 > adapter's role may reach the data plane; the agent role has no path to it.**
 > Add it to both.

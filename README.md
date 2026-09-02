@@ -42,8 +42,8 @@ advertises bounded capabilities, accepts a semantic intent, decides whether an
 action is admissible, executes only what was admitted, refuses the rest, and
 leaves evidence. It exists across IEEE CCECE 2026, EMBC 2026 and
 BigDataService 2026, and its mechanisms exist in code — `ok-governed-motion`
-implements the three-valued verdict, `dk-semantic-gateway-v2` the retrieval and
-capability mesh, `dk-nfcore-admission-gate` the per-task gate.
+implements the three-valued verdict in Rust, and `ok-nfcore-admission-gate`
+the per-task admission gate, measured on a real bioinformatics workload.
 
 What did not exist was one artifact a third party can run, point at, and
 disagree with. This is that artifact.
@@ -274,9 +274,17 @@ vectors, in any language, for any purpose including a commercial one, requires
 no permission from anybody.** [`LICENSE.md`](LICENSE.md) is the map, with the
 per-tier reasoning and the BSL parameters.
 
-## Related
+## Related published work
 
-- `ok-governed-motion` — the three-valued verdict, in Rust. IEEE CBS 2026
-- `dk-semantic-gateway-v2` — retrieval, capability mesh over MCP, ontology
-- `dk-nfcore-admission-gate` — the per-task gate, measured on AWS HealthOmics
-- `dk-semantic-discovery-engine` — `VOLUME_SPEC`, descriptor semantics
+- [`ok-governed-motion`](https://github.com/doytsujin/ok-governed-motion) — the
+  three-valued verdict, in Rust, for robot motion rather than datasets. IEEE
+  CBS 2026. `tests/test_verdict_parity.py` checks this port against its
+  serialised strings.
+- [`ok-nfcore-admission-gate`](https://github.com/doytsujin/ok-nfcore-admission-gate)
+  — the same admission idea as a per-task gate, measured on a real nf-core
+  workload.
+- [`ok-agentic-datasets`](https://github.com/doytsujin/ok-agentic-datasets) —
+  the programme-level description of what agentic datasets are. CC BY 4.0.
+
+The papers above are the citable statements of the model. This repository is
+the runnable one.

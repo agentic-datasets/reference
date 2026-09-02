@@ -19,16 +19,15 @@ services.**
 
 > ## Status: DRAFT ARCHITECTURE. Design, not deployment.
 >
-> Nothing described here has been built or run. Same discipline as
-> `dk-job-applications/AWS-REFERENCE-DESIGNS.md`, which states it on its first
-> page for the same reason: a design argued on a page inherits none of the
-> constraints a running system would have imposed.
+> Nothing described here has been built or run. The status block is on the
+> first page for the reason such blocks exist: a design argued on a page
+> inherits none of the constraints a running system would have imposed.
 >
 > **What makes it credible anyway** is that it is a *port*. The three-valued
 > verdict, the approval token, capability-over-generic-tools, policy-aware
 > discovery and the authorization-scoped cache key are not proposals — they
-> exist in `ok-governed-motion`, `dk-semantic-gateway-v2` and
-> `dk-nfcore-admission-gate`. This expresses known behaviour in a mainstream
+> exist in `ok-governed-motion` and `ok-nfcore-admission-gate`, and in
+> unpublished companion work. This expresses known behaviour in a mainstream
 > stack; it does not invent architecture.
 >
 >
@@ -969,7 +968,7 @@ Observability: CloudWatch + OpenTelemetry + LangSmith
 
 Portable to Azure, GCP or on-premises.
 
-> Cross-reference: `dk-job-applications/AWS-REFERENCE-DESIGNS.md` maps three
+> Cross-reference: a companion set of AWS reference designs maps three
 > other built systems onto AWS with the same discipline, and pairs each
 > enforcement point with the IAM condition that prevents bypass. That pairing
 > is missing here and should be added — for this design the condition is that

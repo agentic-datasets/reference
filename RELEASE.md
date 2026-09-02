@@ -63,10 +63,9 @@ them is discovered after a DOI has been minted.
       around the prose describing it. Forcing BUSL onto a repository because it
       shares a programme name would have been the wrong kind of consistency.
 
-- [x] **Renamed 2026-09-02** — `dk-agentic-dataset-reference` →
-      `ok-agentic-dataset-reference`, under the prefix policy, while still
-      private. Done before publication rather than after, so no public name is
-      ever cited or cloned and then redirected.
+- [x] **Renamed 2026-09-02** to `ok-agentic-dataset-reference`, under the
+      naming policy, while still private. Done before publication rather than
+      after, so no public name is ever cited or cloned and then redirected.
 
 ## Mechanical, once the above are settled
 
