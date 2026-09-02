@@ -9,8 +9,17 @@ declares which assertion must catch it. `TARGETS` is the contract, and
 `tests/test_conformance_vectors.py` asserts every mutant is caught by the
 assertion named -- not merely by some assertion.
 
-Mutants often break more than their target. That is expected and is reported,
-because the additional failures say something about how the assertions overlap.
+Every one of the fifteen assertions has at least one mutant of its own. The
+first version of this file had thirteen mutants covering eleven assertions,
+which meant AD-002, AD-009, AD-013 and AD-014 were only ever exercised as
+cross-detectors -- visible the moment the detection matrix was drawn, and not
+before.
+
+Mutants often break more than their target. That is expected and is reported:
+`python -m agentic_dataset.conformance --matrix` prints which assertion catches
+which mutant, and the off-diagonal entries are a fact about how the assertions
+overlap rather than noise. Safety invariants that never overlap are usually
+invariants that do not cover much.
 """
 
 from __future__ import annotations
@@ -197,9 +206,68 @@ class ExpiredTokensAccepted(ToyImplementation):
         return {"dataset": dataset, "capability": capability, "rows": 2}
 
 
+class AdvertisedMeansImplemented(ToyImplementation):
+    """Every advertised capability is treated as implemented.
+
+    This is F-011 -- the mistake the toy actually made on its first run --
+    planted so it stays reproducible instead of surviving only as an anecdote.
+    """
+
+    name = "mutant:advertised-means-implemented"
+
+    def load_world(self, world):
+        super().load_world(world)
+        self._derive = True
+
+    def _op_register_descriptor(self, step):
+        result = super()._op_register_descriptor(step)
+        self._implemented |= {
+            (step["descriptor"]["dataset"], c["name"])
+            for c in step["descriptor"].get("capabilities", ())
+        }
+        return result
+
+
+class EvidenceOmitsPrincipal(ToyImplementation):
+    """Evidence cannot say who was acting."""
+
+    name = "mutant:evidence-omits-principal"
+
+    def _observe(self, *args, **kwargs):
+        observation = super()._observe(*args, **kwargs)
+        for row in observation.evidence:
+            row["principal_class"] = None
+        return observation
+
+
+class RemoteDelegationUnchecked(ToyImplementation):
+    """The MCP seam stops checking the scope. The A2A seam still does."""
+
+    name = "mutant:remote-delegation-unchecked"
+    _channel = "mcp"
+
+    def _op_delegate(self, step):
+        observation = super()._op_delegate(step)
+        if step["channel"] == self._channel and observation.errors:
+            observation.errors = []
+            calls = [f"{step['channel']}-target:{step['dataset']}.{step['capability']}"]
+            observation.mcp_calls = calls if step["channel"] == "mcp" else []
+            observation.a2a_calls = calls if step["channel"] == "a2a" else []
+            observation.executed_scope = dict(step["scope"])
+        return observation
+
+
+class HandoffUnchecked(RemoteDelegationUnchecked):
+    """The agent-handoff seam stops checking the scope. The MCP seam still does."""
+
+    name = "mutant:handoff-unchecked"
+    _channel = "a2a"
+
+
 # mutant class -> the assertion that must catch it
 TARGETS: dict[type, str] = {
     DescriptorNotValidated: "AD-001",
+    AdvertisedMeansImplemented: "AD-002",
     ExecutesWithoutAGrant: "AD-003",
     ExpiredTokensAccepted: "AD-003",
     RefusalStillMintsAuthority: "AD-004",
@@ -208,9 +276,12 @@ TARGETS: dict[type, str] = {
     DelegationWidensScope: "AD-007",
     CacheIgnoresPrincipal: "AD-008",
     CacheIgnoresRevision: "AD-008",
+    EvidenceOmitsPrincipal: "AD-009",
     RefusalLeavesNoEvidence: "AD-010",
     EvidenceOmitsRevision: "AD-011",
     EvidenceOmitsPolicyVersion: "AD-012",
+    RemoteDelegationUnchecked: "AD-013",
+    HandoffUnchecked: "AD-014",
     ProhibitionsIgnored: "AD-015",
 }
 

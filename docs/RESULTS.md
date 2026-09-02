@@ -1,19 +1,21 @@
 # Results
 
 ```
-15 conformance assertions, all checked through a public interface
+15 normative assertions, 85 language-neutral vector steps
 
-    9     subjects pass 15/15, one of them sharing no code with the reference
- 13/13    broken variants caught by their target assertion
-  0 / 39  prohibited steps executed, per subject
-  0 / 576 prohibited executions, white-box matrix
-  0 /  24 prohibited executions, evaluation
-    401   tests passed
+reference architecture      4 runtimes x 2 dataset boundaries   15/15 each
+independent implementation  shares no code with the above       15/15
+mutation analysis           17 targeted violations              17/17 detected
+                            15/15 assertions covered             2.2 assertions
+                                                                 per mutant
+execution safety            0 / 39  prohibited steps, per subject
+                            0 / 576 prohibited executions, white-box matrix
+                            0 /  24 prohibited executions, evaluation
+tests                       405 passed
 
-Authorized Recall@5
-  filter after truncation     0.853
-  filter before truncation    0.960
-                             +0.107
+Authorized Recall@5         filter after truncation     0.853
+                            filter before truncation    0.960
+                                                       +0.107
 ```
 
 The two prohibited-execution denominators are separate because they are
@@ -78,12 +80,18 @@ the same person who wrote the specification, and one person's reading of their
 own document is the weakest kind of independence. The outstanding experiment is
 a second reading by somebody else.
 
-**And the suite would now notice a broken implementation.** Thirteen variants,
+**And the suite would now notice a broken implementation.** Seventeen variants,
 each removing exactly one guarantee, are each caught by the assertion named for
-them — `python -m agentic_dataset.conformance --mutants`. The overlap map is in
-`PORTABILITY.md`; it is informative rather than noise, because removing the
-prohibition check breaks the evidence assertions too, and that dependency is a
-fact about the contract.
+them, and every one of the fifteen assertions has a mutant of its own —
+`python -m agentic_dataset.conformance --matrix`.
+
+The detection matrix in `PORTABILITY.md` reports two separate things, because
+they mean different things: **target detection** (17/17) says the suite is
+sensitive to each named violation, and **cross-detection** (2.2 assertions per
+mutant) says the assertions are not orthogonal. The second is a characterisation
+rather than a score. It is also how the coverage gap was found: the first
+version of the analysis had 13 mutants covering 11 assertions, and nothing in
+the pass/fail output revealed that four assertions were never under test.
 
 The move outside cost something, and `PORTABILITY.md` records it: AD-003 and
 AD-007 became universally quantified invariants over every observation rather
@@ -184,7 +192,7 @@ Capability selection measured 0.800 on the first run — see
 ## 4. Tests
 
 ```
-401 passed
+405 passed
 ```
 
 `pytest` parametrises the conformance suite down to one test per assertion per

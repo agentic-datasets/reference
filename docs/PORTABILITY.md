@@ -94,29 +94,31 @@ caught that would not have been worth building.
 
 ## Mutation results
 
-Thirteen deliberately broken variants, each removing exactly one guarantee.
-Every one is caught by the assertion named for it:
+Seventeen deliberately broken variants, each removing exactly one guarantee.
+The matrix is what `python -m agentic_dataset.conformance --matrix` prints; the
+committed run is in [`runs/mutation-matrix.txt`](runs/mutation-matrix.txt).
 
 ```
-mutant:descriptor-not-validated          AD-001   caught by AD-001
-mutant:executes-without-a-grant          AD-003   caught by AD-002, AD-003, AD-013, AD-014
-mutant:expired-tokens-accepted           AD-003   caught by AD-003, AD-013, AD-014
-mutant:refusal-still-mints-authority     AD-004   caught by AD-001, AD-004, AD-006, AD-015
-mutant:indeterminate-becomes-refusal     AD-005   caught by AD-005
-mutant:default-allow                     AD-006   caught by AD-006
-mutant:delegation-widens-scope           AD-007   caught by AD-007, AD-013, AD-014
-mutant:cache-ignores-principal           AD-008   caught by AD-008
-mutant:cache-ignores-revision            AD-008   caught by AD-008
-mutant:refusal-leaves-no-evidence        AD-010   caught by AD-009, AD-010
-mutant:evidence-omits-revision           AD-011   caught by AD-009, AD-010, AD-011
-mutant:evidence-omits-policy-version     AD-012   caught by AD-009, AD-010, AD-012
-mutant:prohibitions-ignored              AD-015   caught by AD-004, AD-009, AD-010, AD-015
+target detection : 17/17 mutants caught by their intended assertion
+cross-detection  : 2.2 assertions per mutant on average
+coverage         : 15/15 assertions have a mutant of their own
 ```
 
-The over-catching is informative rather than noise. Removing the prohibition
-check breaks AD-015 *and* AD-004 *and* the evidence assertions, because a
-prohibited action that executes also produces a granted decision where a
-refusal was recorded — the assertions are not independent, and the overlap map
-is a fact about the contract worth having written down.
+**The coverage line is there because it was not always 15/15.** The first
+version of this analysis had thirteen mutants covering eleven assertions, which
+meant AD-002, AD-009, AD-013 and AD-014 were exercised only as cross-detectors
+— never as the assertion under test. Nothing in the pass/fail output showed
+that. Drawing the matrix showed it immediately, and four mutants were added.
 
-Reproduce: `python -m agentic_dataset.conformance --mutants`
+**The off-diagonal entries are a result, not noise.** They say the fifteen
+assertions are not orthogonal, which is what safety invariants ought to look
+like: removing the prohibition check breaks AD-015 *and* AD-004 *and* the
+evidence assertions, because a prohibited action that executes also records a
+grant where a refusal belonged. An assertion whose row contains nothing but its
+own `T` is doing work nothing else does — AD-005, AD-011 and AD-012 are those,
+and that is worth knowing about them.
+
+The average of 2.2 is therefore a characterisation of the suite rather than a
+score. It should not be driven up or down.
+
+Reproduce: `python -m agentic_dataset.conformance --matrix`

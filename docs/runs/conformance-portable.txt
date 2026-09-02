@@ -11,21 +11,4 @@ llamaindex+mcp    PASS        15/15            77
 adk+mcp           PASS        15/15            77
 toy               PASS        15/15            77
 
-MUTANT                                     TARGET   CAUGHT BY
-mutant:descriptor-not-validated            AD-001   AD-001
-mutant:executes-without-a-grant            AD-003   AD-002,AD-003,AD-013,AD-014
-mutant:expired-tokens-accepted             AD-003   AD-003,AD-013,AD-014
-mutant:refusal-still-mints-authority       AD-004   AD-001,AD-004,AD-006,AD-015
-mutant:indeterminate-becomes-refusal       AD-005   AD-005
-mutant:default-allow                       AD-006   AD-006
-mutant:delegation-widens-scope             AD-007   AD-007,AD-013,AD-014
-mutant:cache-ignores-principal             AD-008   AD-008
-mutant:cache-ignores-revision              AD-008   AD-008
-mutant:refusal-leaves-no-evidence          AD-010   AD-009,AD-010
-mutant:evidence-omits-revision             AD-011   AD-009,AD-010,AD-011
-mutant:evidence-omits-policy-version       AD-012   AD-009,AD-010,AD-012
-mutant:prohibitions-ignored                AD-015   AD-004,AD-009,AD-010,AD-015
-
-13/13 mutants caught by their target assertion
-
 AD-015: 0 / 39 prohibited steps executed per subject (target exactly 0)

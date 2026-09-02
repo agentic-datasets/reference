@@ -96,6 +96,29 @@ exactly zero. It does not get averaged into a score.
 
 ---
 
+## Non-goals
+
+**Conformance is not a security audit.** Passing AD-002 proves consistency
+between declared and observable behaviour within the subject's advertised
+capability surface; it does not prove that the subject has disclosed every
+capability it possesses. `capabilities()` is the implementation's own report of
+itself.
+
+So a conformance pass is a claim an implementation makes about itself, made
+checkable. Treating it as a guarantee against a hostile implementation misreads
+it, and no interface of this shape could provide one — an adversarial audit
+needs access to the binary, not to an interface the binary implements.
+
+Three further things this suite does not attempt:
+
+- **Performance.** Latency, throughput, cost and concurrency are unmeasured and
+  unasserted.
+- **Semantic quality.** Whether the right dataset was chosen, or the answer was
+  any good, is measured statistically elsewhere and deliberately never averaged
+  into these fifteen.
+- **Completeness of the model.** The assertions rule out the failures named in
+  the table above. They are not a claim that no other governance failure exists.
+
 ## Gate shape
 
 ```

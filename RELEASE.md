@@ -21,25 +21,27 @@ them is discovered after a DOI has been minted.
       three-way split would follow, so this is decidable rather than
       hypothetical:
 
-      | tier | files | what it has to allow |
-      |---|---|---|
-      | specification | `CONFORMANCE.md`, `src/agentic_dataset/conformance/verbs.md`, `docs/PORTABILITY.md` | quoting, reproducing and extending the spec text |
-      | conformance assets | `conformance/` (world, vectors, `subjects.py`, `generate.py`, `toy_implementation.py`, `mutations.py`) and `src/agentic_dataset/conformance/` (interface + runner) | a third party building and testing an independent implementation, commercially or not |
-      | reference implementation | the rest of `src/agentic_dataset/`, `evals/`, `examples/` | whatever commercial boundary is wanted |
+      **Recommended split — not decided.** Five tiers, because the normative
+      JSON behaves more like data than like software and benefits from less
+      friction than the runner does:
 
-      The middle tier is now real: it imports no implementation, and a test
-      asserts it. Two consequences to settle:
+      | tier | files | recommended | why |
+      |---|---|---|---|
+      | specification prose | `CONFORMANCE.md`, `src/agentic_dataset/conformance/verbs.md`, `docs/PORTABILITY.md` | CC BY 4.0 | quote, reproduce and extend the spec text |
+      | normative vectors | `conformance/worlds/`, `conformance/vectors/`, `conformance/generate.py` | CC0 (or CC BY 4.0) | copy them into a Rust repo, ship them with a commercial implementation, transform them into another harness — friction here defeats the purpose |
+      | conformance runner | `src/agentic_dataset/conformance/`, `conformance/subjects.py`, `toy_implementation.py`, `mutations.py` | Apache-2.0 | a third party must be able to build *and test* an independent implementation, commercially or not |
+      | Authorized Recall | `src/agentic_dataset/authorized_recall/` | Apache-2.0 | imports nothing else here; the piece most likely to be used by people who never adopt the architecture, and there is no strategic gain in making that hard |
+      | reference implementation | the rest of `src/agentic_dataset/`, `evals/`, `examples/` | BSL, if the commercial boundary is still wanted | this is the part worth differentiating |
+
+      The middle tiers are now real rather than aspirational: they import no
+      implementation, and a test asserts it. Two consequences to settle:
       - CC BY-NC on `CONFORMANCE.md` restricts reuse of the specification
         *text*, which works against treating it as an interoperability
         specification. (It does not restrict implementing the method —
         copyright covers expression, not mechanism.)
       - BSL is source-available, not OSI-approved, which forecloses JOSS for as
-        long as it applies to the software. If the middle tier is permissively
-        licensed and the reference implementation stays BSL, that question
-        applies only to the third tier.
-      - `src/agentic_dataset/authorized_recall/` is a fourth candidate: it
-        imports nothing else in the repository and is the piece most likely to
-        be used by people who never adopt the architecture.
+        long as it applies to the software. Under the split above that question
+        applies only to the last tier.
 - [ ] **Rename** `dk-agentic-dataset-reference` → `ok-agentic-dataset-reference`
       under the prefix policy, at the moment it goes public and not before.
 
@@ -63,6 +65,11 @@ them is discovered after a DOI has been minted.
       ```
 - [ ] Make the repository public **before** tagging, so there is a window for
       external scrutiny before an immutable snapshot exists.
+- [ ] Invite a second implementation rather than writing one. The toy
+      establishes independence from the reference *code*; only somebody else's
+      reading establishes independence from the author's interpretation of the
+      contract. That is the next validation threshold, and writing a third
+      implementation here would not cross it.
 - [ ] Tag `v0.1.0` and archive that exact tag through the Zenodo GitHub
       integration. **Zenodo publication is irreversible** — confirm the record
       immediately before minting.

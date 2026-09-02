@@ -39,8 +39,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e ".[all]"
-      - name: portable suite, every subject, plus the mutants
-        run: python -m agentic_dataset.conformance --mutants
+      - name: portable suite, every subject, plus the mutation matrix
+        run: python -m agentic_dataset.conformance --matrix
       - name: white-box suite, 8 configurations
         run: python -m agentic_dataset.reference_suite
       - run: pytest -q

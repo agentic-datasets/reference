@@ -1,40 +1,36 @@
 # agentic-dataset-reference
 
-**One governance contract. Four agent runtimes. Two dataset boundaries. And an
-independent implementation that shares no code with any of them.**
+**A framework-independent behavioural contract for agentic datasets, expressed
+as language-neutral executable vectors and evaluated against implementations
+without access to their internals.**
 
 ```
-15 conformance assertions, all checked through a public interface
+15 normative assertions, 85 language-neutral vector steps
 
-    9  subjects pass 15/15   4 runtimes x 2 dataset boundaries, plus one
-                             implementation sharing nothing with the reference
-13/13  broken variants       each caught by its target assertion
- 0/39  prohibited steps executed, per subject
-  401  tests passed
+reference architecture      4 runtimes x 2 dataset boundaries   15/15 each
+independent implementation  shares no code with the above       15/15
+mutation analysis           17 targeted violations              17/17 detected
+                            all 15 assertions covered            2.2 assertions
+                                                                 per mutant
+defects exposed by the
+conversion to vectors       F-010, F-011
+execution safety            0 / 576 prohibited executions
+                            0 /  24 in the evaluation set
+tests                       405 passed
 
-Authorized Recall@5
-  filter after truncation     0.853
-  filter before truncation    0.960
-                             +0.107   -- plain Recall@5 stays at 0.867
-                                         and cannot see the difference
+Authorized Recall@5         filter after truncation     0.853
+                            filter before truncation    0.960
+                                                       +0.107
 ```
 
-Reproduce with `python -m agentic_dataset.conformance --mutants`. Raw output is
-in [`docs/runs/`](docs/runs/); the caveats attached to every number are in
+The four runtimes are the experimental variable, not the product. What is being
+tested is whether the contract survives being expressed somewhere else — and
+whether a harness that cannot see inside an implementation can still tell a
+conforming one from a broken one.
+
+Reproduce with `python -m agentic_dataset.conformance --matrix`. Raw output is
+in [`docs/runs/`](docs/runs/); every number's caveats are in
 [`docs/RESULTS.md`](docs/RESULTS.md).
-
-The conformance harness imports nothing from the implementation it tests — a
-constraint a test asserts, because it is what the portability claim rests on.
-The assertions, the world and the expectations are JSON in
-[`conformance/`](conformance/); Python is one runner.
-
-> ## Status: runs, and is not finished.
->
-> No deployment, no real data, no model in the loop by default, no latency or
-> cost claim. The independent implementation is a 250-line toy written by the
-> same person, which is weaker evidence than one written by somebody else —
-> that is the experiment still outstanding, and
-> [`CONTRIBUTING.md`](CONTRIBUTING.md) says how to run it.
 
 ---
 
@@ -137,10 +133,10 @@ from `ok-governed-motion`'s `policy.rs`, and
 pip install -e ".[all]"                      # or ".[dev]" for the core alone
 
 python -m agentic_dataset.conformance           # portable suite, every subject
-python -m agentic_dataset.conformance --mutants # and the 13 broken variants
+python -m agentic_dataset.conformance --matrix  # the 17-mutant detection matrix
 python -m agentic_dataset.reference_suite       # white-box suite, 8 configurations
 python conformance/generate.py                  # regenerate world and vectors
-pytest -q                                       # 401 tests
+pytest -q                                       # 405 tests
 
 python -m agentic_dataset.authorized_recall  # milestone M6, the metric
 python evals/evaluate.py                     # milestone M5, six evaluators
@@ -213,9 +209,9 @@ src/agentic_dataset/
     authorized_recall/  the metric, standalone: no dependency on any of the above
     datasets/         the synthetic reference dataset family
 conformance/          the normative artifact: world, vectors, verbs,
-                      an independent implementation and 13 broken variants
+                      an independent implementation and 17 broken variants
 examples/             one runnable script per runtime, plus the MCP boundary
-tests/                401 tests
+tests/                405 tests
 evals/                the M5 evaluators and the committed corpus record
 docs/                 architecture (three ports), results, findings, raw runs
 ```
