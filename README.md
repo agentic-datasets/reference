@@ -37,16 +37,24 @@ in [`docs/runs/`](docs/runs/); every number's caveats are in
 
 ## What this is
 
-The agentic-dataset model is published: a dataset that describes itself,
-advertises bounded capabilities, accepts a semantic intent, decides whether an
-action is admissible, executes only what was admitted, refuses the rest, and
-leaves evidence. It exists across IEEE CCECE 2026, EMBC 2026 and
-BigDataService 2026, and its mechanisms exist in code — `ok-governed-motion`
-implements the three-valued verdict in Rust, and `ok-nfcore-admission-gate`
-the per-task admission gate, measured on a real bioinformatics workload.
+An **agentic dataset** is a dataset that describes itself, advertises bounded
+capabilities, accepts a semantic intent, decides whether an action is
+admissible, executes only what was admitted, refuses the rest, and leaves
+evidence.
 
-What did not exist was one artifact a third party can run, point at, and
-disagree with. This is that artifact.
+The model is not new here, and neither are its mechanisms: `ok-governed-motion`
+implements the three-valued verdict in Rust for robot motion, and
+`ok-nfcore-admission-gate` implements the per-task admission gate, measured on
+a real bioinformatics workload. Both are public and linked below.
+
+What did not exist was **one artifact a third party can run, point at, and
+disagree with** — a contract stated precisely enough to be implemented twice,
+with a way to check whether two implementations agree. That is what this
+repository is.
+
+If you have never heard of any of this, start with
+[`CONFORMANCE.md`](CONFORMANCE.md): fifteen assertions, each naming a failure
+it rules out. Everything else here exists to check them.
 
 ## The claim, and how it is tested
 
@@ -273,6 +281,22 @@ openly licensed, while the reference implementation is not:
 vectors, in any language, for any purpose including a commercial one, requires
 no permission from anybody.** [`LICENSE.md`](LICENSE.md) is the map, with the
 per-tier reasoning and the BSL parameters.
+
+## Papers
+
+The model is argued in three conference papers, all accepted for 2026 and none
+yet in the published proceedings, so there are no DOIs to cite yet:
+
+| Venue | Title |
+|---|---|
+| IEEE CCECE 2026 | *Agentic Datasets as an Engineering Control Plane* |
+| IEEE EMBC 2026 | *Dataset Descriptors for Autonomous and Observable Biomedical Data Pipelines* |
+| IEEE BigDataService 2026 | *Agentic Data Services: A Control-Plane Architecture for Adaptive Data Workflows* |
+
+**Nothing in this repository depends on those papers.** The assertions,
+the vectors and the measurements stand on their own and are reproducible from a
+clone. The papers are where the model is motivated; this is where it is
+checked.
 
 ## Related published work
 

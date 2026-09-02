@@ -131,6 +131,13 @@ them is discovered after a DOI has been minted.
       software artifact and the scholarly artifact should not become
       version-coupled.
 
+- [x] **Git history reviewed and accepted 2026-09-02.** Earlier commits name
+      four private repositories, in commit *contents* rather than messages —
+      `git log -S` finds them. HEAD is clean and a leak scan over the tree
+      (keys, tokens, account ids, home paths, hostnames, credentials) found
+      nothing. The decision is to accept: the names leak, the contents do not,
+      and all four repositories stay private. **No history rewrite.**
+
 ## Deliberately not on this list
 
 **JOSS.** It requires an OSI-approved license and a public development history,
