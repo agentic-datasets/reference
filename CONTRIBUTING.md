@@ -20,28 +20,33 @@ is more useful to this project than any amount of code review.
 If you do this, please open an issue. A finding that AD-007 is ambiguous is a
 better outcome than a green tick.
 
+### How to do it
+
+1. Implement `ConformanceSubject` — four methods, in
+   [`interface.py`](src/agentic_dataset/conformance/interface.py). The control
+   verbs are in `verbs.md` beside it.
+2. Register it in [`conformance/subjects.py`](conformance/subjects.py).
+3. `python -m agentic_dataset.conformance`.
+
+The world and the vectors are JSON under [`conformance/`](conformance/), so an
+implementation in another language needs a runner for that JSON rather than a
+reimplementation of this harness. `conformance/toy_implementation.py` is a
+250-line worked example that imports the interface and nothing else.
+
 ### What is honest about the current state
 
-Only **2 of the 15 assertions** (AD-004 and AD-005) are checked purely through
-the public `Runtime` interface. The other thirteen reach into the reference
-implementation's objects — `plane.ledger`, `plane.capabilities`,
-`plane._cache_key`, `DelegatedExecutor`, and so on.
+The toy is independent of the reference implementation but **not of its
+author**. One person's reading of their own specification is the weakest kind
+of independence, and it is the reason this section exists. A second reading is
+the experiment.
 
-So the suite as it stands **cannot be pointed at a foreign implementation**. It
-is a conformance suite for this codebase that happens to cover four runtimes.
-Making it genuinely portable requires two things that do not exist yet:
-
-1. a declared conformance interface — what an implementation must expose to be
-   testable at all (decision, reason, absence of execution, evidence rows,
-   cache key dimensions, and the hooks to make an evaluator unreachable, revoke
-   a principal, or advance a dataset revision);
-2. language-neutral test vectors for the assertions expressible as
-   scenario → expected outcome, so an implementation in another language can be
-   checked without reimplementing the harness.
-
-That work is tracked in [`PLAN.md`](PLAN.md). Until it exists, treat
-`CONFORMANCE.md` as the specification and this repository as one worked example
-of it.
+[`docs/PORTABILITY.md`](docs/PORTABILITY.md) records where the contract had to
+change shape to leave the building — AD-003 and AD-007 became universally
+quantified invariants, AD-008 became behavioural rather than structural — and
+the one thing conformance cannot establish at all: a subject that under-reports
+its own capabilities passes AD-002 while hiding a tool. Conformance here is a
+claim an implementation makes about itself, made checkable. It is not an
+adversarial audit.
 
 ## Other contributions that would help
 

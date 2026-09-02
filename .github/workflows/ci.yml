@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  core-only:
-    # The core has no dependencies. This job exists to prove it: if an import
-    # of langgraph, llama_index, google.adk or mcp leaks out of adapters/,
-    # this is where it fails.
+  harness-purity:
+    # The portability claim rests on the conformance package importing no
+    # implementation. This job proves the harness runs with none installed --
+    # only the toy, which imports the interface and nothing else.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,10 +24,11 @@ jobs:
           for m in ("langgraph", "llama_index", "google.adk", "mcp"):
               assert u.find_spec(m) is None, f"{m} should not be installed in this job"
           PY
-      - run: python -m agentic_dataset.conformance --local
+      - name: the portable suite still runs
+        run: python -m agentic_dataset.conformance
       - run: pytest -q
 
-  all-runtimes:
+  all-subjects:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -38,10 +39,16 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e ".[all]"
-      - name: AD-001..AD-015, every runtime, both dataset boundaries
-        run: python -m agentic_dataset.conformance
+      - name: portable suite, every subject, plus the mutants
+        run: python -m agentic_dataset.conformance --mutants
+      - name: white-box suite, 8 configurations
+        run: python -m agentic_dataset.reference_suite
       - run: pytest -q
       - name: evaluation and the M6 measurement
         run: |
           python evals/evaluate.py
-          python evals/authorized_recall.py
+          python -m agentic_dataset.authorized_recall
+      - name: the committed vectors match the generator
+        run: |
+          python conformance/generate.py
+          git diff --exit-code conformance/

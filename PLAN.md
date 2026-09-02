@@ -138,36 +138,38 @@ where the filter sits, which is what the metric was defined to isolate.
 - A production deployment
 - Anything requiring the current employer's systems, data or people
 
-## M7 — a portable conformance suite
+## M7 — a portable conformance suite ✅
 
-Not started, and the thing most worth doing next.
+Before: 2 of 15 assertions checked through a public interface. After: 15.
 
-Only AD-004 and AD-005 are checked through the public `Runtime` interface; the
-other thirteen reach into this implementation's objects. So the invitation in
-`CONTRIBUTING.md` currently asks someone to implement the spec *and* write
-their own harness, which is a much larger ask than it looks.
+- [x] The conformance interface declared — four methods, one `Observation` type
+- [x] World, vectors and expectations as JSON; Python is one runner
+- [x] The conformance package imports nothing from any implementation, and a
+      test asserts it
+- [x] An independent implementation exists — `conformance/toy_implementation.py`,
+      250 lines, no framework, no MCP, no shared code — and passes 15/15
+- [x] 13 broken variants, each caught by the assertion named for it
+- [x] `docs/PORTABILITY.md` records what changed shape and what cannot be
+      reached from outside
 
-- [ ] Declare the conformance interface: what an implementation must expose
-      to be testable, reading and controlling
-- [ ] Emit the scenario → expected-outcome assertions as language-neutral
-      vectors (JSON), and drive the Python suite from those vectors so the two
-      cannot drift
-- [ ] State which assertions are *not* expressible as vectors and why — that
-      list is itself a finding about the specification
-- [ ] Prove it by checking a deliberately broken implementation and confirming
-      the expected assertions fail
+**The first finding came from the toy itself.** Its initial version derived
+`capabilities()` from the descriptors, making every advertised capability
+executable by construction. AD-002 caught it on the first run — which is the
+clearest evidence available that the suite is not vacuous.
 
-**Done when** a second implementation in another language can be checked
-without reimplementing the harness.
+**The second came from the vectors.** AD-008 failed at the MCP boundary only:
+after a revision change the server kept serving the revision it was constructed
+with. The white-box suite had never noticed, because it only asserted the miss
+and not the subsequent hit. `docs/FINDINGS.md` F-010.
 
 ## What would strengthen the result
 
 In rough order of how much each would add:
 
-1. **A second implementation by someone else**, from `CONFORMANCE.md` alone.
-   The four ports here share one `ControlPlane`; independent agreement is the
-   experiment this artifact does not run. M7 is the precondition for making
-   that ask reasonable.
+1. **A second implementation by someone else.** The toy is independent of the
+   reference implementation but not of its author, and one person's reading of
+   their own specification is the weakest kind of independence. M7 made the ask
+   reasonable — four methods and a JSON suite — but did not answer it.
 2. **A model in the loop**, so the statistical rows carry a spread and the
    invariant rows can be watched not moving.
 3. **A harder discovery corpus**, where MRR is not 1.000.

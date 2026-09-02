@@ -1,11 +1,14 @@
 # Results
 
 ```
-15 conformance assertions x 8 configurations = 120 assertion-runs, all passed
+15 conformance assertions, all checked through a public interface
 
-  0 / 576   prohibited executions, conformance matrix
-  0 /  24   prohibited executions, evaluation
-    247     tests passed
+    9     subjects pass 15/15, one of them sharing no code with the reference
+ 13/13    broken variants caught by their target assertion
+  0 / 39  prohibited steps executed, per subject
+  0 / 576 prohibited executions, white-box matrix
+  0 /  24 prohibited executions, evaluation
+    401   tests passed
 
 Authorized Recall@5
   filter after truncation     0.853
@@ -64,21 +67,29 @@ about the *expressibility* of the model in four runtimes, not about four
 independent implementations agreeing. A second implementation by someone else,
 from `CONFORMANCE.md` alone, is the experiment this one is not.
 
-**And the suite could not currently check one.** Of the fifteen assertions,
-only AD-004 and AD-005 are exercised purely through the public `Runtime`
-interface. The other thirteen reach into this implementation's objects —
-`plane.ledger`, `plane.capabilities`, `plane._cache_key`, `DelegatedExecutor`.
+**A ninth subject shares nothing.** `conformance/toy_implementation.py` is 250
+lines written from the specification — no framework, no MCP, no descriptor
+class, no policy engine; grants are integers in a dict — and it passes all
+fifteen. That is the evidence that the assertions are properties of the
+contract rather than of the reference architecture.
 
-| | assertions |
-|---|---|
-| checked through the public interface | AD-004, AD-005 |
-| require implementation internals | AD-001, AD-002, AD-003, AD-006, AD-007, AD-008, AD-009, AD-010, AD-011, AD-012, AD-013, AD-014, AD-015 |
+**What is still missing is independence of authorship.** The toy was written by
+the same person who wrote the specification, and one person's reading of their
+own document is the weakest kind of independence. The outstanding experiment is
+a second reading by somebody else.
 
-That is a property of how the checks were written, not of the assertions
-themselves: most of the thirteen are scenario → expected-outcome and would be
-expressible as language-neutral vectors against a declared interface. Until
-that exists, `CONFORMANCE.md` is the portable artifact and the harness is not.
-`CONTRIBUTING.md` says what would have to be built.
+**And the suite would now notice a broken implementation.** Thirteen variants,
+each removing exactly one guarantee, are each caught by the assertion named for
+them — `python -m agentic_dataset.conformance --mutants`. The overlap map is in
+`PORTABILITY.md`; it is informative rather than noise, because removing the
+prohibition check breaks the evidence assertions too, and that dependency is a
+fact about the contract.
+
+The move outside cost something, and `PORTABILITY.md` records it: AD-003 and
+AD-007 became universally quantified invariants over every observation rather
+than single pokes at a call site (stronger), and AD-008 became behavioural
+rather than structural (wider, and the structural version survives in
+`agentic_dataset.reference_suite`).
 
 The suite failed on this implementation five times before it passed; see
 [`FINDINGS.md`](FINDINGS.md) F-004 … F-009. Two of those were visible only in
@@ -173,7 +184,7 @@ Capability selection measured 0.800 on the first run — see
 ## 4. Tests
 
 ```
-247 passed
+401 passed
 ```
 
 `pytest` parametrises the conformance suite down to one test per assertion per

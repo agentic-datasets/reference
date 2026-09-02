@@ -3,13 +3,17 @@
 **Fifteen assertions that any implementation of the agentic-dataset model must
 satisfy, in any framework.**
 
-> ## Status: IMPLEMENTED, AND PASSING IN EIGHT CONFIGURATIONS.
+> ## Status: IMPLEMENTED, PORTABLE, AND PASSING AGAINST NINE SUBJECTS.
 >
-> `src/agentic_dataset/conformance/` implements all fifteen. They pass against
-> four runtimes at two dataset boundaries — 120 assertion-runs, no failures,
-> and **no assertion had to be dropped as inexpressible**.
+> All fifteen are checked **through a public interface**, against four runtimes
+> at two dataset boundaries *and* against an independent implementation that
+> shares no code with any of them. Thirteen deliberately broken variants are
+> each caught by the assertion named for them.
 >
-> Run it: `python -m agentic_dataset.conformance`
+> The harness imports nothing from any implementation. The normative artifacts
+> — the world, the vectors, the expectations — are JSON in `conformance/`.
+>
+> Run it: `python -m agentic_dataset.conformance --mutants`
 >
 > Source: `docs/ARCHITECTURE-ADK.md` §107, generalised.
 
@@ -96,7 +100,7 @@ exactly zero. It does not get averaged into a score.
 
 ```
                                   gate      measured
-AD-001 .. AD-015                = 100%      15/15 x 8 configurations
+AD-001 .. AD-015                = 100%      15/15 x 9 subjects
 Authorized Recall@5            >= 0.95      0.960  (filter before truncation)
                                             0.853  (filter after truncation)
 Capability selection accuracy  >= 0.97      1.000
@@ -137,27 +141,35 @@ about the assertion, not about the framework.** None had to be dropped;
 `docs/FINDINGS.md` records the two places where the implementation departed
 from the architecture documents instead.
 
-### The suite is not yet portable, and this file is
+### How to be tested
 
-Of the fifteen, only **AD-004 and AD-005** are checked purely through the
-public `Runtime` interface. The other thirteen reach into the reference
-implementation's objects, so the harness in `src/agentic_dataset/conformance/`
-**cannot today be pointed at a foreign implementation**.
+An implementation is conformance-testable when it exposes four things
+(`src/agentic_dataset/conformance/interface.py`):
 
-That is a property of how the checks were written rather than of the assertions.
-Making it portable needs two things that do not exist yet:
+```
+load_world(world)      adopt descriptors, principals and a policy version
+capabilities()         report every operation it will actually execute
+step(step)             run one control verb, return an Observation
+reset()                forget cache and evidence
+```
 
-1. **A declared conformance interface** — what an implementation must expose to
-   be testable at all. Reading: decision, reason, policy id, whether a grant
-   exists, tool/MCP/A2A call lists, evidence rows, and the cache key's
-   dimensions. Controlling: make the evaluator unreachable or slow, revoke a
-   principal, advance a dataset revision, register a malformed descriptor.
-2. **Language-neutral test vectors** for the assertions that are
-   scenario → expected-outcome, so an implementation in another language can be
-   checked without reimplementing the harness.
+`Observation` is the entire observable surface — decision, reason, policy id,
+whether a grant exists, the admitted and executed scopes, tool/MCP/A2A call
+lists, cache hit, evidence rows, errors. **If a property cannot be established
+from an Observation, a world and a sequence of steps, it is not part of the
+portable contract.**
 
-Until then: **this document is the portable artifact.** Implement against the
-prose, not against the Python.
+The control verbs are in `verbs.md` beside the interface. The worlds and
+vectors are JSON under `conformance/`, so an implementation in Rust, Go,
+TypeScript or Java can be checked without reproducing Python object semantics —
+Python is one runner, not the specification.
+
+`conformance/toy_implementation.py` is a 250-line worked example that imports
+the interface and nothing else, and passes all fifteen.
+
+`docs/PORTABILITY.md` records the three assertions whose shape changed when
+they moved outside, the one property that was deliberately widened, and the one
+that cannot be checked from outside at all.
 
 ---
 

@@ -121,6 +121,34 @@ Resolved by owning a loop on a worker thread rather than making the control
 plane async. Admission is not an I/O-bound problem, and colouring it async to
 accommodate one transport would push `await` into every policy call site.
 
+### F-010 — the MCP server kept serving the revision it was built with
+
+Found by the **portable** suite, at the MCP boundary only, and missed entirely
+by the white-box one.
+
+`_add_tool` captured `descriptor.revision` when the server was constructed, so
+after the dataset's data changed the far side went on verifying grants against
+the revision it had started with. The white-box AD-008 had only asserted that a
+revision change produces a cache *miss*; the vector additionally asserts the
+next identical request is a *hit*, and that second half is what exposed it.
+
+Fixed by reading the revision from the registry at call time. Recorded because
+it is the clearest argument for the portable suite existing: the assertion was
+the same, the implementation was the same, and only the way the property was
+expressed differed.
+
+### F-011 — the toy conflated advertised with implemented
+
+The first version of `conformance/toy_implementation.py` derived
+`capabilities()` from the descriptors it had been given, which made every
+advertised capability executable by construction. AD-002 failed on the first
+run.
+
+This is a finding about the *suite* rather than about the implementation: it is
+the only direct evidence that the assertions catch a real mistake made in
+earnest rather than one planted to be found. The thirteen mutants in
+`conformance/mutations.py` are planted; this one was not.
+
 ---
 
 ## The semantic cache is lexical

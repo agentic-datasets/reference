@@ -1,13 +1,16 @@
 # agentic-dataset-reference
 
-**One governance contract. Four agent runtimes. Two dataset boundaries.**
+**One governance contract. Four agent runtimes. Two dataset boundaries. And an
+independent implementation that shares no code with any of them.**
 
 ```
-15 conformance assertions x 8 configurations = 120 assertion-runs, all passed
+15 conformance assertions, all checked through a public interface
 
-  0 / 576   prohibited executions, conformance matrix
-  0 /  24   prohibited executions, evaluation
-    247     tests passed
+    9  subjects pass 15/15   4 runtimes x 2 dataset boundaries, plus one
+                             implementation sharing nothing with the reference
+13/13  broken variants       each caught by its target assertion
+ 0/39  prohibited steps executed, per subject
+  401  tests passed
 
 Authorized Recall@5
   filter after truncation     0.853
@@ -16,24 +19,22 @@ Authorized Recall@5
                                          and cannot see the difference
 ```
 
-Measured across a framework-free reference runtime, LangGraph, LlamaIndex
-Workflows and Google ADK, each over local and MCP dataset boundaries.
-Reproduce it with `python -m agentic_dataset.conformance`; the raw output is in
-[`docs/runs/`](docs/runs/) and the caveats on every number are in
+Reproduce with `python -m agentic_dataset.conformance --mutants`. Raw output is
+in [`docs/runs/`](docs/runs/); the caveats attached to every number are in
 [`docs/RESULTS.md`](docs/RESULTS.md).
 
-The two prohibited-execution denominators are kept apart on purpose. They come
-from different experiments — the conformance matrix and the evaluation set —
-and adding them into one 0/600 would merge two populations that were never
-sampled together.
+The conformance harness imports nothing from the implementation it tests — a
+constraint a test asserts, because it is what the portability claim rests on.
+The assertions, the world and the expectations are JSON in
+[`conformance/`](conformance/); Python is one runner.
 
 > ## Status: runs, and is not finished.
 >
 > No deployment, no real data, no model in the loop by default, no latency or
-> cost claim. And the conformance suite is **not yet portable**: only 2 of the
-> 15 assertions are checked through the public interface, so it cannot today be
-> pointed at somebody else's implementation. See
-> [`CONTRIBUTING.md`](CONTRIBUTING.md).
+> cost claim. The independent implementation is a 250-line toy written by the
+> same person, which is weaker evidence than one written by somebody else —
+> that is the experiment still outstanding, and
+> [`CONTRIBUTING.md`](CONTRIBUTING.md) says how to run it.
 
 ---
 
@@ -73,11 +74,17 @@ adk+mcp           PASS    15/15
 AD-015 prohibited execution rate: 0.000 (target exactly 0)
 ```
 
-The four ports share one `ControlPlane`, deliberately: an assertion that passed
-because each port re-implemented its own policy would be four experiments, not
-one. What the matrix shows is that the model is *expressible* in four runtimes
-with different primitives — not that four independent implementations agree.
-[`docs/RESULTS.md`](docs/RESULTS.md) §1 states both halves.
+The eight reference configurations share one `ControlPlane`, deliberately: an
+assertion that passed because each port re-implemented its own policy would be
+eight experiments, not one. **The ninth subject shares nothing.**
+`conformance/toy_implementation.py` is 250 lines written from the specification
+— grants are integers in a dict, the cache is a dict, there is no framework, no
+MCP and no policy engine — and it passes all fifteen. That is the evidence that
+the assertions are properties of the contract rather than of the reference
+architecture.
+
+It is still weaker evidence than an implementation written by someone else, and
+[`docs/RESULTS.md`](docs/RESULTS.md) §1 says why.
 
 ### Independent conformance implementations wanted
 
@@ -88,13 +95,16 @@ reference `ControlPlane`**, would test whether the specification is complete
 enough to be implemented twice and whether two implementations agree on the
 governance semantics.
 
-Two honest cautions before anyone tries. Only **AD-004 and AD-005** are
-currently checked through the public `Runtime` interface; the other thirteen
-reach into this implementation's internals, so the harness cannot yet be
-pointed at a foreign implementation. And a finding that an assertion is
-ambiguous is a more useful result than a passing run.
-[`CONTRIBUTING.md`](CONTRIBUTING.md) says what would have to exist to make the
-suite portable.
+The harness can now check one. Implement `ConformanceSubject`
+([`interface.py`](src/agentic_dataset/conformance/interface.py), four methods),
+register it in [`conformance/subjects.py`](conformance/subjects.py), and run
+the same vectors. `conformance/toy_implementation.py` is a worked example of
+exactly that.
+
+A finding that an assertion is ambiguous is a more useful result than a passing
+run. [`docs/PORTABILITY.md`](docs/PORTABILITY.md) records what the contract can
+and cannot reach, including the one property that was deliberately widened and
+the one that cannot be checked from outside at all.
 
 The suite failed on this implementation five times before it passed, twice only
 in the MCP configuration and twice only under the async runtimes. Those are
@@ -126,10 +136,11 @@ from `ok-governed-motion`'s `policy.rs`, and
 ```bash
 pip install -e ".[all]"                      # or ".[dev]" for the core alone
 
-python -m agentic_dataset.conformance        # AD-001..AD-015, every runtime
-python -m agentic_dataset.conformance --json # machine-readable
-python -m agentic_dataset.conformance --local   # skip the MCP boundary
-pytest -q                                    # 247 tests
+python -m agentic_dataset.conformance           # portable suite, every subject
+python -m agentic_dataset.conformance --mutants # and the 13 broken variants
+python -m agentic_dataset.reference_suite       # white-box suite, 8 configurations
+python conformance/generate.py                  # regenerate world and vectors
+pytest -q                                       # 401 tests
 
 python -m agentic_dataset.authorized_recall  # milestone M6, the metric
 python evals/evaluate.py                     # milestone M5, six evaluators
@@ -197,11 +208,14 @@ src/agentic_dataset/
     runtime.py        the control plane: nodes, state, RunResult
     mcp_boundary.py   a dataset behind MCP, and the client that consumes it
     adapters/         native · langgraph · llamaindex · adk
-    conformance/      AD-001..AD-015, implemented once
+    conformance/      the portable harness: interface + runner, no impl imports
+    reference_suite/  the white-box suite, which needs implementation access
     authorized_recall/  the metric, standalone: no dependency on any of the above
     datasets/         the synthetic reference dataset family
+conformance/          the normative artifact: world, vectors, verbs,
+                      an independent implementation and 13 broken variants
 examples/             one runnable script per runtime, plus the MCP boundary
-tests/                247 tests
+tests/                401 tests
 evals/                the M5 evaluators and the committed corpus record
 docs/                 architecture (three ports), results, findings, raw runs
 ```
@@ -215,8 +229,10 @@ docs/                 architecture (three ports), results, findings, raw runs
   — Authorized Recall@K: the definition, the two conventions, and the proof
   that the pre/post-filter gap is non-negative. The package has no dependency
   on the control plane, so the metric can be used without adopting any of this.
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — what an independent implementation
-  would need, and what is missing before the suite can check one.
+- [`docs/PORTABILITY.md`](docs/PORTABILITY.md) — what the portable contract
+  reaches, what it deliberately does not, and the mutation results.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to write an independent
+  implementation and register it as a subject.
 - [`RELEASE.md`](RELEASE.md) — what has to change together before this is
   published.
 - [`docs/RESULTS.md`](docs/RESULTS.md) — what was measured, with the caveats
