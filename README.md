@@ -29,9 +29,27 @@ tested is whether the contract survives being expressed somewhere else — and
 whether a harness that cannot see inside an implementation can still tell a
 conforming one from a broken one.
 
-Reproduce with `agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix`. Raw output is
-in [`docs/runs/`](docs/runs/); every number's caveats are in
+Reproduce with `agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix`.
+Raw output is in [`docs/runs/`](docs/runs/); every number's caveats are in
 [`docs/RESULTS.md`](docs/RESULTS.md).
+
+> ## Status: release candidate
+>
+> Public **before** `v0.1.0` is tagged, deliberately. Nothing is archived or
+> minted yet, so a finding can still change the artifact rather than becoming
+> errata against a DOI. If you find something,
+> [open an issue](https://github.com/doytsujin/ok-agentic-dataset-reference/issues)
+> — a finding that an assertion is ambiguous is more useful here than a passing
+> run.
+>
+> **What this is not.** No deployment, no real data, no model in the loop by
+> default, no latency or cost claim, and no security guarantee — see
+> [`docs/CLAIMS.md`](docs/CLAIMS.md), which is frozen and lists the one thing
+> explicitly not claimed. The independent implementation is a 250-line toy
+> **written by the same person who wrote the specification**: that establishes
+> independence from the reference *code*, not from its author's reading of the
+> contract. Interpretive independence is the next threshold and it needs
+> somebody else — [`CONTRIBUTING.md`](CONTRIBUTING.md) says how.
 
 ---
 
