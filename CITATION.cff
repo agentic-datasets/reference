@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software or the Authorized Recall@K metric, please cite it."
+title: "Agentic Dataset Reference Implementation and Conformance Suite"
+abstract: >-
+  One behavioural contract for governed agentic datasets, expressed as fifteen
+  conformance assertions (AD-001..AD-015), with a dependency-free reference
+  control plane mapped onto four agent runtimes (a framework-free reference,
+  LangGraph, LlamaIndex Workflows and Google ADK) and exercised across two
+  dataset boundaries (local and MCP). Includes Authorized Recall@K, a
+  retrieval metric defined over the subset of a corpus a principal is
+  authorized to use.
+type: software
+authors:
+  - family-names: Chernov
+    given-names: Alexander
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # add before archiving
+version: 0.1.0
+license-url: "https://github.com/doytsujin/dk-agentic-dataset-reference/blob/main/LICENSE.md"
+repository-code: "https://github.com/doytsujin/dk-agentic-dataset-reference"
+keywords:
+  - agentic datasets
+  - data governance
+  - conformance suite
+  - authorization-aware retrieval
+  - Model Context Protocol
+  - LangGraph
+  - LlamaIndex
+  - Google ADK
