@@ -139,15 +139,16 @@ expressed differed.
 
 ### F-011 — the toy conflated advertised with implemented
 
-The first version of `conformance/toy_implementation.py` derived
+The first version of the toy subject (now
+`agentic_dataset_conformance.toy`) derived
 `capabilities()` from the descriptors it had been given, which made every
 advertised capability executable by construction. AD-002 failed on the first
 run.
 
 This is a finding about the *suite* rather than about the implementation: it is
 the only direct evidence that the assertions catch a real mistake made in
-earnest rather than one planted to be found. The thirteen mutants in
-`conformance/mutations.py` are planted; this one was not.
+earnest rather than one planted to be found. The seventeen mutants in
+`agentic_dataset_conformance.mutations` are planted; this one was not.
 
 ---
 

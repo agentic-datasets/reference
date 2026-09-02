@@ -16,7 +16,7 @@ cross-detectors -- visible the moment the detection matrix was drawn, and not
 before.
 
 Mutants often break more than their target. That is expected and is reported:
-`python -m agentic_dataset.conformance --matrix` prints which assertion catches
+`agentic-dataset-conformance run --matrix` prints which assertion catches
 which mutant, and the off-diagonal entries are a fact about how the assertions
 overlap rather than noise. Safety invariants that never overlap are usually
 invariants that do not cover much.
@@ -24,12 +24,7 @@ invariants that do not cover much.
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent))
-
-from toy_implementation import SENSITIVITY, ToyImplementation  # noqa: E402
+from .toy import SENSITIVITY, ToyImplementation
 
 __all__ = ["MUTANTS", "TARGETS"]
 

@@ -29,7 +29,7 @@ tested is whether the contract survives being expressed somewhere else — and
 whether a harness that cannot see inside an implementation can still tell a
 conforming one from a broken one.
 
-Reproduce with `python -m agentic_dataset.conformance --matrix`. Raw output is
+Reproduce with `agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix`. Raw output is
 in [`docs/runs/`](docs/runs/); every number's caveats are in
 [`docs/RESULTS.md`](docs/RESULTS.md).
 
@@ -82,7 +82,7 @@ AD-015 prohibited execution rate: 0.000 (target exactly 0)
 The eight reference configurations share one `ControlPlane`, deliberately: an
 assertion that passed because each port re-implemented its own policy would be
 eight experiments, not one. **The ninth subject shares nothing.**
-`conformance/toy_implementation.py` is 250 lines written from the specification
+`packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py` is 250 lines written from the specification
 — grants are integers in a dict, the cache is a dict, there is no framework, no
 MCP and no policy engine — and it passes all fifteen. That is the evidence that
 the assertions are properties of the contract rather than of the reference
@@ -101,9 +101,9 @@ enough to be implemented twice and whether two implementations agree on the
 governance semantics.
 
 The harness can now check one. Implement `ConformanceSubject`
-([`interface.py`](src/agentic_dataset/conformance/interface.py), four methods),
+([`interface.py`](packages/agentic-dataset-conformance/src/agentic_dataset_conformance/interface.py), four methods),
 register it in [`conformance/subjects.py`](conformance/subjects.py), and run
-the same vectors. `conformance/toy_implementation.py` is a worked example of
+the same vectors. `packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py` is a worked example of
 exactly that.
 
 A finding that an assertion is ambiguous is a more useful result than a passing
@@ -138,11 +138,28 @@ from `ok-governed-motion`'s `policy.rs`, and
 
 ## Quickstart
 
-```bash
-pip install -e ".[all]"                      # or ".[dev]" for the core alone
+Two pieces are published distributions, independently installable and
+permissively licensed:
 
-python -m agentic_dataset.conformance           # portable suite, every subject
-python -m agentic_dataset.conformance --matrix  # the 17-mutant detection matrix
+```bash
+pip install agentic-dataset-conformance      # the contract + vectors + runner
+pip install authorized-recall                # the metric, Apache-2.0, no deps
+
+agentic-dataset-conformance run              # against its own worked example
+agentic-dataset-conformance run --matrix     # and the 17 broken variants
+agentic-dataset-conformance vectors --export ./vectors   # CC0, take them
+```
+
+Neither needs this repository. The reference implementation is **not** on PyPI
+— it is BUSL-1.1, and `pip install` reads as open source.
+
+For the reference implementation itself, from a clone:
+
+```bash
+pip install -e ./packages/authorized-recall -e ./packages/agentic-dataset-conformance -e ".[all]"
+
+agentic-dataset-conformance run --subject conformance.subjects:subjects           # portable suite, every subject
+agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix  # the 17-mutant detection matrix
 python -m agentic_dataset.reference_suite       # white-box suite, 8 configurations
 python conformance/generate.py                  # regenerate world and vectors
 pytest -q                                       # 405 tests

@@ -1,0 +1,13 @@
+The files in this directory -- the normative worlds and conformance vectors --
+are dedicated to the public domain under CC0 1.0 Universal.
+
+    SPDX-License-Identifier: CC0-1.0
+    Full text: ../../../LICENSES/CC0-1.0.txt
+               https://creativecommons.org/publicdomain/zero/1.0/
+
+No attribution is required and no conditions are attached. They are meant to be
+copied unchanged into implementations in other languages, and every condition
+would be friction against the only thing they exist for.
+
+The software in the parent package is Apache-2.0. The distribution as a whole
+is therefore "Apache-2.0 AND CC0-1.0".

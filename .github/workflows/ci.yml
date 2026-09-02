@@ -6,27 +6,56 @@ on:
   workflow_dispatch:
 
 jobs:
-  harness-purity:
-    # The portability claim rests on the conformance package importing no
-    # implementation. This job proves the harness runs with none installed --
-    # only the toy, which imports the interface and nothing else.
+  harness-standalone:
+    # The portability claim rests on the conformance distribution needing no
+    # implementation at all. This job installs *only* that package -- not the
+    # reference implementation, not this repository -- and runs the suite.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -e ".[dev]"
-      - name: no framework is installed
+      - run: pip install ./packages/agentic-dataset-conformance
+      - name: the reference implementation is not installed
         run: |
           python - <<'PY'
           import importlib.util as u
-          for m in ("langgraph", "llama_index", "google.adk", "mcp"):
+          for m in ("agentic_dataset", "langgraph", "llama_index", "google.adk", "mcp"):
               assert u.find_spec(m) is None, f"{m} should not be installed in this job"
           PY
-      - name: the portable suite still runs
-        run: python -m agentic_dataset.conformance
-      - run: pytest -q
+      - name: the suite runs against its own subject, from an unrelated directory
+        run: cd /tmp && agentic-dataset-conformance run --matrix
+      - name: the vectors can be exported for use elsewhere
+        run: cd /tmp && agentic-dataset-conformance vectors --export ./exported && ls ./exported/vectors | wc -l
+
+  packages-build:
+    # Both distributions must build and install standalone, wheel and sdist.
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - package: agentic-dataset-conformance
+            module: agentic_dataset_conformance
+          - package: authorized-recall
+            module: authorized_recall
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install build
+      - run: python -m build --outdir dist ./packages/${{ matrix.package }}
+      - name: wheel installs standalone and imports
+        run: |
+          python -m venv /tmp/w
+          /tmp/w/bin/pip install dist/*.whl
+          cd /tmp && /tmp/w/bin/python -c "import ${{ matrix.module }} as m; print(m.__name__, m.__version__)"
+      - name: sdist installs standalone and imports
+        run: |
+          python -m venv /tmp/s
+          /tmp/s/bin/pip install dist/*.tar.gz
+          cd /tmp && /tmp/s/bin/python -c "import ${{ matrix.module }} as m; print(m.__name__, m.__version__)"
 
   all-subjects:
     runs-on: ubuntu-latest
@@ -38,9 +67,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: pip install -e ".[all]"
+      - run: pip install -e ./packages/authorized-recall -e ./packages/agentic-dataset-conformance -e ".[all]"
       - name: portable suite, every subject, plus the mutation matrix
-        run: python -m agentic_dataset.conformance --matrix
+        run: agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix
       - name: white-box suite, 8 configurations
         run: python -m agentic_dataset.reference_suite
       - run: pytest -q

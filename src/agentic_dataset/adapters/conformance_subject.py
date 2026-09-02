@@ -1,8 +1,8 @@
 """Adapt the reference implementation to the portable conformance interface.
 
-This module lives outside `agentic_dataset.conformance` on purpose. The
-harness must not know what a `ControlPlane` is; the mapping from one to the
-other is the implementation's problem, and every implementation writes its own.
+The harness is a separate distribution and must not know what a `ControlPlane`
+is; the mapping from one to the other is the implementation's problem, and
+every implementation writes its own. This is ours.
 """
 
 from __future__ import annotations
@@ -12,7 +12,7 @@ from typing import Any, Callable, Sequence
 
 from ..admission import Evaluator
 from ..cache import SemanticCache
-from ..conformance.interface import Observation
+from agentic_dataset_conformance.interface import Observation
 from ..delegation import DelegatedExecutor
 from ..descriptor import DatasetDescriptor, DescriptorRegistry
 from ..grant import UnauthorizedExecution

@@ -26,7 +26,7 @@ The accurate one-sentence summary, and the one to use publicly:
 
 ```
 CONFORMANCE.md
-src/agentic_dataset/conformance/verbs.md
+packages/agentic-dataset-conformance/src/agentic_dataset_conformance/verbs.md
 docs/PORTABILITY.md
 docs/RESULTS.md
 docs/FINDINGS.md
@@ -44,8 +44,8 @@ commercially is not an interoperability specification.
 ## Tier 2 — Normative worlds and vectors · CC0-1.0
 
 ```
-conformance/worlds/*.json
-conformance/vectors/*.json
+packages/agentic-dataset-conformance/src/agentic_dataset_conformance/data/worlds/*.json
+packages/agentic-dataset-conformance/src/agentic_dataset_conformance/data/vectors/*.json
 ```
 
 <https://creativecommons.org/publicdomain/zero/1.0/>
@@ -56,14 +56,30 @@ vendored unchanged into a Rust crate, a Go module, a TypeScript package or a
 commercial product's test suite. Every condition attached to them is friction
 against the one outcome this repository most wants.
 
+## Tiers 2 and 3 are a published distribution
+
+`agentic-dataset-conformance` on PyPI carries both: the software under
+Apache-2.0 and the normative data under CC0-1.0, declared as the SPDX
+expression `Apache-2.0 AND CC0-1.0` rather than rounded to whichever is more
+convenient. `agentic_dataset_conformance/data/LICENSE` states the CC0
+dedication inside the distribution, so it survives being unpacked somewhere
+else.
+
+`authorized-recall` is a second published distribution, Apache-2.0.
+
+The reference implementation is **not published to PyPI**. `pip install` reads
+as open source to most people, and shipping BUSL code that way would be
+misleading whatever the metadata said.
+
 ## Tier 3 — Conformance software · Apache-2.0
 
 ```
-src/agentic_dataset/conformance/**       (interface, runner, CLI)
+packages/agentic-dataset-conformance/src/**   (interface, runner, CLI, toy, mutants)
 conformance/generate.py
 conformance/subjects.py
-conformance/toy_implementation.py
-conformance/mutations.py
+conformance/__init__.py
+packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py
+packages/agentic-dataset-conformance/src/agentic_dataset_conformance/mutations.py
 tests/test_conformance_vectors.py
 ```
 
@@ -135,7 +151,7 @@ Tiers 1–4 need no such agreement, commercially or otherwise.
 ## Independent reimplementation is explicitly welcome
 
 `CONFORMANCE.md` (CC BY 4.0) states the fifteen assertions in prose;
-`conformance/vectors/` (CC0) makes them executable. **Writing an independent
+the packaged `data/vectors/` (CC0) makes them executable. **Writing an independent
 implementation against them, in any language, for any purpose including a
 commercial one, and publishing whether it passes, requires no permission from
 anybody.** It is the outcome this license map is arranged around.

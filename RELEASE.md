@@ -110,7 +110,7 @@ them is discovered after a DOI has been minted.
 - [x] Re-ran everything and refreshed `docs/runs/` under the final repository
       identity:
       ```
-      python -m agentic_dataset.conformance
+      agentic-dataset-conformance run --subject conformance.subjects:subjects
       python -m authorized_recall
       python evals/evaluate.py
       pytest -q

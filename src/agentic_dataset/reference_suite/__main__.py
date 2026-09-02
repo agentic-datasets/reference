@@ -1,8 +1,8 @@
 """Run AD-001 .. AD-015 against every runtime available here.
 
-    python -m agentic_dataset.conformance            # table
-    python -m agentic_dataset.conformance --json     # machine-readable
-    python -m agentic_dataset.conformance --local    # skip the MCP boundary
+    python -m agentic_dataset.reference_suite            # table
+    python -m agentic_dataset.reference_suite --json     # machine-readable
+    python -m agentic_dataset.reference_suite --local    # skip the MCP boundary
 
 Exit status is 1 if any assertion fails, so this is usable as a CI gate.
 Runtimes whose framework is not installed are reported as skipped rather than

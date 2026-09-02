@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-dataset-conformance"
+version = "0.1.0"
+description = "AD-001..AD-015: the agentic-dataset governance contract as language-neutral executable conformance vectors, plus a runner that needs no access to an implementation's internals"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Alexander Chernov" }]
+
+# Two licences in one distribution, so the expression says so rather than
+# rounding to whichever is more convenient. The software is Apache-2.0; the
+# normative worlds and vectors under `data/` are dedicated to the public domain
+# under CC0-1.0, deliberately, so they can be vendored unchanged into an
+# implementation in any language with no attribution condition attached.
+license = "Apache-2.0 AND CC0-1.0"
+license-files = ["LICENSES/Apache-2.0.txt", "LICENSES/CC0-1.0.txt"]
+
+keywords = [
+    "conformance", "specification", "test vectors", "agentic datasets",
+    "data governance", "authorization", "admission control", "interoperability",
+]
+# No "License ::" classifier: PEP 639 supersedes them with the expression above,
+# and setuptools rejects having both.
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Quality Assurance",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+]
+
+# None. The harness must not depend on any implementation, including the
+# reference one, or it would be testing itself.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/doytsujin/ok-agentic-dataset-reference"
+Specification = "https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/CONFORMANCE.md"
+Source = "https://github.com/doytsujin/ok-agentic-dataset-reference/tree/main/packages/agentic-dataset-conformance"
+
+[project.scripts]
+agentic-dataset-conformance = "agentic_dataset_conformance.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+agentic_dataset_conformance = [
+    "data/worlds/*.json",
+    "data/vectors/*.json",
+    "data/LICENSE",
+    "verbs.md",
+]

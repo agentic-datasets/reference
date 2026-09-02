@@ -29,15 +29,21 @@ better outcome than a green tick.
 
 ### How to do it
 
+```bash
+pip install agentic-dataset-conformance
+```
+
 1. Implement `ConformanceSubject` — four methods, in
-   [`interface.py`](src/agentic_dataset/conformance/interface.py). The control
-   verbs are in `verbs.md` beside it.
-2. Register it in [`conformance/subjects.py`](conformance/subjects.py).
-3. `python -m agentic_dataset.conformance`.
+   [`interface.py`](packages/agentic-dataset-conformance/src/agentic_dataset_conformance/interface.py).
+   The control verbs are in `verbs.md` beside it.
+2. `agentic-dataset-conformance run --subject yourmodule:your_factory`
+
+You do not need this repository. The harness, the vectors and a worked example
+subject are all in that one package, which imports no implementation at all.
 
 The world and the vectors are JSON under [`conformance/`](conformance/), so an
 implementation in another language needs a runner for that JSON rather than a
-reimplementation of this harness. `conformance/toy_implementation.py` is a
+reimplementation of this harness. `packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py` is a
 250-line worked example that imports the interface and nothing else.
 
 ### What is honest about the current state
@@ -74,13 +80,13 @@ adversarial audit.
 ```bash
 pip install -e ".[all]"
 
-python -m agentic_dataset.conformance      # AD-001..AD-015, every runtime
+agentic-dataset-conformance run --subject conformance.subjects:subjects      # AD-001..AD-015, every runtime
 python -m authorized_recall
 python evals/evaluate.py
 pytest -q
 ```
 
-`python -m agentic_dataset.conformance` exits non-zero on any failure. CI also
+`agentic-dataset-conformance run --subject conformance.subjects:subjects` exits non-zero on any failure. CI also
 runs the core with **no** framework installed, which is where an import leaking
 out of `adapters/` fails.
 

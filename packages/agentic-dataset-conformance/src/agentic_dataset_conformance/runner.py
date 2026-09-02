@@ -17,14 +17,13 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
+from importlib import resources
 from pathlib import Path
 from typing import Any, Callable, Iterable, Sequence
 
 from .interface import ConformanceSubject, Observation, Scope
 
 __all__ = ["Vector", "VectorSuite", "SubjectReport", "run", "load_suite", "INVARIANTS"]
-
-DEFAULT_ROOT = Path(__file__).resolve().parents[3] / "conformance"
 
 
 # -- loading --------------------------------------------------------------
@@ -49,17 +48,38 @@ class VectorSuite:
         return tuple(sorted({v.assertion for v in self.vectors}))
 
 
-def load_suite(root: Path | str = DEFAULT_ROOT) -> VectorSuite:
-    root = Path(root)
-    worlds = {
-        p.stem: json.loads(p.read_text()) for p in (root / "worlds").glob("*.json")
-    }
+def load_suite(root: Path | str | None = None) -> VectorSuite:
+    """Load the normative suite.
+
+    Defaults to the vectors packaged with this distribution, read through
+    `importlib.resources` rather than from a path relative to a checkout --
+    an installed package has no checkout around it. `root` overrides that with
+    a directory containing `worlds/` and `vectors/`, which is how a fork or a
+    draft revision is tried without reinstalling.
+    """
+    if root is None:
+        data = resources.files(__package__) / "data"
+        worlds = {
+            p.name.removesuffix(".json"): json.loads(p.read_text())
+            for p in (data / "worlds").iterdir() if p.name.endswith(".json")
+        }
+        entries = sorted(
+            (p for p in (data / "vectors").iterdir() if p.name.endswith(".json")),
+            key=lambda p: p.name,
+        )
+    else:
+        root = Path(root)
+        worlds = {
+            p.stem: json.loads(p.read_text()) for p in (root / "worlds").glob("*.json")
+        }
+        entries = sorted((root / "vectors").glob("*.json"))
+
     vectors = []
-    for path in sorted((root / "vectors").glob("*.json")):
+    for path in entries:
         raw = json.loads(path.read_text())
         vectors.append(
             Vector(
-                name=path.stem,
+                name=path.name.removesuffix(".json"),
                 assertion=raw["assertion"],
                 rules_out=raw.get("rules_out", ""),
                 steps=tuple(raw["steps"]),

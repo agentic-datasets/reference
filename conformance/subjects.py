@@ -1,11 +1,9 @@
 """Which implementations to test, and how to build them.
 
-This file lives outside `agentic_dataset.conformance` so that the harness has
-no import of any implementation -- including the reference one. Adding a
-subject is editing this list; nothing in the package changes.
-
-A foreign implementation registers itself here the same way: import it, return
-something that satisfies `ConformanceSubject`.
+The harness is a separate distribution and imports no implementation. This file
+is how *this* repository registers its own subjects with it; a foreign
+implementation does the same thing from its own package, or passes
+`--subject module:attribute` on the command line and writes no file at all.
 """
 
 from __future__ import annotations
@@ -30,9 +28,10 @@ def subjects() -> list[Any]:
     except Exception:
         pass
 
-    # An implementation that shares nothing with the one above.
+    # An implementation that shares nothing with the one above, shipped with the
+    # conformance distribution rather than with this repository.
     try:
-        from toy_implementation import ToyImplementation
+        from agentic_dataset_conformance.toy import ToyImplementation
 
         found.append(ToyImplementation())
     except Exception:

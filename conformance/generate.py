@@ -5,6 +5,9 @@ the suite runs without regenerating, and `pytest` asserts the committed files
 match what this produces.
 
     python conformance/generate.py
+
+It imports the reference implementation to build the world from its fixtures,
+so it is not part of the conformance distribution -- the data it emits is.
 """
 
 from __future__ import annotations
@@ -14,6 +17,12 @@ from pathlib import Path
 
 HERE = Path(__file__).parent
 REPO = HERE.parent
+# The normative data lives inside the distribution that ships it, so there is
+# one copy rather than a repository copy and a packaged copy that can drift.
+DATA = (
+    REPO / "packages" / "agentic-dataset-conformance"
+    / "src" / "agentic_dataset_conformance" / "data"
+)
 
 PROHIBITED = {
     "purification-batches": [
@@ -290,15 +299,15 @@ def _phantom_descriptor() -> dict:
 
 
 def main() -> None:
-    (HERE / "worlds").mkdir(exist_ok=True)
-    (HERE / "vectors").mkdir(exist_ok=True)
-    (HERE / "worlds" / "reference.json").write_text(
+    (DATA / "worlds").mkdir(parents=True, exist_ok=True)
+    (DATA / "vectors").mkdir(parents=True, exist_ok=True)
+    (DATA / "worlds" / "reference.json").write_text(
         json.dumps(world(), indent=2, sort_keys=True) + "\n"
     )
     produced = vectors()
     for name, vector in produced.items():
         vector.setdefault("world", "reference")
-        (HERE / "vectors" / f"{name}.json").write_text(
+        (DATA / "vectors" / f"{name}.json").write_text(
             json.dumps(vector, indent=2) + "\n"
         )
     steps = sum(len(v["steps"]) for v in produced.values())

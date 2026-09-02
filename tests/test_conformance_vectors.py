@@ -10,13 +10,13 @@ from pathlib import Path
 
 import pytest
 
-from agentic_dataset.conformance import load_suite, run
-from agentic_dataset.conformance.runner import DEFAULT_ROOT
+from agentic_dataset_conformance import load_suite, run, vectors_path
+from agentic_dataset_conformance.mutations import TARGETS
 
 REPO = Path(__file__).resolve().parents[1]
+HARNESS = REPO / "packages/agentic-dataset-conformance/src/agentic_dataset_conformance"
 sys.path.insert(0, str(REPO / "conformance"))
 
-from mutations import TARGETS  # noqa: E402
 from subjects import subjects  # noqa: E402
 
 SUITE = load_suite()
@@ -45,7 +45,7 @@ def test_the_harness_imports_no_implementation():
     become a test of this codebase again.
     """
     offenders = []
-    for path in sorted((REPO / "src/agentic_dataset/conformance").glob("*.py")):
+    for path in sorted(HARNESS.glob("*.py")):
         for node in ast.walk(ast.parse(path.read_text())):
             if isinstance(node, ast.ImportFrom):
                 module = ("." * node.level) + (node.module or "")
@@ -53,10 +53,10 @@ def test_the_harness_imports_no_implementation():
                 module = ",".join(a.name for a in node.names)
             else:
                 continue
-            if module.startswith("agentic_dataset"):
-                offenders.append(f"{path.name}: {module}")
-            if module.startswith(".") and module.lstrip(".").split(".")[0] not in (
-                "interface", "runner", ""
+            # The harness may import itself; it may not import any
+            # implementation, the reference one included.
+            if module.startswith("agentic_dataset") and not module.startswith(
+                "agentic_dataset_conformance"
             ):
                 offenders.append(f"{path.name}: {module}")
     assert not offenders, offenders
@@ -72,7 +72,7 @@ def test_subject_satisfies_assertion(subject, assertion, reports):
 def test_an_independent_implementation_passes():
     """Criterion 3 and 4 of M7: the contract is implementable without the
     reference implementation, and the implementation that does so passes."""
-    from toy_implementation import ToyImplementation
+    from agentic_dataset_conformance.toy import ToyImplementation
 
     report = run(ToyImplementation(), SUITE)
     assert report.passed
@@ -80,14 +80,14 @@ def test_an_independent_implementation_passes():
 
 
 def test_the_toy_shares_nothing_but_the_interface():
-    source = (REPO / "conformance/toy_implementation.py").read_text()
+    source = (HARNESS / "toy.py").read_text()
     imported = {
         (node.module or "")
         for node in ast.walk(ast.parse(source))
         if isinstance(node, ast.ImportFrom)
     }
     from_impl = {m for m in imported if m.startswith("agentic_dataset")}
-    assert from_impl == {"agentic_dataset.conformance.interface"}, from_impl
+    assert from_impl == {".interface"} or from_impl == set(), from_impl
 
 
 @pytest.mark.parametrize(
@@ -114,10 +114,11 @@ def test_the_committed_vectors_match_the_generator():
     import generate
 
     produced = generate.vectors()
+    data = vectors_path()
     for name, vector in produced.items():
-        on_disk = json.loads((DEFAULT_ROOT / "vectors" / f"{name}.json").read_text())
+        on_disk = json.loads((data / "vectors" / f"{name}.json").read_text())
         vector.setdefault("world", "reference")
         assert on_disk == json.loads(json.dumps(vector)), name
-    assert json.loads((DEFAULT_ROOT / "worlds" / "reference.json").read_text()) == json.loads(
+    assert json.loads((data / "worlds" / "reference.json").read_text()) == json.loads(
         json.dumps(generate.world())
     )

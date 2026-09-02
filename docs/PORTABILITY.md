@@ -14,7 +14,7 @@ admits the assertion was partly white-box.
 | assertions checked through a public interface | 2 of 15 | **15 of 15** |
 | implementation imports in the conformance package | 8 modules | **none** |
 | subjects the suite can test | this codebase | anything satisfying `ConformanceSubject` |
-| independent implementations passing | 0 | 1 (`conformance/toy_implementation.py`) |
+| independent implementations passing | 0 | 1 (`packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py`) |
 | broken implementations demonstrably caught | 0 | 13, each by its named assertion |
 
 ## The three assertions that changed shape
@@ -76,7 +76,7 @@ out of scope.
 
 ## What the toy demonstrates
 
-`conformance/toy_implementation.py` is roughly 250 lines and shares nothing
+`packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py` is roughly 250 lines and shares nothing
 with the reference implementation but the interface module. It has no
 framework, no MCP, no descriptor class, no policy engine, no ledger — grants
 are integers in a dict and the cache is a dict.
@@ -124,7 +124,7 @@ than "the design was correct from the start" and a more useful one.
 ## Mutation results
 
 Seventeen deliberately broken variants, each removing exactly one guarantee.
-The matrix is what `python -m agentic_dataset.conformance --matrix` prints; the
+The matrix is what `agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix` prints; the
 committed run is in [`runs/mutation-matrix.txt`](runs/mutation-matrix.txt).
 
 ```
@@ -150,4 +150,4 @@ and that is worth knowing about them.
 The average of 2.2 is therefore a characterisation of the suite rather than a
 score. It should not be driven up or down.
 
-Reproduce: `python -m agentic_dataset.conformance --matrix`
+Reproduce: `agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix`

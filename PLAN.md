@@ -146,7 +146,7 @@ Before: 2 of 15 assertions checked through a public interface. After: 15.
 - [x] World, vectors and expectations as JSON; Python is one runner
 - [x] The conformance package imports nothing from any implementation, and a
       test asserts it
-- [x] An independent implementation exists — `conformance/toy_implementation.py`,
+- [x] An independent implementation exists — `packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py`,
       250 lines, no framework, no MCP, no shared code — and passes 15/15
 - [x] 13 broken variants, each caught by the assertion named for it
 - [x] `docs/PORTABILITY.md` records what changed shape and what cannot be

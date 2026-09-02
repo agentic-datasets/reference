@@ -69,7 +69,7 @@ about the *expressibility* of the model in four runtimes, not about four
 independent implementations agreeing. A second implementation by someone else,
 from `CONFORMANCE.md` alone, is the experiment this one is not.
 
-**A ninth subject shares nothing.** `conformance/toy_implementation.py` is 250
+**A ninth subject shares nothing.** `packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py` is 250
 lines written from the specification — no framework, no MCP, no descriptor
 class, no policy engine; grants are integers in a dict — and it passes all
 fifteen. That is the evidence that the assertions are properties of the
@@ -83,7 +83,7 @@ a second reading by somebody else.
 **And the suite would now notice a broken implementation.** Seventeen variants,
 each removing exactly one guarantee, are each caught by the assertion named for
 them, and every one of the fifteen assertions has a mutant of its own —
-`python -m agentic_dataset.conformance --matrix`.
+`agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix`.
 
 The detection matrix in `PORTABILITY.md` reports two separate things, because
 they mean different things: **target detection** (17/17) says the suite is

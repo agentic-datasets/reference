@@ -13,7 +13,7 @@ satisfy, in any framework.**
 > The harness imports nothing from any implementation. The normative artifacts
 > — the world, the vectors, the expectations — are JSON in `conformance/`.
 >
-> Run it: `python -m agentic_dataset.conformance --mutants`
+> Run it: `agentic-dataset-conformance run --subject conformance.subjects:subjects --mutants`
 >
 > Source: `docs/ARCHITECTURE-ADK.md` §107, generalised.
 
@@ -167,7 +167,7 @@ from the architecture documents instead.
 ### How to be tested
 
 An implementation is conformance-testable when it exposes four things
-(`src/agentic_dataset/conformance/interface.py`):
+(`packages/agentic-dataset-conformance/src/agentic_dataset_conformance/interface.py`):
 
 ```
 load_world(world)      adopt descriptors, principals and a policy version
@@ -187,7 +187,7 @@ vectors are JSON under `conformance/`, so an implementation in Rust, Go,
 TypeScript or Java can be checked without reproducing Python object semantics —
 Python is one runner, not the specification.
 
-`conformance/toy_implementation.py` is a 250-line worked example that imports
+`packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py` is a 250-line worked example that imports
 the interface and nothing else, and passes all fifteen.
 
 `docs/PORTABILITY.md` records the three assertions whose shape changed when

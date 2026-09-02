@@ -1,4 +1,4 @@
-15 vectors, 85 steps, 9 subjects
+15 vectors, 85 steps, 9 subject(s)
 
 SUBJECT           RESULT  ASSERTIONS  OBSERVATIONS
 native+local      PASS        15/15            77
@@ -53,5 +53,3 @@ coverage         : 15/15 assertions have a mutant of their own
 
 T = caught by its target assertion   x = caught redundantly
 . = not detected                     ! = target failed to catch it
-
-AD-015: 0 / 39 prohibited steps executed per subject (target exactly 0)
