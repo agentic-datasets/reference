@@ -115,9 +115,19 @@ them is discovered after a DOI has been minted.
       python evals/evaluate.py
       pytest -q
       ```
-- [ ] Make the repository public **before** tagging, marked clearly as a
-      release candidate rather than as v0.1.0, so there is a real window for
-      external scrutiny before an immutable snapshot exists.
+- [x] **Public since 2026-09-02**, marked as a release candidate in the README
+      rather than as v0.1.0, so the scrutiny window is real.
+- [x] **Documentation site live** —
+      <https://doytsujin.github.io/ok-agentic-dataset-reference/>. mdBook,
+      generated from the repository's own files; CI fails if the two drift.
+- [x] **Tagged `v0.1.0-rc.1`** so the candidate itself is citable and the
+      changes external scrutiny produces can be diffed against it.
+- [ ] **Publish the two permissive distributions to PyPI.** Blocked on
+      credentials: there is no `~/.pypirc` or PyPI token on this machine, and
+      publication is irreversible — a version number cannot be reused once
+      uploaded, and yanking does not remove it. `agentic-dataset-conformance`
+      and `authorized-recall` are built and verified as wheel and sdist.
+      The reference implementation is **not** published: it is BUSL-1.1.
 - [ ] Invite a second implementation rather than writing one. The toy
       establishes independence from the reference *code*; only somebody else's
       reading establishes independence from the author's interpretation of the
