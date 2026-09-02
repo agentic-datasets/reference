@@ -1,6 +1,6 @@
 """A deliberately boring implementation of the agentic-dataset contract.
 
-Written from `CONFORMANCE.md` and `src/agentic_dataset/conformance/verbs.md`.
+Written from `CONFORMANCE.md` and the `verbs.md` beside this module.
 It imports the conformance *interface* and nothing else: no `ControlPlane`, no
 ledger, no capability registry, no `DelegatedExecutor`. It ships inside the
 conformance distribution precisely because it depends on nothing that
