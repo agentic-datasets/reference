@@ -1,12 +1,14 @@
-"""Generate the discovery corpus. Deterministic, so the numbers are reproducible.
+"""The discovery corpus. Deterministic, so the numbers are reproducible.
 
 Forty datasets across eight domains, twenty-four queries, four authorization
 profiles. Relevance is defined by construction -- a dataset is relevant to a
 query if it belongs to the query's domain -- because a ground truth argued
 after the fact is a ground truth fitted to the retriever.
 
-Run `python evals/corpus.py` to regenerate `evals/datasets/*.json`. The outputs
-are committed, so the measurement can be reproduced without rerunning this.
+`build()` returns the corpus in memory, so the experiment runs with no data
+files present. `python -m agentic_dataset.authorized_recall.corpus` also writes
+it to `evals/datasets/*.json`, which are committed as the record of what was
+measured.
 """
 
 from __future__ import annotations
@@ -14,7 +16,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-OUT = Path(__file__).parent / "datasets"
+OUT = Path(__file__).resolve().parents[3] / "evals" / "datasets"
 
 DOMAINS = {
     "purification": {

@@ -22,6 +22,14 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Iterable, Mapping, Optional, Sequence
 
+from .authorized_recall.metric import authorized_recall_at_k as _authorized_recall_at_k
+from .authorized_recall.metric import (
+    ndcg_at_k,
+    precision_at_k,
+    recall_at_k,
+    reciprocal_rank,
+    unusable_fraction_at_k,
+)
 from .descriptor import DatasetDescriptor, DescriptorRegistry
 from .principal import Principal
 
@@ -32,6 +40,7 @@ __all__ = [
     "precision_at_k",
     "reciprocal_rank",
     "ndcg_at_k",
+    "unusable_fraction_at_k",
     "authorized_recall_at_k",
 ]
 
@@ -144,38 +153,23 @@ class SemanticIndex:
 
 
 # -- retrieval metrics ----------------------------------------------------
+#
+# Defined in `agentic_dataset.authorized_recall`, not here. That package has no
+# dependency on the control plane, so the metric can be used by systems that
+# never adopt any of this; re-exporting rather than re-implementing is what
+# stops the two definitions drifting into two different numbers.
+#
+# The signatures below take a `Principal` and adapt it to the predicate the
+# metric is actually defined over.
 
-def recall_at_k(retrieved: Sequence[str], relevant: Iterable[str], k: int) -> float:
-    rel = set(relevant)
-    if not rel:
-        return 1.0
-    return len(rel & set(retrieved[:k])) / len(rel)
+def _predicate(principal: Principal, required_capability: Optional[str] = None):
+    def authorized(dataset_id: str) -> bool:
+        held = principal.granted_capabilities(dataset_id)
+        if not held:
+            return False
+        return required_capability is None or required_capability in held
 
-
-def precision_at_k(retrieved: Sequence[str], relevant: Iterable[str], k: int) -> float:
-    rel = set(relevant)
-    if k == 0:
-        return 0.0
-    return len(rel & set(retrieved[:k])) / k
-
-
-def reciprocal_rank(retrieved: Sequence[str], relevant: Iterable[str]) -> float:
-    rel = set(relevant)
-    for i, item in enumerate(retrieved, start=1):
-        if item in rel:
-            return 1.0 / i
-    return 0.0
-
-
-def ndcg_at_k(retrieved: Sequence[str], relevant: Iterable[str], k: int) -> float:
-    rel = set(relevant)
-    dcg = sum(
-        1.0 / math.log2(i + 1)
-        for i, item in enumerate(retrieved[:k], start=1)
-        if item in rel
-    )
-    ideal = sum(1.0 / math.log2(i + 1) for i in range(1, min(len(rel), k) + 1))
-    return dcg / ideal if ideal else 0.0
+    return authorized
 
 
 def authorized_recall_at_k(
@@ -187,29 +181,10 @@ def authorized_recall_at_k(
 ) -> float:
     """Recall over the subset the principal may actually use.
 
-    Plain Recall@K scores surfacing a dataset the caller cannot touch as a
-    success. It is not one: the caller cannot act on it, and the only thing
-    that changed is that they now know it exists.
-
-    The denominator is therefore the *authorized* relevant set, and the
-    numerator counts only retrieved items that are both relevant and reachable.
-    When the principal is authorized for everything relevant, this equals
-    Recall@K; the gap between the two is what the metric is for.
-
-    Two edge cases, decided rather than left to fall out of the arithmetic:
-    when nothing relevant is authorized the score is 1.0, because the control
-    plane cannot be faulted for failing to surface what it must not surface;
-    and retrieved items that are relevant but unauthorized are neither credited
-    nor penalised here -- they are reported as `withheld`.
+    Thin adapter over `authorized_recall.metric.authorized_recall_at_k`, which
+    carries the definition, the two conventions and the proof that the
+    pre/post-filter gap is non-negative.
     """
-    rel = set(relevant)
-    authorized_relevant = {
-        d
-        for d in rel
-        if principal.granted_capabilities(d)
-        and (required_capability is None or required_capability in principal.granted_capabilities(d))
-    }
-    if not authorized_relevant:
-        return 1.0
-    hit = authorized_relevant & set(retrieved[:k])
-    return len(hit) / len(authorized_relevant)
+    return _authorized_recall_at_k(
+        retrieved, relevant, _predicate(principal, required_capability), k
+    )
