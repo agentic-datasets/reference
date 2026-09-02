@@ -1,0 +1,476 @@
+{
+  "assertion": "AD-015",
+  "rules_out": "any prohibited action executing at all, ever",
+  "rate": true,
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "delete_source on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "delete_source on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "delete_source on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "delete_source on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "overwrite_batch_record on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "overwrite_batch_record",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "overwrite_batch_record on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "overwrite_batch_record",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "overwrite_batch_record on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "overwrite_batch_record",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "overwrite_batch_record on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "overwrite_batch_record",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "bypass_governance on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "bypass_governance",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "bypass_governance on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "bypass_governance",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "bypass_governance on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "bypass_governance",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "bypass_governance on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "bypass_governance",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "expose_restricted_identifiers on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "expose_restricted_identifiers",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "expose_restricted_identifiers on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "expose_restricted_identifiers",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "expose_restricted_identifiers on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "expose_restricted_identifiers",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "expose_restricted_identifiers on purification-batches",
+      "dataset": "purification-batches",
+      "capability": "expose_restricted_identifiers",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "delete_source on chromatography-results",
+      "dataset": "chromatography-results",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "delete_source on chromatography-results",
+      "dataset": "chromatography-results",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "delete_source on chromatography-results",
+      "dataset": "chromatography-results",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "delete_source on chromatography-results",
+      "dataset": "chromatography-results",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "bypass_governance on chromatography-results",
+      "dataset": "chromatography-results",
+      "capability": "bypass_governance",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "bypass_governance on chromatography-results",
+      "dataset": "chromatography-results",
+      "capability": "bypass_governance",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "bypass_governance on chromatography-results",
+      "dataset": "chromatography-results",
+      "capability": "bypass_governance",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "bypass_governance on chromatography-results",
+      "dataset": "chromatography-results",
+      "capability": "bypass_governance",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "expose_restricted_identifiers on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "expose_restricted_identifiers",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "expose_restricted_identifiers on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "expose_restricted_identifiers",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "expose_restricted_identifiers on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "expose_restricted_identifiers",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "expose_restricted_identifiers on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "expose_restricted_identifiers",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "materialize on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "materialize",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "materialize on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "materialize",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "materialize on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "materialize",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "materialize on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "materialize",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "delete_source on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "delete_source on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "clinical_reviewer",
+      "text": "delete_source on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "delete_source on clinical-private",
+      "dataset": "clinical-private",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    }
+  ],
+  "world": "reference"
+}

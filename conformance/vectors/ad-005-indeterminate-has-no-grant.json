@@ -1,0 +1,41 @@
+{
+  "assertion": "AD-005",
+  "rules_out": "unknown authority becoming permission",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "evaluator": {
+        "reachable": false,
+        "latency_s": 0.0
+      },
+      "expect": {
+        "decision": "INDETERMINATE",
+        "reason": "EVALUATOR_UNAVAILABLE",
+        "policy_id": null,
+        "rationale_present": true,
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "evaluator": {
+        "reachable": true,
+        "latency_s": 5.0
+      },
+      "expect": {
+        "decision": "INDETERMINATE",
+        "reason": "EVALUATOR_TIMEOUT",
+        "policy_id": null,
+        "rationale_present": true,
+        "granted": false,
+        "executed": false
+      }
+    }
+  ],
+  "world": "reference"
+}

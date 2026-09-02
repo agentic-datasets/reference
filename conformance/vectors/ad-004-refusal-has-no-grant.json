@@ -1,0 +1,75 @@
+{
+  "assertion": "AD-004",
+  "rules_out": "a refusal that still mints authority",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "delete the source",
+      "dataset": "purification-batches",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "PROHIBITED_OPERATION",
+        "policy_id": "AD-POL-004",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "external_auditor",
+      "text": "Compare the recovery of batches B001 and B002",
+      "dataset": "purification-batches",
+      "capability": "compare_batches",
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "INSUFFICIENT_PRIVILEGE",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "detect outliers in recovery",
+      "dataset": "purification-batches",
+      "capability": "detect_outliers",
+      "expect": {
+        "decision": "REFUSED",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "dataset": "purification-batches",
+      "capability": "compare_batches",
+      "expected_schema_version": "99",
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "SCHEMA_VERSION_MISMATCH",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "search chromatography runs",
+      "dataset": "chromatography-results",
+      "capability": "search",
+      "freshness": 60,
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "FRESHNESS_UNSATISFIABLE",
+        "granted": false,
+        "executed": false
+      }
+    }
+  ],
+  "world": "reference"
+}

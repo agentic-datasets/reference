@@ -1,0 +1,52 @@
+{
+  "assertion": "AD-009",
+  "rules_out": "a result that cannot be traced to what produced it",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "evidence_rows": 1,
+        "evidence_complete": true
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "delete the source",
+      "dataset": "purification-batches",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "evidence_rows": 1,
+        "evidence_complete": true
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "evaluator": {
+        "reachable": false,
+        "latency_s": 0.0
+      },
+      "expect": {
+        "evidence_rows": 1,
+        "evidence_complete": true
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "search nothing",
+      "dataset": "no-such-dataset",
+      "capability": "search",
+      "expect": {
+        "evidence_rows": 1,
+        "evidence_complete": true
+      }
+    }
+  ],
+  "world": "reference"
+}

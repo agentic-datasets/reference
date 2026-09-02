@@ -1,0 +1,28 @@
+{
+  "assertion": "AD-001",
+  "rules_out": "a dataset participating in admission without a well-formed contract",
+  "steps": [
+    {
+      "op": "register_descriptor",
+      "descriptor": {
+        "dataset": "broken-dataset",
+        "version": "1",
+        "description": "no revision, no capabilities"
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "search broken",
+      "dataset": "broken-dataset",
+      "capability": "search",
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "DESCRIPTOR_INVALID",
+        "granted": false,
+        "executed": false
+      }
+    }
+  ],
+  "world": "reference"
+}

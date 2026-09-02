@@ -56,7 +56,7 @@ def build_dataset_server(
             bound = capabilities.get(descriptor.dataset_id, capability.name)
             if bound is None:
                 continue
-            _add_tool(server, descriptor, bound, authority)
+            _add_tool(server, descriptors, descriptor.dataset_id, bound, authority)
     return server
 
 
@@ -89,20 +89,28 @@ def _add_resources(server: MCPServer, descriptor: DatasetDescriptor) -> None:
 
 def _add_tool(
     server: MCPServer,
-    descriptor: DatasetDescriptor,
+    descriptors: DescriptorRegistry,
+    dataset_id: str,
     bound: BoundCapability,
     authority: GrantAuthority,
 ) -> None:
     def call(authorization: dict, arguments: Optional[dict] = None) -> dict:
         """Execute a bounded capability. Requires a valid approval token."""
+        # The revision is read from the registry at call time, not captured
+        # when the tool was built. A server that keeps serving the revision it
+        # was constructed with will happily accept a grant for data it no
+        # longer holds -- see docs/FINDINGS.md F-010, which the portable suite
+        # found and the white-box suite did not.
+        descriptor = descriptors.get(dataset_id)
+        revision = descriptor.revision if descriptor else ""
         try:
             grant = Grant.from_dict(authorization)
             # The far side verifies for itself. If this line were removed, an
             # unauthenticated caller reaching the server directly would execute.
             authority.verify(
                 grant,
-                dataset_id=descriptor.dataset_id,
-                dataset_revision=descriptor.revision,
+                dataset_id=dataset_id,
+                dataset_revision=revision,
                 capability=bound.operation,
                 requested_scope=grant.scope,
             )
@@ -115,17 +123,17 @@ def _add_tool(
         return bound(
             authorization=grant,
             authority=authority,
-            dataset_revision=descriptor.revision,
+            dataset_revision=revision,
             requested_scope=grant.scope,
             **(arguments or {}),
         )
 
-    call.__name__ = _tool_name(descriptor.dataset_id, bound.operation)
+    call.__name__ = _tool_name(dataset_id, bound.operation)
     server.add_tool(
         call,
         name=call.__name__,
         description=(
-            f"{bound.operation} on {descriptor.dataset_id} "
+            f"{bound.operation} on {dataset_id} "
             f"(effect={bound.effect}, sensitivity={bound.sensitivity}, policy={bound.policy})"
         ),
     )

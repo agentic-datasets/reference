@@ -1,0 +1,36 @@
+{
+  "assertion": "AD-007",
+  "rules_out": "scope widening between admission and execution",
+  "note": "the general form is the cross-vector invariant grant_scope covers executed_scope",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "decision": "GRANTED",
+        "granted": true
+      }
+    },
+    {
+      "op": "delegate",
+      "channel": "a2a",
+      "dataset": "purification-batches",
+      "capability": "compare_batches",
+      "scope": {
+        "principal_class": "process-engineer",
+        "dataset": "purification-batches",
+        "capabilities": [
+          "compare_batches",
+          "detect_outliers"
+        ],
+        "max_sensitivity": "restricted"
+      },
+      "expect": {
+        "executed": false,
+        "error_contains": "widen"
+      }
+    }
+  ],
+  "world": "reference"
+}

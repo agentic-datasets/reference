@@ -1,0 +1,30 @@
+{
+  "assertion": "AD-011",
+  "rules_out": "evidence that cannot identify which data was used",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "evidence_has_revision": true,
+        "evidence_rows": 1
+      }
+    },
+    {
+      "op": "set_revision",
+      "dataset": "purification-batches",
+      "revision": "rev-audit"
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Calculate the yield for batch B003",
+      "expect": {
+        "evidence_has_revision": true,
+        "evidence_revision": "rev-audit"
+      }
+    }
+  ],
+  "world": "reference"
+}

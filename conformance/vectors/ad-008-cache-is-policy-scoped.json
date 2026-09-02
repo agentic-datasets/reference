@@ -1,0 +1,80 @@
+{
+  "assertion": "AD-008",
+  "rules_out": "a cached answer crossing an authorization boundary",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "cache_hit": false,
+        "decision": "GRANTED"
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "cache_hit": true
+      }
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "cache_hit": false
+      }
+    },
+    {
+      "op": "set_revision",
+      "dataset": "purification-batches",
+      "revision": "rev-next"
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "cache_hit": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "cache_hit": true
+      }
+    },
+    {
+      "op": "set_policy_version",
+      "version": "2026.10.01"
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "cache_hit": false
+      }
+    },
+    {
+      "op": "revoke",
+      "principal": "process_engineer",
+      "dataset": "purification-batches"
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "decision": "REFUSED",
+        "cache_hit": false,
+        "executed": false
+      }
+    }
+  ],
+  "world": "reference"
+}

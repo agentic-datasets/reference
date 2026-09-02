@@ -1,11 +1,28 @@
-"""AD-001 .. AD-015, implemented once and run against every runtime.
+"""The portable conformance harness.
 
-The suite takes a factory rather than a runtime instance, because most checks
-need a control plane in a specific state and sharing one between checks would
-let an earlier assertion's cache entry decide a later one.
+Imports nothing from the reference implementation. Everything it needs -- the
+world, the vectors, the expectations -- arrives as JSON from `conformance/` at
+the repository root.
+
+    from agentic_dataset.conformance import load_suite, run
+    report = run(my_subject)
+
+`interface.py` says what a subject must expose; `verbs.md` and
+`docs/PORTABILITY.md` say what the contract can and cannot reach.
 """
 
-from .checks import CHECKS
-from .suite import CheckResult, Harness, SuiteReport, run_suite
+from .interface import ConformanceSubject, Observation, Scope
+from .runner import (
+    INVARIANTS,
+    AssertionResult,
+    SubjectReport,
+    Vector,
+    VectorSuite,
+    load_suite,
+    run,
+)
 
-__all__ = ["CHECKS", "CheckResult", "Harness", "SuiteReport", "run_suite"]
+__all__ = [
+    "INVARIANTS", "AssertionResult", "ConformanceSubject", "Observation",
+    "Scope", "SubjectReport", "Vector", "VectorSuite", "load_suite", "run",
+]

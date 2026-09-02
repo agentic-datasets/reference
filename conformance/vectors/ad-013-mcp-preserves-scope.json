@@ -1,0 +1,71 @@
+{
+  "assertion": "AD-013",
+  "rules_out": "MCP delegation as an escalation path",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "decision": "GRANTED",
+        "granted": true
+      }
+    },
+    {
+      "op": "delegate",
+      "channel": "mcp",
+      "dataset": "purification-batches",
+      "capability": "compare_batches",
+      "scope": {
+        "principal_class": "process-engineer",
+        "dataset": "purification-batches",
+        "capabilities": [
+          "compare_batches"
+        ],
+        "max_sensitivity": "internal"
+      },
+      "expect": {
+        "executed": true,
+        "mcp_calls_nonempty": true
+      }
+    },
+    {
+      "op": "delegate",
+      "channel": "mcp",
+      "dataset": "purification-batches",
+      "capability": "compare_batches",
+      "scope": {
+        "principal_class": "process-engineer",
+        "dataset": "purification-batches",
+        "capabilities": [
+          "compare_batches",
+          "detect_outliers"
+        ],
+        "max_sensitivity": "restricted"
+      },
+      "expect": {
+        "executed": false,
+        "error_contains": "widen"
+      }
+    },
+    {
+      "op": "delegate",
+      "channel": "mcp",
+      "dataset": "purification-batches",
+      "capability": "detect_outliers",
+      "scope": {
+        "principal_class": "process-engineer",
+        "dataset": "purification-batches",
+        "capabilities": [
+          "compare_batches"
+        ],
+        "max_sensitivity": "internal"
+      },
+      "prohibited": false,
+      "expect": {
+        "executed": false
+      }
+    }
+  ],
+  "world": "reference"
+}

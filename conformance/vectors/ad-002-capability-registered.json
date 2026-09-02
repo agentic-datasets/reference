@@ -1,0 +1,122 @@
+{
+  "assertion": "AD-002",
+  "rules_out": "an executable action with no capability metadata behind it",
+  "capability_surface_matches_descriptors": true,
+  "steps": [
+    {
+      "op": "register_descriptor",
+      "descriptor": {
+        "dataset": "purification-batches",
+        "version": "2026.08.31",
+        "revision": "s3-etag-4c1f9a",
+        "schema_version": "3",
+        "description": "Process and analytical data describing purification batches: recovery, yield, step conditions and in-process controls for downstream chromatography.",
+        "schemas": [
+          "batch_record",
+          "in_process_control",
+          "step_condition"
+        ],
+        "capabilities": [
+          {
+            "name": "search",
+            "description": "find batches by free text over batch records",
+            "effect": "read",
+            "sensitivity": "internal",
+            "policy": null,
+            "arguments": [
+              "query"
+            ]
+          },
+          {
+            "name": "compare_batches",
+            "description": "compare recovery and step conditions across two batches",
+            "effect": "read",
+            "sensitivity": "internal",
+            "policy": "BPD-DATA-014",
+            "arguments": [
+              "batch_a",
+              "batch_b"
+            ]
+          },
+          {
+            "name": "calculate_yield",
+            "description": "compute step yield and cumulative recovery for a batch",
+            "effect": "compute",
+            "sensitivity": "internal",
+            "policy": null,
+            "arguments": [
+              "batch_id"
+            ]
+          },
+          {
+            "name": "detect_outliers",
+            "description": "flag anomalous batches against the historical distribution",
+            "effect": "compute",
+            "sensitivity": "confidential",
+            "policy": "BPD-DATA-021",
+            "arguments": [
+              "metric"
+            ]
+          },
+          {
+            "name": "phantom_export",
+            "effect": "read",
+            "sensitivity": "internal",
+            "description": "advertised with nothing behind it",
+            "policy": null,
+            "arguments": []
+          }
+        ],
+        "prohibited": [
+          "delete_source",
+          "overwrite_batch_record",
+          "bypass_governance",
+          "expose_restricted_identifiers"
+        ],
+        "policies": [
+          "BPD-DATA-014",
+          "BPD-DATA-021"
+        ],
+        "provenance": {
+          "system": "volume",
+          "source": "s3"
+        },
+        "freshness": {
+          "maximum_age_s": 86400
+        },
+        "age_s": 3600,
+        "quality": {
+          "required_fields": [
+            "batch_ids",
+            "recovery"
+          ]
+        },
+        "retention": {
+          "observations": 1000
+        },
+        "endpoints": {
+          "mcp": "stdio://purification"
+        }
+      }
+    },
+    {
+      "op": "grant",
+      "principal": "process_engineer",
+      "dataset": "purification-batches",
+      "capability": "phantom_export"
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "export everything",
+      "dataset": "purification-batches",
+      "capability": "phantom_export",
+      "expect": {
+        "executed": false,
+        "result_present": false,
+        "error_contains": "not a registered capability"
+      }
+    }
+  ],
+  "world": "reference"
+}

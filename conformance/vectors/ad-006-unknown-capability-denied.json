@@ -1,0 +1,58 @@
+{
+  "assertion": "AD-006",
+  "rules_out": "default-allow on an unregistered tool",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "do the thing",
+      "dataset": "purification-batches",
+      "capability": "query_database",
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "UNREGISTERED_CAPABILITY",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "do the thing",
+      "dataset": "purification-batches",
+      "capability": "exfiltrate",
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "UNREGISTERED_CAPABILITY",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "do the thing",
+      "dataset": "purification-batches",
+      "capability": "search_all",
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "UNREGISTERED_CAPABILITY",
+        "granted": false,
+        "executed": false
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "do the thing",
+      "dataset": "purification-batches",
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "UNREGISTERED_CAPABILITY",
+        "granted": false,
+        "executed": false
+      }
+    }
+  ],
+  "world": "reference"
+}

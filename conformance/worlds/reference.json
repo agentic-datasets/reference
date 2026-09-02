@@ -1,0 +1,254 @@
+{
+  "datasets": [
+    {
+      "age_s": 3600,
+      "capabilities": [
+        {
+          "arguments": [
+            "query"
+          ],
+          "description": "find batches by free text over batch records",
+          "effect": "read",
+          "name": "search",
+          "policy": null,
+          "sensitivity": "internal"
+        },
+        {
+          "arguments": [
+            "batch_a",
+            "batch_b"
+          ],
+          "description": "compare recovery and step conditions across two batches",
+          "effect": "read",
+          "name": "compare_batches",
+          "policy": "BPD-DATA-014",
+          "sensitivity": "internal"
+        },
+        {
+          "arguments": [
+            "batch_id"
+          ],
+          "description": "compute step yield and cumulative recovery for a batch",
+          "effect": "compute",
+          "name": "calculate_yield",
+          "policy": null,
+          "sensitivity": "internal"
+        },
+        {
+          "arguments": [
+            "metric"
+          ],
+          "description": "flag anomalous batches against the historical distribution",
+          "effect": "compute",
+          "name": "detect_outliers",
+          "policy": "BPD-DATA-021",
+          "sensitivity": "confidential"
+        }
+      ],
+      "dataset": "purification-batches",
+      "description": "Process and analytical data describing purification batches: recovery, yield, step conditions and in-process controls for downstream chromatography.",
+      "endpoints": {
+        "mcp": "stdio://purification"
+      },
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "policies": [
+        "BPD-DATA-014",
+        "BPD-DATA-021"
+      ],
+      "prohibited": [
+        "delete_source",
+        "overwrite_batch_record",
+        "bypass_governance",
+        "expose_restricted_identifiers"
+      ],
+      "provenance": {
+        "source": "s3",
+        "system": "volume"
+      },
+      "quality": {
+        "required_fields": [
+          "batch_ids",
+          "recovery"
+        ]
+      },
+      "retention": {
+        "observations": 1000
+      },
+      "revision": "s3-etag-4c1f9a",
+      "schema_version": "3",
+      "schemas": [
+        "batch_record",
+        "in_process_control",
+        "step_condition"
+      ],
+      "version": "2026.08.31"
+    },
+    {
+      "age_s": 172800,
+      "capabilities": [
+        {
+          "arguments": [
+            "query"
+          ],
+          "description": "find chromatography runs by free text",
+          "effect": "read",
+          "name": "search",
+          "policy": null,
+          "sensitivity": "internal"
+        },
+        {
+          "arguments": [
+            "metric"
+          ],
+          "description": "aggregate peak metrics over runs",
+          "effect": "compute",
+          "name": "aggregate",
+          "policy": null,
+          "sensitivity": "internal"
+        }
+      ],
+      "dataset": "chromatography-results",
+      "description": "Chromatography run results: peak tables, resolution, pooling decisions and column performance across polishing steps.",
+      "endpoints": {},
+      "freshness": {
+        "maximum_age_s": 86400
+      },
+      "policies": [
+        "BPD-DATA-014"
+      ],
+      "prohibited": [
+        "delete_source",
+        "bypass_governance"
+      ],
+      "provenance": {
+        "source": "s3",
+        "system": "volume"
+      },
+      "quality": {},
+      "retention": {
+        "observations": 5000
+      },
+      "revision": "s3-etag-90ab21",
+      "schema_version": "2",
+      "schemas": [
+        "peak_table",
+        "column_performance"
+      ],
+      "version": "2026.08.20"
+    },
+    {
+      "age_s": 7200,
+      "capabilities": [
+        {
+          "arguments": [
+            "query"
+          ],
+          "description": "find subject observations by free text",
+          "effect": "read",
+          "name": "search",
+          "policy": "BPD-CLIN-002",
+          "sensitivity": "restricted"
+        },
+        {
+          "arguments": [
+            "metric"
+          ],
+          "description": "aggregate endpoints across subjects",
+          "effect": "compute",
+          "name": "aggregate",
+          "policy": "BPD-CLIN-002",
+          "sensitivity": "restricted"
+        }
+      ],
+      "dataset": "clinical-private",
+      "description": "Subject-level clinical observations including recovery endpoints. Restricted; identifiers are never exposed through any capability.",
+      "endpoints": {},
+      "freshness": {
+        "maximum_age_s": 604800
+      },
+      "policies": [
+        "BPD-CLIN-002"
+      ],
+      "prohibited": [
+        "expose_restricted_identifiers",
+        "materialize",
+        "delete_source"
+      ],
+      "provenance": {
+        "source": "postgres",
+        "system": "volume"
+      },
+      "quality": {},
+      "retention": {
+        "observations": 200
+      },
+      "revision": "pg-lsn-00ff31",
+      "schema_version": "1",
+      "schemas": [
+        "subject_observation"
+      ],
+      "version": "2026.07.02"
+    }
+  ],
+  "policy_budget_s": 0.25,
+  "policy_version": "2026.09.01",
+  "principals": {
+    "analyst": {
+      "clearance": "internal",
+      "grants": {
+        "chromatography-results": [
+          "search"
+        ],
+        "purification-batches": [
+          "compare_batches",
+          "search"
+        ]
+      },
+      "principal_class": "analyst",
+      "principal_id": "u-ana-01"
+    },
+    "clinical_reviewer": {
+      "clearance": "restricted",
+      "grants": {
+        "clinical-private": [
+          "aggregate",
+          "search"
+        ],
+        "purification-batches": [
+          "search"
+        ]
+      },
+      "principal_class": "clinical-reviewer",
+      "principal_id": "u-clin-01"
+    },
+    "external_auditor": {
+      "clearance": "public",
+      "grants": {
+        "purification-batches": [
+          "search"
+        ]
+      },
+      "principal_class": "external-auditor",
+      "principal_id": "u-ext-01"
+    },
+    "process_engineer": {
+      "clearance": "confidential",
+      "grants": {
+        "chromatography-results": [
+          "aggregate",
+          "search"
+        ],
+        "purification-batches": [
+          "calculate_yield",
+          "compare_batches",
+          "detect_outliers",
+          "search"
+        ]
+      },
+      "principal_class": "process-engineer",
+      "principal_id": "u-eng-01"
+    }
+  }
+}

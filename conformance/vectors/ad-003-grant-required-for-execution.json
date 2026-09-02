@@ -1,0 +1,30 @@
+{
+  "assertion": "AD-003",
+  "rules_out": "execution reachable without an authorization artifact",
+  "note": "the general form is the cross-vector invariant executed => granted",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "decision": "GRANTED",
+        "granted": true,
+        "executed": true
+      }
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Calculate the yield for batch B003",
+      "grant_ttl_s": -1,
+      "expect": {
+        "decision": "GRANTED",
+        "executed": false,
+        "result_present": false,
+        "error_contains": "expired"
+      }
+    }
+  ],
+  "world": "reference"
+}

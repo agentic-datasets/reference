@@ -1,0 +1,27 @@
+{
+  "assertion": "AD-012",
+  "rules_out": "evidence that cannot identify which rules applied",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "evidence_policy_version": "2026.09.01"
+      }
+    },
+    {
+      "op": "set_policy_version",
+      "version": "2026.10.01"
+    },
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Calculate the yield for batch B003",
+      "expect": {
+        "evidence_policy_version": "2026.10.01"
+      }
+    }
+  ],
+  "world": "reference"
+}

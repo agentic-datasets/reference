@@ -1,0 +1,20 @@
+{
+  "assertion": "AD-010",
+  "rules_out": "a refusal that leaves no evidence",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "delete the source",
+      "dataset": "purification-batches",
+      "capability": "delete_source",
+      "prohibited": true,
+      "expect": {
+        "evidence_rows": 1,
+        "evidence_decision": "REFUSED",
+        "evidence_complete": true
+      }
+    }
+  ],
+  "world": "reference"
+}

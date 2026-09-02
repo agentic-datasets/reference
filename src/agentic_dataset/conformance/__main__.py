@@ -1,81 +1,92 @@
-"""Run AD-001 .. AD-015 against every runtime available here.
+"""Run the portable conformance suite against every subject available here.
 
-    python -m agentic_dataset.conformance            # table
-    python -m agentic_dataset.conformance --json     # machine-readable
-    python -m agentic_dataset.conformance --local    # skip the MCP boundary
+    python -m agentic_dataset.conformance             # reference runtimes + the toy
+    python -m agentic_dataset.conformance --mutants   # and the broken variants
+    python -m agentic_dataset.conformance --json
 
-Exit status is 1 if any assertion fails, so this is usable as a CI gate.
-Runtimes whose framework is not installed are reported as skipped rather than
-quietly omitted: a suite that shrinks silently is a suite that always passes.
+Exit status is 1 if any subject fails, or if any mutant is *not* caught by the
+assertion it is supposed to break.
+
+The package imports no implementation at all, this module included. Subjects
+come from `conformance/subjects.py` at the repository root, loaded by path --
+which is also how a foreign implementation registers itself.
 """
 
 from __future__ import annotations
 
 import json
 import sys
-import time
+from pathlib import Path
 
-from ..adapters import ADAPTERS, available
-from .checks import CHECKS
-from ..datasets import build_control_plane, build_mcp_control_plane
-from .suite import run_suite
+from .runner import load_suite, run
+
+REPO = Path(__file__).resolve().parents[3]
+
+
+def _subjects() -> list:
+    sys.path.insert(0, str(REPO / "conformance"))
+    try:
+        import subjects as registry
+    except ImportError as exc:
+        print(f"no subjects registered ({exc})", file=sys.stderr)
+        return []
+    return registry.subjects()
 
 
 def main(argv: list[str]) -> int:
     as_json = "--json" in argv
-    local_only = "--local" in argv
+    with_mutants = "--mutants" in argv
+    suite = load_suite()
+    reports = [run(s, suite) for s in _subjects()]
 
-    boundaries = {"local": build_control_plane}
-    if not local_only:
-        boundaries["mcp"] = build_mcp_control_plane
+    failed = any(not r.passed for r in reports)
+    mutant_rows: list[tuple[str, str, bool, list[str]]] = []
+    if with_mutants:
+        sys.path.insert(0, str(REPO / "conformance"))
+        from mutations import TARGETS
 
-    runtimes = available()
-    skipped = sorted(set(ADAPTERS) - set(runtimes))
-    reports = []
-    for boundary, plane_factory in boundaries.items():
-        for name, cls in runtimes.items():
-            started = time.time()
-            report = run_suite(f"{name}+{boundary}", cls, plane_factory=plane_factory)
-            reports.append((report, time.time() - started))
+        for cls, target in TARGETS.items():
+            report = run(cls(), suite)
+            caught = [f.assertion for f in report.failures]
+            mutant_rows.append((cls.name, target, target in caught, caught))
+        failed = failed or any(not ok for _, _, ok, _ in mutant_rows)
 
     if as_json:
-        print(
-            json.dumps(
-                {
-                    "skipped_runtimes": skipped,
-                    "reports": [r.to_dict() for r, _ in reports],
-                },
-                indent=2,
-            )
-        )
-    else:
-        width = max(len(r.runtime) for r, _ in reports)
-        print(f"{'RUNTIME':<{width}}  RESULT  PASSED  TIME")
-        for report, elapsed in reports:
-            passed = len(report.results) - len(report.failures)
-            mark = "PASS" if report.passed else "FAIL"
-            print(
-                f"{report.runtime:<{width}}  {mark:<6}  {passed:>2}/{len(report.results)}   {elapsed:5.1f}s"
-            )
-            for failure in report.failures:
-                print(f"    {failure.check.id} {failure.check.name}: "
-                      f"{failure.detail} {failure.error or ''}")
-        if skipped:
-            print(f"\nskipped (framework not installed): {', '.join(skipped)}")
-        assertions = len(CHECKS)
-        configurations = len(reports)
-        executed = sum(r.by_id("AD-015").numerator or 0 for r, _ in reports)
-        attempted = sum(r.by_id("AD-015").denominator or 0 for r, _ in reports)
-        print(
-            f"\n{assertions} assertions x {configurations} configurations = "
-            f"{assertions * configurations} assertion-runs"
-        )
-        print(
-            f"AD-015: {executed} / {attempted} prohibited executions "
-            f"across the matrix (target exactly 0)"
-        )
+        print(json.dumps({
+            "vectors": len(suite.vectors),
+            "subjects": [r.to_dict() for r in reports],
+            "mutants": [
+                {"mutant": n, "target": t, "caught": ok, "caught_by": by}
+                for n, t, ok, by in mutant_rows
+            ],
+        }, indent=2))
+        return 1 if failed else 0
 
-    return 0 if all(r.passed for r, _ in reports) else 1
+    width = max((len(r.subject) for r in reports), default=10)
+    print(f"{len(suite.vectors)} vectors, {sum(len(v.steps) for v in suite.vectors)} steps, "
+          f"{len(reports)} subjects\n")
+    print(f"{'SUBJECT':<{width}}  RESULT  ASSERTIONS  OBSERVATIONS")
+    for report in reports:
+        passed = len(report.results) - len(report.failures)
+        mark = "PASS" if report.passed else "FAIL"
+        print(f"{report.subject:<{width}}  {mark:<6}  {passed:>6}/{len(report.results)}"
+              f"  {report.observations:>12}")
+        for failure in report.failures:
+            print(f"    {failure.assertion}: {failure.detail}")
+
+    if mutant_rows:
+        print(f"\n{'MUTANT':<42} {'TARGET':<8} CAUGHT BY")
+        for name, target, ok, caught in mutant_rows:
+            mark = "" if ok else "MISSED "
+            print(f"{name:<42} {target:<8} {mark}{','.join(caught) or 'nothing'}")
+        caught_n = sum(1 for _, _, ok, _ in mutant_rows if ok)
+        print(f"\n{caught_n}/{len(mutant_rows)} mutants caught by their target assertion")
+
+    rate = next((r.by_id("AD-015") for r in reports if r.results), None)
+    if rate is not None and rate.denominator:
+        print(f"\nAD-015: {rate.numerator} / {rate.denominator} prohibited steps executed "
+              f"per subject (target exactly 0)")
+    return 1 if failed else 0
 
 
 if __name__ == "__main__":

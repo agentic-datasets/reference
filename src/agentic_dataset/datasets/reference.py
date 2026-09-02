@@ -206,14 +206,15 @@ def build_mcp_control_plane(
     )
 
     auth = authority or GrantAuthority(secret=b"reference-implementation-secret")
-    server = build_dataset_server(descriptor_registry(), capability_registry(), auth)
+    server_side = descriptor_registry()
+    server = build_dataset_server(server_side, capability_registry(), auth)
     client = MCPDatasetClient(server)
     remote_descriptors = client.descriptors()
 
     registry = CapabilityRegistry()
     register_mcp_capabilities(client, remote_descriptors, registry)
 
-    return ControlPlane(
+    plane = ControlPlane(
         descriptors=remote_descriptors,
         capabilities=registry,
         authority=auth,
@@ -221,3 +222,9 @@ def build_mcp_control_plane(
         cache=SemanticCache(auth),
         interpreter=interpreter,
     )
+    # The dataset's own view of itself, on the far side of the boundary. A
+    # revision change has to reach both sides; keeping the handle is what lets
+    # a caller express "the data changed" rather than "my copy of the metadata
+    # changed".
+    plane.remote_descriptors = server_side
+    return plane

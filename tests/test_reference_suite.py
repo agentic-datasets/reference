@@ -1,15 +1,21 @@
-"""AD-001 .. AD-015 against every installed runtime, at both dataset boundaries.
+"""The white-box suite: AD-001..AD-015 with implementation access.
 
 Parametrised down to one test per assertion per configuration, so a failure
 names the assertion and the runtime rather than reporting that "the suite
 failed".
+
+These checks reach into `plane.ledger`, `plane.capabilities`, `plane._cache_key`
+and `DelegatedExecutor`. That privilege is why they found six defects in this
+codebase and why they cannot be pointed at anybody else's. The portable
+equivalents are in `tests/test_conformance_vectors.py`; both run, and
+`docs/PORTABILITY.md` explains where the two differ.
 """
 
 from __future__ import annotations
 
 import pytest
 
-from agentic_dataset.conformance import CHECKS, run_suite
+from agentic_dataset.reference_suite import CHECKS, run_suite
 
 CHECK_IDS = [check.id for check, _ in CHECKS]
 
