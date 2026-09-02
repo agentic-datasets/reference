@@ -10,12 +10,10 @@ them is discovered after a DOI has been minted.
 
 ## Blocked on decisions
 
-- [ ] **Disclosure comparison.** Compare what is being released against
-      `dk-agentic-datasets-patents` — the fourth and earliest disclosure repo
-      (2025-11/12), whose scope under the 2026-08-18 no-filing decision was
-      left explicitly open. Establish whether anything here falls outside the
-      intended defensive-publication envelope, record the conclusion, and stop.
-      This is disclosure accounting, not claim mining.
+- [x] **Disclosure comparison — DONE 2026-09-02. No blocker.** Nothing being
+      released falls outside the intended defensive-publication envelope. The
+      conclusion is recorded in the disclosure workspace rather than here,
+      since that is where the search record lives.
 - [x] **Licensing boundary — DECIDED 2026-09-02.** Five tiers, implemented in
       `LICENSE.md` with full license texts in `LICENSES/` and per-directory
       markers:
