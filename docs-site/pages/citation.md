@@ -3,16 +3,22 @@
 The software carries a `CITATION.cff`, which GitHub renders as *Cite this
 repository*.
 
+**`v0.1.0` does not exist yet, so do not cite it.** During the release
+candidate, cite the tag and the commit:
+
 ```
 Chernov, A. (2026). Agentic Dataset Reference Implementation and
-Conformance Suite (Version 0.1.0) [Computer software].
+Conformance Suite (v0.1.0-rc.1) [Computer software].
 https://github.com/doytsujin/ok-agentic-dataset-reference
 ```
+
+A commit SHA is better still, because a release candidate is expected to move:
+the point of the window is that findings change the artifact.
 
 ORCID: [0009-0007-3198-2712](https://orcid.org/0009-0007-3198-2712)
 
 **There is no DOI yet.** One will be minted from the `v0.1.0` tag once the
-release-candidate window closes; until then cite the repository and a commit.
+window closes.
 
 ## Citing an assertion
 

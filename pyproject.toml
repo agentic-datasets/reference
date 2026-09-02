@@ -4,12 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agentic-dataset-reference"
-version = "0.1.0"
+version = "0.1.0rc1"
 description = "Reference implementation and conformance suite for the agentic-dataset control plane"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Mixed: CC-BY-4.0 / CC0-1.0 / Apache-2.0 / BUSL-1.1 -- see LICENSE.md" }
-dependencies = ["authorized-recall>=0.1.0", "agentic-dataset-conformance>=0.1.0"]
+# Pinned to the pre-release explicitly. `>=0.1.0` will NOT resolve against
+# 0.1.0rc1: pip excludes pre-releases unless the specifier itself mentions one,
+# so the bare lower bound made this distribution uninstallable the moment the
+# packages became release candidates.
+dependencies = [
+    "authorized-recall>=0.1.0rc1",
+    "agentic-dataset-conformance>=0.1.0rc1",
+]
 
 # The core control plane needs no framework. That is load-bearing: if the
 # governance model needed one, the claim this repository exists to make would

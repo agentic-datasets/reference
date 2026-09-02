@@ -122,6 +122,12 @@ them is discovered after a DOI has been minted.
       generated from the repository's own files; CI fails if the two drift.
 - [x] **Tagged `v0.1.0-rc.1`** so the candidate itself is citable and the
       changes external scrutiny produces can be diffed against it.
+- [ ] **Re-check the paper publication status immediately before `v0.1.0`.**
+      `docs-site/pages/citation.md` states all three conference papers are
+      accepted for 2026 and none is yet in published proceedings. That is
+      inherently time-sensitive and will go stale without anything failing.
+      If any has appeared, add its DOI there and drop the "no DOIs" sentence.
+
 - [ ] **Publish the two permissive distributions to PyPI.** Blocked on
       credentials: there is no `~/.pypirc` or PyPI token on this machine, and
       publication is irreversible — a version number cannot be reused once

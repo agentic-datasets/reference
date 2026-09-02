@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "authorized-recall"
-version = "0.1.0"
+version = "0.1.0rc1"
 description = "Authorized Recall@K — retrieval quality measured over the subset a principal is permitted to use"
 readme = "README.md"
 requires-python = ">=3.11"

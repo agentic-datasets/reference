@@ -19,7 +19,7 @@ from .metric import (
 )
 from .retrieval import TfIdfIndex
 
-__version__ = "0.1.0"
+__version__ = "0.1.0rc1"
 
 __all__ = [
     "Authorized", "TfIdfIndex", "__version__", "authorized_recall_at_k", "ndcg_at_k",

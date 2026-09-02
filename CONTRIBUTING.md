@@ -30,7 +30,8 @@ better outcome than a green tick.
 ### How to do it
 
 ```bash
-pip install agentic-dataset-conformance
+# Not on PyPI yet. From a clone, during the release candidate:
+pip install ./packages/agentic-dataset-conformance
 ```
 
 1. Implement `ConformanceSubject` — four methods, in

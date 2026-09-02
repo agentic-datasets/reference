@@ -5,9 +5,11 @@ executable vectors, checkable against any implementation without access to its
 internals.**
 
 ```bash
-pip install agentic-dataset-conformance
-agentic-dataset-conformance run          # against the built-in reference subject
+pip install --pre agentic-dataset-conformance   # 0.1.0rc1 is a pre-release
+agentic-dataset-conformance run                 # against the built-in subject
 ```
+
+Not yet on PyPI during the release candidate; install from a clone until it is.
 
 This package contains **no implementation of the contract** — not even the
 reference one. That is the property it exists to have: a conformance suite that
