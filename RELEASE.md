@@ -67,7 +67,11 @@ them is discovered after a DOI has been minted.
 - [ ] Update the repository URL in `CITATION.cff` (`repository-code`,
       `license-url`) — GitHub redirects the old name, the citation record
       should not rely on that.
-- [ ] Add an ORCID to `CITATION.cff`.
+- [x] ORCID added to `CITATION.cff` — 0009-0007-3198-2712, verified against
+      the ORCID public API: the record names Alexander Chernov and lists
+      github.com/doytsujin, chernov.ca and the LinkedIn profile as its
+      researcher URLs. It must also be duplicated into `.zenodo.json`, which
+      does not inherit it from `CITATION.cff`.
 - [ ] Update the GitHub repository description. It still reads "on the
       LangChain stack. PLANNED — nothing built yet", which contradicts the
       first screen of the README.
