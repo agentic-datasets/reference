@@ -46,6 +46,11 @@ them is discovered after a DOI has been minted.
       restriction turns out to suppress adoption while protecting little,
       moving it to Apache-2.0 is an easy later decision.
 
+- [x] **Claims frozen 2026-09-02** — [`docs/CLAIMS.md`](docs/CLAIMS.md).
+      Thirteen rows, one of which is "explicitly not claimed". Nothing written
+      about this project during the remaining administrative work should assert
+      anything not in that table.
+
 - [ ] **Align `ok-agentic-datasets`** with the same *principle* — open
       specification and interoperability artifacts, restricted commercial
       implementation. It currently applies CC BY-**NC** to all documentation
@@ -66,8 +71,32 @@ them is discovered after a DOI has been minted.
 - [ ] Update the GitHub repository description. It still reads "on the
       LangChain stack. PLANNED — nothing built yet", which contradicts the
       first screen of the README.
-- [ ] Write `.zenodo.json` — it needs a license identifier, so it cannot be
-      written before the licensing decision.
+- [ ] **Zenodo metadata is a mixed-licence problem, not a filled-in field.**
+      The release carries four rights regimes — CC-BY-4.0, CC0-1.0,
+      Apache-2.0, BUSL-1.1 — so no single licence identifier describes it.
+      `"license": "BUSL-1.1"` would wrongly imply BSL covers the vectors and
+      the conformance software; `"license": "Apache-2.0"` would wrongly imply
+      the reference implementation is permissive, which is worse.
+
+      Do not resolve this by picking one. Declare every applicable licence on
+      the Zenodo record and leave `LICENSE.md` as the authoritative
+      file-to-licence map.
+
+      **To verify in Zenodo Sandbox before minting anything** — these are
+      expectations, not confirmed facts, and the schema may have moved:
+      - whether the `.zenodo.json` GitHub-integration schema still exposes a
+        single `license` field, and if so whether a record created that way
+        can be corrected to multiple licences before publishing;
+      - that **Zenodo ignores `CITATION.cff` entirely when `.zenodo.json` is
+        present** — they do not merge, so every creator, ORCID, version and
+        related-identifier field has to be duplicated correctly into
+        `.zenodo.json`;
+      - the Rights section of the draft record, read in full, before publish.
+
+      Sequence: RC public → scrutiny → tag `v0.1.0` → create the record →
+      verify Rights → publish. **Zenodo publication is irreversible**, and a
+      record asserting one licence over a four-regime artifact is not something
+      to fix afterwards.
 - [ ] Re-run everything and refresh `docs/runs/`:
       ```
       python -m agentic_dataset.conformance
@@ -83,9 +112,9 @@ them is discovered after a DOI has been minted.
       reading establishes independence from the author's interpretation of the
       contract. That is the next validation threshold, and writing a third
       implementation here would not cross it.
-- [ ] Tag `v0.1.0` and archive that exact tag through the Zenodo GitHub
-      integration. **Zenodo publication is irreversible** — confirm the record
-      immediately before minting.
+- [ ] Tag `v0.1.0` and archive that exact tag. **Zenodo publication is
+      irreversible** — read the whole draft record, Rights included, in the
+      same sitting as pressing publish.
 - [ ] The technical report is a separate repository with its own DOI, which
       cites the software DOI. Do not vendor a `paper/` directory here: the
       software artifact and the scholarly artifact should not become

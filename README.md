@@ -226,6 +226,8 @@ docs/                 architecture (three ports), results, findings, raw runs
   — Authorized Recall@K: the definition, the two conventions, and the proof
   that the pre/post-filter gap is non-negative. The package has no dependency
   on the control plane, so the metric can be used without adopting any of this.
+- [`docs/CLAIMS.md`](docs/CLAIMS.md) — everything this project asserts, and
+  the one thing it explicitly does not. Frozen before release.
 - [`docs/PORTABILITY.md`](docs/PORTABILITY.md) — what the portable contract
   reaches, what it deliberately does not, and the mutation results.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to write an independent
