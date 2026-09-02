@@ -130,10 +130,10 @@ Two notes on the choice.
 
 **Why the restriction exists.** The reference implementation contains a working
 expression of authorization-scoped semantic caching, which overlaps a live
-commercial interest. The underlying mechanisms are already defensively
-published — Zenodo 10.5281/zenodo.22076330, CC BY — so this restricts *this
-code*, not the ideas, and anyone is free to implement them from the papers or
-from Tier 1.
+commercial interest. What Tier 5 restricts is *this code*. The contract itself
+is not restricted: the specification is Tier 1, the vectors are Tier 2, and
+implementing them independently — commercially or otherwise — requires nothing
+from this tier.
 
 **Why it is time-limited.** Indefinite source-available licensing would leave
 the project permanently unable to describe itself simply. The Change Date fixes
