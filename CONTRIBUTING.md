@@ -4,6 +4,13 @@ The most valuable contribution to this repository is not a pull request.
 
 ## Wanted: an independent conformance implementation
 
+**You need no permission and no license from anybody to do this.** The
+specification is CC BY 4.0, the normative vectors are CC0, and the conformance
+runner is Apache-2.0 — including for a commercial implementation. Only the
+reference implementation in `src/agentic_dataset/` (excluding `conformance/`
+and `authorized_recall/`) is restricted, and you do not need it.
+
+
 The four runtime ports here share one reference `ControlPlane`. That is
 deliberate — an assertion that passed because each port re-implemented its own
 policy would be four experiments rather than one — but it caps what the result

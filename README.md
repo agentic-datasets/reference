@@ -248,6 +248,30 @@ The three architecture documents are **design, and predate the
 implementation**. Where the code disagrees with them, `docs/FINDINGS.md` says
 so and says why; they have not been retrofitted to match.
 
+## Licensing
+
+**Not one license, and not open source as a whole.** The split is arranged so
+that everything needed to implement and test the contract independently is
+openly licensed, while the reference implementation is not:
+
+| What | License |
+|---|---|
+| Specification and normative prose | CC BY 4.0 |
+| Normative worlds and vectors | **CC0-1.0** — vendor them unchanged, no attribution required |
+| Conformance software, generator, toy subject, mutants | Apache-2.0 |
+| Authorized Recall | Apache-2.0 |
+| Reference implementation | BUSL-1.1, converting to Apache-2.0 on 2029-09-02 |
+
+> The Agentic Dataset specification, normative vectors, conformance tooling and
+> Authorized Recall implementation are openly licensed for independent
+> implementation and reuse. The reference implementation is source-available
+> under the Business Source License 1.1.
+
+**Writing an independent implementation against `CONFORMANCE.md` and the
+vectors, in any language, for any purpose including a commercial one, requires
+no permission from anybody.** [`LICENSE.md`](LICENSE.md) is the map, with the
+per-tier reasoning and the BSL parameters.
+
 ## Related
 
 - `ok-governed-motion` — the three-valued verdict, in Rust. IEEE CBS 2026

@@ -1,85 +1,147 @@
-# License for the Agentic Dataset Reference Implementation
+# License map
 
-This repository contains **two distinct categories of content**, each under its
-own license. It follows the same scheme as `ok-agentic-datasets`, which is the
-public repository this work belongs with.
+This repository is **not under a single license**, and it is not accurate to
+call it open source as a whole. Five tiers, chosen so that everything a third
+party needs in order to implement and test the contract independently is
+openly licensed, while the reference implementation of the contract is not.
 
----
+| Tier | What | License |
+|---|---|---|
+| 1 | Specification and normative prose | **CC BY 4.0** |
+| 2 | Normative worlds and vectors | **CC0-1.0** |
+| 3 | Conformance software | **Apache-2.0** |
+| 4 | Authorized Recall | **Apache-2.0** |
+| 5 | Reference implementation | **BUSL-1.1** → Apache-2.0 on 2029-09-02 |
 
-## 1. Documentation, Diagrams, and Research Materials
+The accurate one-sentence summary, and the one to use publicly:
 
-Applies to `README.md`, `PLAN.md`, `CONFORMANCE.md` and everything under
-`docs/`.
-
-**License:** Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
-**License Text:** https://creativecommons.org/licenses/by-nc/4.0/
-
-You are free to:
-- **Share** — copy and redistribute the material in any medium or format
-- **Adapt** — remix, transform, and build upon the material
-
-Under the following terms:
-- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
-- **NonCommercial** — You may not use the material for commercial purposes.
-
-**Definition of Commercial Use:** Any use primarily intended for, or directed
-toward, commercial advantage or monetary compensation.
+> The Agentic Dataset specification, normative vectors, conformance tooling and
+> Authorized Recall implementation are openly licensed for independent
+> implementation and reuse. The reference implementation is source-available
+> under the Business Source License 1.1.
 
 ---
 
-## 2. Prototype Code and Software Components
+## Tier 1 — Specification and normative prose · CC BY 4.0
 
-Applies to everything under `src/`, `tests/` and `evals/`.
+```
+CONFORMANCE.md
+src/agentic_dataset/conformance/verbs.md
+docs/PORTABILITY.md
+docs/RESULTS.md
+docs/FINDINGS.md
+docs/ARCHITECTURE.md, docs/ARCHITECTURE-LLAMAINDEX.md, docs/ARCHITECTURE-ADK.md
+README.md, PLAN.md, RELEASE.md, CONTRIBUTING.md
+```
 
-**License:** Business Source License 1.1 (BSL 1.1)
-**Full Text:** https://mariadb.com/bsl11/
+<https://creativecommons.org/licenses/by/4.0/>
 
-Parameters:
-- **Licensor:** Alexander Chernov
-- **Licensed Work:** all source code in `src/`, `tests/` and `evals/`, unless otherwise marked.
-- **Change Date:** 36 months from the date of each commit containing the Licensed Work.
-- **Change License:** GNU Affero General Public License v3.0 (AGPL-3.0)
+Quote it, reproduce it, extend it, translate it, build a competing
+specification on it. Attribution required. **Commercial use is permitted** —
+this is CC BY, not CC BY-NC, because a specification nobody may use
+commercially is not an interoperability specification.
 
-Usage Terms:
-- You may use the Licensed Work for **non-commercial purposes** only, including
-  research, teaching, and personal projects.
-- Commercial use requires **explicit, written permission** from the Licensor.
-- After the Change Date, the Licensed Work automatically becomes available
-  under the Change License (AGPL-3.0).
+## Tier 2 — Normative worlds and vectors · CC0-1.0
 
-**Definition of Commercial Use:** Same as above.
+```
+conformance/worlds/*.json
+conformance/vectors/*.json
+```
 
----
+<https://creativecommons.org/publicdomain/zero/1.0/>
 
-## 3. Independent reimplementation is explicitly welcome
+Public domain dedication, **including no attribution requirement**. This is
+deliberate and it is the point of the tier: these files are meant to be
+vendored unchanged into a Rust crate, a Go module, a TypeScript package or a
+commercial product's test suite. Every condition attached to them is friction
+against the one outcome this repository most wants.
 
-`CONFORMANCE.md` states the fifteen assertions in prose so that they can be
-implemented again by someone else. **Writing an independent implementation
-against that specification, in any language, and publishing whether it passes,
-is a non-commercial research use and is encouraged.** It is the experiment this
-repository cannot run on itself.
+## Tier 3 — Conformance software · Apache-2.0
+
+```
+src/agentic_dataset/conformance/**       (interface, runner, CLI)
+conformance/generate.py
+conformance/subjects.py
+conformance/toy_implementation.py
+conformance/mutations.py
+tests/test_conformance_vectors.py
+```
+
+[`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt)
+
+A third party must be able to *build and test* an independent implementation,
+commercially or not. `generate.py` is here rather than in Tier 2 because it is
+software: CC0 can cover code, but Apache-2.0 gives downstream users clearer
+patent treatment.
+
+## Tier 4 — Authorized Recall · Apache-2.0
+
+```
+src/agentic_dataset/authorized_recall/**
+```
+
+[`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt)
+
+This package imports nothing else in the repository. It is the piece most
+likely to be used by people who never adopt the architecture — authorization-
+aware search, multi-tenant retrieval, ABAC/RBAC retrieval evaluation — and
+there is no strategic gain in making that difficult.
+
+## Tier 5 — Reference implementation · BUSL-1.1
+
+```
+src/agentic_dataset/**   EXCEPT conformance/ and authorized_recall/
+evals/**
+examples/**
+```
+
+[`LICENSES/BUSL-1.1.txt`](LICENSES/BUSL-1.1.txt), with parameters filled in:
+
+- **Licensor** — Alexander Chernov
+- **Additional Use Grant** — production use permitted where not primarily
+  intended for or directed toward commercial advantage or monetary
+  compensation. Research, teaching, evaluation, peer review and personal
+  projects are covered.
+- **Change Date** — 2029-09-02
+- **Change License** — Apache-2.0
+
+**BSL is not an open-source license**, and the license itself says so. What it
+guarantees is that this tier *becomes* one: on the Change Date, or the fourth
+anniversary of first public distribution, whichever comes first, it converts to
+Apache-2.0 automatically.
+
+Two notes on the choice.
+
+**Why the restriction exists.** The reference implementation contains a working
+expression of authorization-scoped semantic caching, which overlaps a live
+commercial interest. The underlying mechanisms are already defensively
+published — Zenodo 10.5281/zenodo.22076330, CC BY — so this restricts *this
+code*, not the ideas, and anyone is free to implement them from the papers or
+from Tier 1.
+
+**Why it is time-limited.** Indefinite source-available licensing would leave
+the project permanently unable to describe itself simply. The Change Date fixes
+that on a schedule rather than on a decision.
+
+## Commercial licensing
+
+To use Tier 5 commercially before the Change Date:
+
+**Alexander Chernov** — GitHub [@doytsujin](https://github.com/doytsujin) ·
+LinkedIn [@thedoytsujin](https://www.linkedin.com/in/thedoytsujin/)
+
+Tiers 1–4 need no such agreement, commercially or otherwise.
+
+## Independent reimplementation is explicitly welcome
+
+`CONFORMANCE.md` (CC BY 4.0) states the fifteen assertions in prose;
+`conformance/vectors/` (CC0) makes them executable. **Writing an independent
+implementation against them, in any language, for any purpose including a
+commercial one, and publishing whether it passes, requires no permission from
+anybody.** It is the outcome this license map is arranged around.
 
 The assertion identifiers `AD-001` … `AD-015` may be referred to freely.
 
 ---
 
-## 4. Dual-Licensing for Commercial Use
-
-To use the code or research materials commercially **before** the Change Date,
-contact:
-
-**Alexander Chernov**
-GitHub: [@doytsujin](https://github.com/doytsujin)
-LinkedIn: [@thedoytsujin](https://www.linkedin.com/in/thedoytsujin/)
-
----
-
-## 5. Summary
-
-- **Docs & diagrams:** CC BY-NC 4.0 — free for non-commercial use with attribution.
-- **Code:** BSL 1.1 — non-commercial use only, reverts to AGPL-3.0 after 36 months.
-- **The conformance specification:** reimplement it, please.
-
----
-
-© 2026 Alexander Chernov. All rights reserved.
+© 2026 Alexander Chernov. Tier 5 rights reserved; Tiers 1–4 licensed as above.
