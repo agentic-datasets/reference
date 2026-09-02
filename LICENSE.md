@@ -12,6 +12,7 @@ openly licensed, while the reference implementation of the contract is not.
 | 3 | Conformance software | **Apache-2.0** |
 | 4 | Authorized Recall | **Apache-2.0** |
 | 5 | Reference implementation | **BUSL-1.1** → Apache-2.0 on 2029-09-02 |
+| — | The **mark** in `brand/` | **excluded from all of the above. All rights reserved.** |
 
 The accurate one-sentence summary, and the one to use publicly:
 
@@ -21,6 +22,18 @@ The accurate one-sentence summary, and the one to use publicly:
 > under the Business Source License 1.1.
 
 ---
+
+## Excluded — the mark in `brand/`
+
+**The Agentic Dataset mark is not covered by any licence in this file.** All
+rights reserved. It is deliberately the one asset here that is not open, for
+the reason an identifier exists: a mark anyone may adapt identifies nothing,
+and a specification that may one day want "conforms to AD-001 … AD-015" to
+carry meaning cannot hand its mark away with its text.
+
+Unmodified use to refer to this project is welcome and needs no permission.
+[`brand/README.md`](brand/README.md) states what that covers. **Implementing
+the contract needs no permission either, and never touches this exclusion.**
 
 ## Tier 1 — Specification and normative prose · CC BY 4.0
 

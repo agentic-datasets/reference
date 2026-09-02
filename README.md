@@ -1,3 +1,5 @@
+<img src="brand/agentic-dataset-mark.svg" alt="" width="72" align="right">
+
 # agentic-dataset-reference
 
 **A framework-independent behavioural contract for agentic datasets, expressed

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"
+     role="img" aria-label="Agentic Dataset">
+  <title>Agentic Dataset</title>
+  <!--
+    A bounded object with one controlled opening.
+
+    The outer square is the boundary. The break in its top edge is the single
+    admitted path. The inner square is the dataset.
+
+    The opening spans x=24 to x=40, exactly the width of the inner square. That
+    proportion is why this width was chosen over a narrower one, and it is also
+    the narrowest gap that stays legible at 16 px.
+
+    Uses currentColor, so it inverts for dark backgrounds without a second asset.
+  -->
+  <g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="butt">
+    <path d="M24 11 H11 V53 H53 V11 H40"/>
+  </g>
+  <rect x="24" y="24" width="16" height="16" fill="currentColor"/>
+</svg>
