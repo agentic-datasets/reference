@@ -63,22 +63,25 @@ them is discovered after a DOI has been minted.
       around the prose describing it. Forcing BUSL onto a repository because it
       shares a programme name would have been the wrong kind of consistency.
 
-- [ ] **Rename** `dk-agentic-dataset-reference` → `ok-agentic-dataset-reference`
-      under the prefix policy, at the moment it goes public and not before.
+- [x] **Renamed 2026-09-02** — `dk-agentic-dataset-reference` →
+      `ok-agentic-dataset-reference`, under the prefix policy, while still
+      private. Done before publication rather than after, so no public name is
+      ever cited or cloned and then redirected.
 
 ## Mechanical, once the above are settled
 
-- [ ] Update the repository URL in `CITATION.cff` (`repository-code`,
-      `license-url`) — GitHub redirects the old name, the citation record
-      should not rely on that.
+- [x] Repository URLs in `CITATION.cff` (`repository-code`, `license-url`)
+      updated to the `ok-` name. GitHub redirects the old one, but a citation
+      record should not depend on a redirect.
 - [x] ORCID added to `CITATION.cff` — 0009-0007-3198-2712, verified against
       the ORCID public API: the record names Alexander Chernov and lists
       github.com/doytsujin, chernov.ca and the LinkedIn profile as its
       researcher URLs. It must also be duplicated into `.zenodo.json`, which
       does not inherit it from `CITATION.cff`.
-- [ ] Update the GitHub repository description. It still reads "on the
-      LangChain stack. PLANNED — nothing built yet", which contradicts the
-      first screen of the README.
+- [x] GitHub repository description replaced. It had still read "on the
+      LangChain stack. PLANNED — nothing built yet", which contradicted the
+      first screen of the README and was wrong in three ways at once.
+
 - [ ] **Zenodo metadata is a mixed-licence problem, not a filled-in field.**
       The release carries four rights regimes — CC-BY-4.0, CC0-1.0,
       Apache-2.0, BUSL-1.1 — so no single licence identifier describes it.
@@ -105,7 +108,8 @@ them is discovered after a DOI has been minted.
       verify Rights → publish. **Zenodo publication is irreversible**, and a
       record asserting one licence over a four-regime artifact is not something
       to fix afterwards.
-- [ ] Re-run everything and refresh `docs/runs/`:
+- [x] Re-ran everything and refreshed `docs/runs/` under the final repository
+      identity:
       ```
       python -m agentic_dataset.conformance
       python -m agentic_dataset.authorized_recall
