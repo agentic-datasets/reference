@@ -92,6 +92,35 @@ from the descriptors, which made every advertised capability executable by
 construction. AD-002 caught it on the first run. A suite that could not have
 caught that would not have been worth building.
 
+## How the method got here
+
+The testing approach was not designed and then vindicated. It changed twice
+because of evidence, and the order matters:
+
+```
+white-box suite
+      |
+      +-- missed F-010 entirely
+                |
+                v
+language-neutral vectors
+      |
+      +-- exposed F-010: the MCP server served the revision it was built with
+      |
+      +-- exposed F-011: the independent toy conflated advertised with implemented
+                |
+                v
+mutation characterisation
+      |
+      +-- F-011 retained as a reproducible mutant (M02)
+      |
+      +-- exposed a coverage gap: 4 of 15 assertions had no mutant of their own
+```
+
+Each step was taken because the previous one turned out to be insufficient, and
+each produced a finding the previous one could not have. That is a weaker claim
+than "the design was correct from the start" and a more useful one.
+
 ## Mutation results
 
 Seventeen deliberately broken variants, each removing exactly one guarantee.

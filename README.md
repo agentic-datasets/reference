@@ -9,9 +9,10 @@ without access to their internals.**
 
 reference architecture      4 runtimes x 2 dataset boundaries   15/15 each
 independent implementation  shares no code with the above       15/15
-mutation analysis           17 targeted violations              17/17 detected
-                            all 15 assertions covered            2.2 assertions
-                                                                 per mutant
+mutation analysis           17 / 17 targeted violations detected
+                            15 / 15 assertions independently exercised
+                             2.2 detecting assertions per mutant (mean)
+                            not treated as an optimization metric
 defects exposed by the
 conversion to vectors       F-010, F-011
 execution safety            0 / 576 prohibited executions

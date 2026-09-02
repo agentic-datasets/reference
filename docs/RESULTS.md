@@ -104,6 +104,70 @@ The suite failed on this implementation five times before it passed; see
 the MCP configuration and two only under the async runtimes, which is the
 argument for the matrix rather than a single run.
 
+## 1a. Mutation analysis
+
+Seventeen variants, each removing exactly one guarantee, run against the same
+vectors. `T` is the assertion the mutant was written for; `x` is a redundant
+detection.
+
+```
+        M01 M02 M03 M04 M05 M06 M07 M08 M09 M10 M11 M12 M13 M14 M15 M16 M17
+        --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+AD-001   T   .   .   .   x   .   .   .   .   .   .   .   .   .   .   .   .    2
+AD-002   .   T   x   .   .   .   .   .   .   .   .   .   .   .   .   .   .    2
+AD-003   .   .   T   T   .   .   .   .   .   .   .   .   .   .   .   .   .    2
+AD-004   .   .   .   .   T   .   .   .   .   .   .   .   .   .   .   .   x    2
+AD-005   .   .   .   .   .   T   .   .   .   .   .   .   .   .   .   .   .    1
+AD-006   .   .   .   .   x   .   T   .   .   .   .   .   .   .   .   .   .    2
+AD-007   .   .   .   .   .   .   .   T   .   .   .   .   .   .   x   x   .    3
+AD-008   .   .   .   .   .   .   .   .   T   T   .   .   .   .   .   .   .    2
+AD-009   .   .   .   .   .   .   .   .   .   .   T   x   x   x   .   .   x    5
+AD-010   .   .   .   .   .   .   .   .   .   .   x   T   x   x   .   .   x    5
+AD-011   .   .   .   .   .   .   .   .   .   .   .   .   T   .   .   .   .    1
+AD-012   .   .   .   .   .   .   .   .   .   .   .   .   .   T   .   .   .    1
+AD-013   .   .   x   x   .   .   .   x   .   .   .   .   .   .   T   .   .    4
+AD-014   .   .   x   x   .   .   .   x   .   .   .   .   .   .   .   T   .    4
+AD-015   .   .   .   .   x   .   .   .   .   .   .   .   .   .   .   .   T    2
+
+M01  AD-001  descriptor-not-validated
+M02  AD-002  advertised-means-implemented
+M03  AD-003  executes-without-a-grant
+M04  AD-003  expired-tokens-accepted
+M05  AD-004  refusal-still-mints-authority
+M06  AD-005  indeterminate-becomes-refusal
+M07  AD-006  default-allow
+M08  AD-007  delegation-widens-scope
+M09  AD-008  cache-ignores-principal
+M10  AD-008  cache-ignores-revision
+M11  AD-009  evidence-omits-principal
+M12  AD-010  refusal-leaves-no-evidence
+M13  AD-011  evidence-omits-revision
+M14  AD-012  evidence-omits-policy-version
+M15  AD-013  remote-delegation-unchecked
+M16  AD-014  handoff-unchecked
+M17  AD-015  prohibitions-ignored
+
+target detection : 17/17 mutants caught by their intended assertion
+cross-detection  : 2.2 assertions per mutant on average
+coverage         : 15/15 assertions have a mutant of their own
+
+T = caught by its target assertion   x = caught redundantly
+. = not detected                     ! = target failed to catch it
+```
+
+**Three separate figures, because they mean three different things.** Target
+detection says the suite is sensitive to each named violation. Coverage says
+every assertion is exercised as the assertion under test rather than only as a
+bystander. Cross-detection says the assertions are not orthogonal.
+
+The last one is a characterisation, not a score, and is deliberately not being
+driven anywhere. AD-005, AD-011 and AD-012 detect only their own mutant — a
+single behavioural check carries the whole detection burden for each — and that
+is worth knowing about those three rather than concealing.
+
+Coverage was 11/15 in the first version of this analysis, and nothing in the
+pass/fail output showed it. Drawing the matrix did.
+
 ## 2. Authorized Recall@K — milestone M6
 
 Defined and measured in `agentic_dataset.authorized_recall`, which has no
