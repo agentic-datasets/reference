@@ -47,7 +47,7 @@ jobs:
       - name: evaluation and the M6 measurement
         run: |
           python evals/evaluate.py
-          python -m agentic_dataset.authorized_recall
+          python -m authorized_recall
       - name: the committed vectors match the generator
         run: |
           python conformance/generate.py

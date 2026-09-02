@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "authorized-recall"
+version = "0.1.0"
+description = "Authorized Recall@K — retrieval quality measured over the subset a principal is permitted to use"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Alexander Chernov" }]
+keywords = [
+    "information retrieval", "evaluation metric", "authorization",
+    "access control", "multi-tenant", "RAG", "ABAC", "RBAC",
+]
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Intended Audience :: Science/Research",
+]
+
+# No dependencies, and that is the point: the metric is a property of
+# policy-conditioned retrieval, not of any particular stack. It takes an
+# authorization predicate, so a system using RBAC, ABAC, row-level security or
+# per-tenant vector namespaces can adopt the measurement without adopting
+# anything else.
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/doytsujin/ok-agentic-dataset-reference"
+Source = "https://github.com/doytsujin/ok-agentic-dataset-reference/tree/main/packages/authorized-recall"
+
+[project.scripts]
+authorized-recall = "authorized_recall.experiment:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

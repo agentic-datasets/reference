@@ -11,4 +11,4 @@ build/
 .env
 .langsmith/
 evidence/*.jsonl
-evals/authorized_recall_result.json
+authorized_recall_result.json

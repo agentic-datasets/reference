@@ -111,7 +111,7 @@ them is discovered after a DOI has been minted.
       identity:
       ```
       python -m agentic_dataset.conformance
-      python -m agentic_dataset.authorized_recall
+      python -m authorized_recall
       python evals/evaluate.py
       pytest -q
       ```

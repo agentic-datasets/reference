@@ -8,7 +8,7 @@ security or per-tenant vector namespaces can adopt the measurement without
 adopting anything else here.
 
 ```
-python -m agentic_dataset.authorized_recall
+python -m authorized_recall
 ```
 
 ---

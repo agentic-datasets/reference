@@ -11,7 +11,7 @@ model. That is a deliberate limitation: it keeps the core dependency-free and
 the ranking reproducible, and the metric this module exists to measure --
 `authorized_recall_at_k` -- is a property of the *filter*, not of the retriever.
 A better retriever moves both numbers and leaves the gap between them, which is
-the quantity of interest. `evals/authorized_recall.py` reports both.
+the quantity of interest. `python -m authorized_recall` reports both.
 """
 
 from __future__ import annotations
@@ -22,8 +22,8 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import Iterable, Mapping, Optional, Sequence
 
-from .authorized_recall.metric import authorized_recall_at_k as _authorized_recall_at_k
-from .authorized_recall.metric import (
+from authorized_recall.metric import authorized_recall_at_k as _authorized_recall_at_k
+from authorized_recall.metric import (
     ndcg_at_k,
     precision_at_k,
     recall_at_k,
@@ -129,7 +129,7 @@ class SemanticIndex:
         occupies one of the k slots. With `pool > k` it retrieves a wider
         candidate set, filters, and then truncates, so the k slots are k
         usable answers. The two differ by a measurable amount --
-        `evals/authorized_recall.py` reports it -- and the difference is the
+        `python -m authorized_recall` reports it -- and the difference is the
         argument for making discovery policy-aware rather than bolting a
         filter onto the end.
         """
@@ -154,10 +154,11 @@ class SemanticIndex:
 
 # -- retrieval metrics ----------------------------------------------------
 #
-# Defined in `agentic_dataset.authorized_recall`, not here. That package has no
-# dependency on the control plane, so the metric can be used by systems that
-# never adopt any of this; re-exporting rather than re-implementing is what
-# stops the two definitions drifting into two different numbers.
+# Defined in the `authorized-recall` distribution, not here. That package has no
+# dependency on the control plane and is separately licensed Apache-2.0, so the
+# metric can be used by systems that never adopt any of this; re-exporting
+# rather than re-implementing is what stops the two definitions drifting into
+# two different numbers.
 #
 # The signatures below take a `Principal` and adapt it to the predicate the
 # metric is actually defined over.

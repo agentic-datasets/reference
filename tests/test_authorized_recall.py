@@ -1,7 +1,7 @@
 """The metric's stated properties, and the cross-check between its two callers.
 
 The definition, the two conventions and the non-negativity proof live in
-`src/agentic_dataset/authorized_recall/README.md`. These are the assertions
+`packages/authorized-recall/README.md`. These are the assertions
 that keep the code matching what that document claims.
 """
 
@@ -9,15 +9,15 @@ from __future__ import annotations
 
 import pytest
 
-from agentic_dataset.authorized_recall import (
+from authorized_recall import (
     authorized_recall_at_k,
     post_filter,
     pre_filter,
     recall_at_k,
     unusable_fraction_at_k,
 )
-from agentic_dataset.authorized_recall.corpus import build
-from agentic_dataset.authorized_recall.experiment import run
+from authorized_recall.corpus import build
+from authorized_recall.experiment import run
 from agentic_dataset.datasets import descriptor_registry, principals
 from agentic_dataset.discovery import SemanticIndex
 from agentic_dataset.discovery import authorized_recall_at_k as via_principal
@@ -62,8 +62,8 @@ def test_pre_filter_contains_post_filter_over_the_whole_corpus(k):
     wrong and every reported gap is suspect.
     """
     datasets, queries, profiles = build()
-    from agentic_dataset.authorized_recall.experiment import _document, _predicate
-    from agentic_dataset.authorized_recall import TfIdfIndex
+    from authorized_recall.experiment import _document, _predicate
+    from authorized_recall import TfIdfIndex
 
     index = TfIdfIndex({d["dataset"]: _document(d) for d in datasets})
     for query in queries:
@@ -96,8 +96,15 @@ def test_the_headline_number_is_what_the_documents_say():
 def test_the_committed_corpus_matches_the_generator():
     """`evals/datasets/*.json` is the record of what was measured. It has to be
     the same corpus the in-memory build produces, or the record is of something
-    else."""
-    assert run(from_json=True)["k"][5] == run()["k"][5]
+    else.
+
+    The path is passed in: the `authorized-recall` package ships no data and
+    does not know where a repository put any.
+    """
+    from pathlib import Path
+
+    data = Path(__file__).resolve().parents[1] / "evals" / "datasets"
+    assert run(from_json=data)["k"][5] == run()["k"][5]
 
 
 def test_the_control_plane_path_reproduces_the_standalone_metric():

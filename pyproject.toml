@@ -9,11 +9,15 @@ description = "Reference implementation and conformance suite for the agentic-da
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Mixed: CC-BY-4.0 / CC0-1.0 / Apache-2.0 / BUSL-1.1 -- see LICENSE.md" }
-dependencies = []
+dependencies = ["authorized-recall>=0.1.0"]
 
-# The core control plane has no dependencies. That is load-bearing: if the
-# governance model needed a framework, the claim this repository exists to
-# make would be false. Framework ports are extras.
+# The core control plane needs no framework. That is load-bearing: if the
+# governance model needed one, the claim this repository exists to make would
+# be false. Framework ports are extras.
+#
+# `authorized-recall` is a dependency rather than a sub-package because it is
+# separately licensed (Apache-2.0) and separately useful. This distribution is
+# BUSL-1.1 and is not published to PyPI; see LICENSE.md.
 [project.optional-dependencies]
 langgraph = ["langgraph>=1.0", "langchain-core>=1.0"]
 llamaindex = ["llama-index-core>=0.14"]
@@ -27,6 +31,7 @@ all = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["agentic_dataset*"]
 
 [tool.setuptools.package-data]
 "agentic_dataset.datasets" = ["*.json"]

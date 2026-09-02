@@ -77,7 +77,7 @@ patent treatment.
 ## Tier 4 — Authorized Recall · Apache-2.0
 
 ```
-src/agentic_dataset/authorized_recall/**
+packages/authorized-recall/**
 ```
 
 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt)

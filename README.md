@@ -147,9 +147,9 @@ python -m agentic_dataset.reference_suite       # white-box suite, 8 configurati
 python conformance/generate.py                  # regenerate world and vectors
 pytest -q                                       # 405 tests
 
-python -m agentic_dataset.authorized_recall  # milestone M6, the metric
+python -m authorized_recall  # milestone M6, the metric
 python evals/evaluate.py                     # milestone M5, six evaluators
-python -m agentic_dataset.authorized_recall.corpus   # regenerate the corpus
+python -m authorized_recall.corpus   # regenerate the corpus
 ```
 
 The conformance runner exits non-zero on any failure, so it works as a CI gate.
@@ -215,8 +215,9 @@ src/agentic_dataset/
     adapters/         native · langgraph · llamaindex · adk
     conformance/      the portable harness: interface + runner, no impl imports
     reference_suite/  the white-box suite, which needs implementation access
-    authorized_recall/  the metric, standalone: no dependency on any of the above
     datasets/         the synthetic reference dataset family
+packages/
+    authorized-recall/  the metric as its own Apache-2.0 distribution
 conformance/          the normative artifact: world, vectors, verbs,
                       an independent implementation and 17 broken variants
 examples/             one runnable script per runtime, plus the MCP boundary
@@ -230,10 +231,11 @@ docs/                 architecture (three ports), results, findings, raw runs
 - [`CONFORMANCE.md`](CONFORMANCE.md) — **AD-001 … AD-015**, the fifteen
   assertions any implementation must satisfy in any framework. This is the
   specification; everything else in the repository is one worked example of it.
-- [`src/agentic_dataset/authorized_recall/README.md`](src/agentic_dataset/authorized_recall/README.md)
+- [`packages/authorized-recall/README.md`](packages/authorized-recall/README.md)
   — Authorized Recall@K: the definition, the two conventions, and the proof
-  that the pre/post-filter gap is non-negative. The package has no dependency
-  on the control plane, so the metric can be used without adopting any of this.
+  that the pre/post-filter gap is non-negative. A **separate distribution**
+  under Apache-2.0 with no dependency on the control plane, so the metric can
+  be used — and installed — without adopting any of this.
 - [`docs/CLAIMS.md`](docs/CLAIMS.md) — everything this project asserts, and
   the one thing it explicitly does not. Frozen before release.
 - [`docs/PORTABILITY.md`](docs/PORTABILITY.md) — what the portable contract

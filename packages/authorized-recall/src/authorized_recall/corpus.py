@@ -6,7 +6,7 @@ query if it belongs to the query's domain -- because a ground truth argued
 after the fact is a ground truth fitted to the retriever.
 
 `build()` returns the corpus in memory, so the experiment runs with no data
-files present. `python -m agentic_dataset.authorized_recall.corpus` also writes
+files present. `python -m authorized_recall.corpus` also writes
 it to `evals/datasets/*.json`, which are committed as the record of what was
 measured.
 """
@@ -16,7 +16,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parents[3] / "evals" / "datasets"
+DEFAULT_OUT = Path("corpus")
 
 DOMAINS = {
     "purification": {
@@ -135,12 +135,21 @@ def build() -> tuple[list[dict], list[dict], dict]:
     return datasets, queries, profiles
 
 
-def main() -> None:
-    OUT.mkdir(parents=True, exist_ok=True)
+def main(out: Path | str | None = None) -> None:
+    import argparse
+
+    if out is None:
+        parser = argparse.ArgumentParser(prog="authorized_recall.corpus")
+        parser.add_argument("--out", default=str(DEFAULT_OUT),
+                            help="directory to write corpus.json, queries.json "
+                                 "and profiles.json into")
+        out = parser.parse_args().out
+    out = Path(out)
+    out.mkdir(parents=True, exist_ok=True)
     datasets, queries, profiles = build()
-    (OUT / "corpus.json").write_text(json.dumps({"datasets": datasets}, indent=2) + "\n")
-    (OUT / "queries.json").write_text(json.dumps({"queries": queries}, indent=2) + "\n")
-    (OUT / "profiles.json").write_text(json.dumps({"profiles": profiles}, indent=2) + "\n")
+    (out / "corpus.json").write_text(json.dumps({"datasets": datasets}, indent=2) + "\n")
+    (out / "queries.json").write_text(json.dumps({"queries": queries}, indent=2) + "\n")
+    (out / "profiles.json").write_text(json.dumps({"profiles": profiles}, indent=2) + "\n")
     print(
         f"{len(datasets)} datasets across {len(DOMAINS)} domains, "
         f"{len(queries)} queries, {len(profiles)} authorization profiles"

@@ -61,7 +61,7 @@ adversarial audit.
   retrieval task is easy and the Authorized Recall numbers are measured in easy
   conditions.
 - **Authorized Recall@K applied to a real corpus** with real authorization
-  data. `agentic_dataset.authorized_recall` is deliberately separable from
+  data. the `authorized-recall` package is deliberately separable from
   everything else so this needs no adoption of the control plane.
 - **A fifth runtime adapter.** The bar is that it contains no policy decision.
   If you find yourself re-deciding something to make it fit, that is a finding
@@ -75,7 +75,7 @@ adversarial audit.
 pip install -e ".[all]"
 
 python -m agentic_dataset.conformance      # AD-001..AD-015, every runtime
-python -m agentic_dataset.authorized_recall
+python -m authorized_recall
 python evals/evaluate.py
 pytest -q
 ```

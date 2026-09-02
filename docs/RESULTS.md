@@ -170,9 +170,10 @@ pass/fail output showed it. Drawing the matrix did.
 
 ## 2. Authorized Recall@K — milestone M6
 
-Defined and measured in `agentic_dataset.authorized_recall`, which has no
-dependency on the rest of the repository. Its
-[README](../src/agentic_dataset/authorized_recall/README.md) carries the
+Defined and measured in the separately distributed and separately licensed
+`authorized-recall` package (Apache-2.0), which has no dependency on the rest
+of the repository. Its [README](../packages/authorized-recall/README.md)
+carries the
 mathematical definition, the two conventions, and a proof that the
 pre/post-filter gap is non-negative for every ranking, K and predicate — so the
 sign of every gap below is guaranteed and only the size is empirical.

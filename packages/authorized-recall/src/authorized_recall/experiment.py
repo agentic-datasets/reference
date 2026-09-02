@@ -1,6 +1,6 @@
 """The Authorized Recall@K measurement.
 
-    python -m agentic_dataset.authorized_recall
+    python -m authorized_recall
 
 Runs on the in-memory corpus by default, so it needs no data files. `--json`
 reads the committed `evals/datasets/*.json` instead; both produce the same
@@ -29,13 +29,12 @@ from .metric import (
 from .retrieval import TfIdfIndex
 
 KS = (1, 3, 5, 10)
-DATA = Path(__file__).resolve().parents[3] / "evals" / "datasets"
 
 
-def _load_from_json() -> tuple[list[dict], list[dict], dict]:
-    corpus = json.loads((DATA / "corpus.json").read_text())["datasets"]
-    queries = json.loads((DATA / "queries.json").read_text())["queries"]
-    profiles = json.loads((DATA / "profiles.json").read_text())["profiles"]
+def _load_from_json(data_dir: Path) -> tuple[list[dict], list[dict], dict]:
+    corpus = json.loads((data_dir / "corpus.json").read_text())["datasets"]
+    queries = json.loads((data_dir / "queries.json").read_text())["queries"]
+    profiles = json.loads((data_dir / "profiles.json").read_text())["profiles"]
     return corpus, queries, profiles
 
 
@@ -60,8 +59,16 @@ def _predicate(profile: dict) -> Callable[[str], bool]:
     return lambda dataset_id: dataset_id in granted
 
 
-def run(from_json: bool = False) -> dict:
-    datasets, queries, profiles = _load_from_json() if from_json else build()
+def run(from_json: Path | str | None = None) -> dict:
+    """Measure. Builds the corpus in memory unless a data directory is given.
+
+    Deliberately no default path: this package ships no data and does not know
+    where a repository put any. `from_json` exists so a committed corpus can be
+    checked against the generator.
+    """
+    datasets, queries, profiles = (
+        _load_from_json(Path(from_json)) if from_json else build()
+    )
     index = TfIdfIndex({d["dataset"]: _document(d) for d in datasets})
     pool = len(datasets)
 
@@ -180,10 +187,10 @@ def report(out: dict) -> str:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog="agentic_dataset.authorized_recall")
-    parser.add_argument("--json", action="store_true",
-                        help="read the committed evals/datasets/*.json instead of "
-                             "building the corpus in memory")
+    parser = argparse.ArgumentParser(prog="authorized-recall")
+    parser.add_argument("--json", metavar="DIR", default=None,
+                        help="read corpus.json, queries.json and profiles.json "
+                             "from DIR instead of building the corpus in memory")
     parser.add_argument("--emit", metavar="PATH",
                         help="write the result dictionary as JSON")
     args = parser.parse_args()
