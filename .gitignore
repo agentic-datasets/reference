@@ -12,3 +12,6 @@ build/
 .langsmith/
 evidence/*.jsonl
 authorized_recall_result.json
+
+# built documentation site (regenerate with: mdbook build docs-site)
+docs-site/book/

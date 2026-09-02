@@ -265,6 +265,11 @@ docs/                 architecture (three ports), results, findings, raw runs
 
 ## Documents
 
+Browsable at
+**[doytsujin.github.io/ok-agentic-dataset-reference](https://doytsujin.github.io/ok-agentic-dataset-reference/)**
+— the same files, with search and a stable anchor per assertion. The site has
+no content of its own; CI fails if it drifts from the repository.
+
 - [`CONFORMANCE.md`](CONFORMANCE.md) — **AD-001 … AD-015**, the fifteen
   assertions any implementation must satisfy in any framework. This is the
   specification; everything else in the repository is one worked example of it.
