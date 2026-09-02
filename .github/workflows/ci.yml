@@ -21,8 +21,16 @@ jobs:
         run: |
           python - <<'PY'
           import importlib.util as u
+          # find_spec on a dotted name imports the parent package first, so
+          # find_spec("google.adk") raises ModuleNotFoundError when `google`
+          # itself is absent -- which is the very state this job asserts. The
+          # exception and a None spec mean the same thing here: not installed.
           for m in ("agentic_dataset", "langgraph", "llama_index", "google.adk", "mcp"):
-              assert u.find_spec(m) is None, f"{m} should not be installed in this job"
+              try:
+                  spec = u.find_spec(m)
+              except ModuleNotFoundError:
+                  spec = None
+              assert spec is None, f"{m} should not be installed in this job"
           PY
       - name: the suite runs against its own subject, from an unrelated directory
         run: cd /tmp && agentic-dataset-conformance run --matrix
