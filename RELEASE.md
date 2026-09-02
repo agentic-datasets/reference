@@ -51,13 +51,17 @@ them is discovered after a DOI has been minted.
       about this project during the remaining administrative work should assert
       anything not in that table.
 
-- [ ] **Align `ok-agentic-datasets`** with the same *principle* — open
-      specification and interoperability artifacts, restricted commercial
-      implementation. It currently applies CC BY-**NC** to all documentation
-      and BSL to all code, with no tier boundary. That is not necessarily
-      wrong for that repository's contents, but two public repositories in one
-      programme should not state the principle differently. This does not mean
-      making its code Apache.
+- [x] **`ok-agentic-datasets` aligned — DONE 2026-09-02.** Its documentation
+      moved from CC BY-NC 4.0 to **CC BY 4.0**, and its Business Source
+      provisions were removed: they applied to `prototypes/` and `datasets/`
+      directories that have never existed there, so they licensed nothing. Its
+      `NOTICE.md` no longer claims a repository-wide commercial restriction and
+      instead points at per-repository licensing.
+
+      The programme is now *coherent* rather than uniformly licensed — the
+      commercial boundary sits around executable implementation code, not
+      around the prose describing it. Forcing BUSL onto a repository because it
+      shares a programme name would have been the wrong kind of consistency.
 
 - [ ] **Rename** `dk-agentic-dataset-reference` → `ok-agentic-dataset-reference`
       under the prefix policy, at the moment it goes public and not before.
