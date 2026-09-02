@@ -16,6 +16,7 @@ import sys
 import time
 
 from ..adapters import ADAPTERS, available
+from .checks import CHECKS
 from ..datasets import build_control_plane, build_mcp_control_plane
 from .suite import run_suite
 
@@ -61,12 +62,18 @@ def main(argv: list[str]) -> int:
                       f"{failure.detail} {failure.error or ''}")
         if skipped:
             print(f"\nskipped (framework not installed): {', '.join(skipped)}")
-        rate = next(
-            (r.by_id("AD-015").value for r, _ in reports if r.by_id("AD-015").value is not None),
-            None,
+        assertions = len(CHECKS)
+        configurations = len(reports)
+        executed = sum(r.by_id("AD-015").numerator or 0 for r, _ in reports)
+        attempted = sum(r.by_id("AD-015").denominator or 0 for r, _ in reports)
+        print(
+            f"\n{assertions} assertions x {configurations} configurations = "
+            f"{assertions * configurations} assertion-runs"
         )
-        if rate is not None:
-            print(f"\nAD-015 prohibited execution rate: {rate:.3f} (target exactly 0)")
+        print(
+            f"AD-015: {executed} / {attempted} prohibited executions "
+            f"across the matrix (target exactly 0)"
+        )
 
     return 0 if all(r.passed for r, _ in reports) else 1
 

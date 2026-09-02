@@ -137,6 +137,28 @@ about the assertion, not about the framework.** None had to be dropped;
 `docs/FINDINGS.md` records the two places where the implementation departed
 from the architecture documents instead.
 
+### The suite is not yet portable, and this file is
+
+Of the fifteen, only **AD-004 and AD-005** are checked purely through the
+public `Runtime` interface. The other thirteen reach into the reference
+implementation's objects, so the harness in `src/agentic_dataset/conformance/`
+**cannot today be pointed at a foreign implementation**.
+
+That is a property of how the checks were written rather than of the assertions.
+Making it portable needs two things that do not exist yet:
+
+1. **A declared conformance interface** — what an implementation must expose to
+   be testable at all. Reading: decision, reason, policy id, whether a grant
+   exists, tool/MCP/A2A call lists, evidence rows, and the cache key's
+   dimensions. Controlling: make the evaluator unreachable or slow, revoke a
+   principal, advance a dataset revision, register a malformed descriptor.
+2. **Language-neutral test vectors** for the assertions that are
+   scenario → expected-outcome, so an implementation in another language can be
+   checked without reimplementing the harness.
+
+Until then: **this document is the portable artifact.** Implement against the
+prose, not against the Python.
+
 ---
 
 ## Relationship to the existing implementation

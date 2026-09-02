@@ -19,6 +19,5 @@ excluding query-principal pairs where nothing relevant is authorized (n=30 of 96
 At K=5, moving the authorization filter ahead of truncation changes
 Authorized Recall@5 from 0.853 to 0.960 (+0.107) on the 30 pairs where anything
 relevant is authorized at all, while plain Recall@5 stays at 0.867 and cannot
-see the difference. Against the >= 0.95 gate in CONFORMANCE.md, filtering
-after truncation fails and filtering before it passes -- so the gate is a
-statement about where the filter sits, not about the retriever.
+see the difference. The gap's sign is guaranteed by the ordering argument in
+this package's README; its size is what the corpus determines.

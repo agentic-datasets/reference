@@ -138,13 +138,36 @@ where the filter sits, which is what the metric was defined to isolate.
 - A production deployment
 - Anything requiring the current employer's systems, data or people
 
+## M7 — a portable conformance suite
+
+Not started, and the thing most worth doing next.
+
+Only AD-004 and AD-005 are checked through the public `Runtime` interface; the
+other thirteen reach into this implementation's objects. So the invitation in
+`CONTRIBUTING.md` currently asks someone to implement the spec *and* write
+their own harness, which is a much larger ask than it looks.
+
+- [ ] Declare the conformance interface: what an implementation must expose
+      to be testable, reading and controlling
+- [ ] Emit the scenario → expected-outcome assertions as language-neutral
+      vectors (JSON), and drive the Python suite from those vectors so the two
+      cannot drift
+- [ ] State which assertions are *not* expressible as vectors and why — that
+      list is itself a finding about the specification
+- [ ] Prove it by checking a deliberately broken implementation and confirming
+      the expected assertions fail
+
+**Done when** a second implementation in another language can be checked
+without reimplementing the harness.
+
 ## What would strengthen the result
 
 In rough order of how much each would add:
 
 1. **A second implementation by someone else**, from `CONFORMANCE.md` alone.
    The four ports here share one `ControlPlane`; independent agreement is the
-   experiment this artifact does not run.
+   experiment this artifact does not run. M7 is the precondition for making
+   that ask reasonable.
 2. **A model in the loop**, so the statistical rows carry a spread and the
    invariant rows can be watched not moving.
 3. **A harder discovery corpus**, where MRR is not 1.000.

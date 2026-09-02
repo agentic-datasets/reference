@@ -22,6 +22,11 @@ class CheckOutcome:
     passed: bool
     detail: str
     value: Optional[float] = None
+    # Rate-valued checks report what they measured over. A rate without its
+    # denominator is not a result, and "0 prohibited executions" says less than
+    # "0 of 72".
+    numerator: Optional[int] = None
+    denominator: Optional[int] = None
 
 
 @dataclass
@@ -31,6 +36,8 @@ class CheckResult:
     detail: str
     value: Optional[float] = None
     error: Optional[str] = None
+    numerator: Optional[int] = None
+    denominator: Optional[int] = None
 
     def to_dict(self) -> dict:
         return {
@@ -40,6 +47,8 @@ class CheckResult:
             "passed": self.passed,
             "detail": self.detail,
             "value": self.value,
+            "numerator": self.numerator,
+            "denominator": self.denominator,
             "error": self.error,
         }
 
@@ -109,7 +118,10 @@ def run_suite(
         try:
             outcome = fn(harness)
             report.results.append(
-                CheckResult(check, outcome.passed, outcome.detail, outcome.value)
+                CheckResult(
+                    check, outcome.passed, outcome.detail, outcome.value,
+                    numerator=outcome.numerator, denominator=outcome.denominator,
+                )
             )
         except Exception as exc:  # a check that crashes is a failure, not a skip
             report.results.append(

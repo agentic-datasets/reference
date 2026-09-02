@@ -1,17 +1,39 @@
 # agentic-dataset-reference
 
-**A reference implementation, conformance suite and semantic benchmark for
-agentic datasets — the same control plane expressed on four runtimes.**
+**One governance contract. Four agent runtimes. Two dataset boundaries.**
 
-> ## Status: RUNS.
+```
+15 conformance assertions x 8 configurations = 120 assertion-runs, all passed
+
+  0 / 576   prohibited executions, conformance matrix
+  0 /  24   prohibited executions, evaluation
+    247     tests passed
+
+Authorized Recall@5
+  filter after truncation     0.853
+  filter before truncation    0.960
+                             +0.107   -- plain Recall@5 stays at 0.867
+                                         and cannot see the difference
+```
+
+Measured across a framework-free reference runtime, LangGraph, LlamaIndex
+Workflows and Google ADK, each over local and MCP dataset boundaries.
+Reproduce it with `python -m agentic_dataset.conformance`; the raw output is in
+[`docs/runs/`](docs/runs/) and the caveats on every number are in
+[`docs/RESULTS.md`](docs/RESULTS.md).
+
+The two prohibited-execution denominators are kept apart on purpose. They come
+from different experiments — the conformance matrix and the evaluation set —
+and adding them into one 0/600 would merge two populations that were never
+sampled together.
+
+> ## Status: runs, and is not finished.
 >
-> `python -m agentic_dataset.conformance` executes AD-001 … AD-015 against
-> four runtimes at two dataset boundaries and passes 15/15 in all eight
-> configurations. `pytest` is 234 tests. Milestone M6 has produced a number.
->
-> What is *not* here is equally short: no deployment, no real data, no model in
-> the loop by default, no latency or cost claim. See
-> [`docs/RESULTS.md`](docs/RESULTS.md) §5.
+> No deployment, no real data, no model in the loop by default, no latency or
+> cost claim. And the conformance suite is **not yet portable**: only 2 of the
+> 15 assertions are checked through the public interface, so it cannot today be
+> pointed at somebody else's implementation. See
+> [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 
@@ -57,6 +79,23 @@ one. What the matrix shows is that the model is *expressible* in four runtimes
 with different primitives — not that four independent implementations agree.
 [`docs/RESULTS.md`](docs/RESULTS.md) §1 states both halves.
 
+### Independent conformance implementations wanted
+
+The gap above is the interesting one, and it cannot be closed from inside this
+repository. An implementation written by someone else from
+[`CONFORMANCE.md`](CONFORMANCE.md) alone, in any language, **without using this
+reference `ControlPlane`**, would test whether the specification is complete
+enough to be implemented twice and whether two implementations agree on the
+governance semantics.
+
+Two honest cautions before anyone tries. Only **AD-004 and AD-005** are
+currently checked through the public `Runtime` interface; the other thirteen
+reach into this implementation's internals, so the harness cannot yet be
+pointed at a foreign implementation. And a finding that an assertion is
+ambiguous is a more useful result than a passing run.
+[`CONTRIBUTING.md`](CONTRIBUTING.md) says what would have to exist to make the
+suite portable.
+
 The suite failed on this implementation five times before it passed, twice only
 in the MCP configuration and twice only under the async runtimes. Those are
 written down in [`docs/FINDINGS.md`](docs/FINDINGS.md).
@@ -90,11 +129,11 @@ pip install -e ".[all]"                      # or ".[dev]" for the core alone
 python -m agentic_dataset.conformance        # AD-001..AD-015, every runtime
 python -m agentic_dataset.conformance --json # machine-readable
 python -m agentic_dataset.conformance --local   # skip the MCP boundary
-pytest -q                                    # 234 tests
+pytest -q                                    # 247 tests
 
-python evals/authorized_recall.py            # milestone M6, the metric
+python -m agentic_dataset.authorized_recall  # milestone M6, the metric
 python evals/evaluate.py                     # milestone M5, six evaluators
-python evals/corpus.py                       # regenerate the eval corpus
+python -m agentic_dataset.authorized_recall.corpus   # regenerate the corpus
 ```
 
 The conformance runner exits non-zero on any failure, so it works as a CI gate.
@@ -159,16 +198,27 @@ src/agentic_dataset/
     mcp_boundary.py   a dataset behind MCP, and the client that consumes it
     adapters/         native · langgraph · llamaindex · adk
     conformance/      AD-001..AD-015, implemented once
+    authorized_recall/  the metric, standalone: no dependency on any of the above
     datasets/         the synthetic reference dataset family
-tests/                234 tests
-evals/                the corpus, the M5 evaluators, the M6 measurement
-docs/                 architecture (three ports), results, findings
+examples/             one runnable script per runtime, plus the MCP boundary
+tests/                247 tests
+evals/                the M5 evaluators and the committed corpus record
+docs/                 architecture (three ports), results, findings, raw runs
 ```
 
 ## Documents
 
 - [`CONFORMANCE.md`](CONFORMANCE.md) — **AD-001 … AD-015**, the fifteen
-  assertions any implementation must satisfy in any framework.
+  assertions any implementation must satisfy in any framework. This is the
+  specification; everything else in the repository is one worked example of it.
+- [`src/agentic_dataset/authorized_recall/README.md`](src/agentic_dataset/authorized_recall/README.md)
+  — Authorized Recall@K: the definition, the two conventions, and the proof
+  that the pre/post-filter gap is non-negative. The package has no dependency
+  on the control plane, so the metric can be used without adopting any of this.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — what an independent implementation
+  would need, and what is missing before the suite can check one.
+- [`RELEASE.md`](RELEASE.md) — what has to change together before this is
+  published.
 - [`docs/RESULTS.md`](docs/RESULTS.md) — what was measured, with the caveats
   attached to each number.
 - [`docs/FINDINGS.md`](docs/FINDINGS.md) — where the implementation disagreed

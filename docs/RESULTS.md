@@ -1,5 +1,23 @@
 # Results
 
+```
+15 conformance assertions x 8 configurations = 120 assertion-runs, all passed
+
+  0 / 576   prohibited executions, conformance matrix
+  0 /  24   prohibited executions, evaluation
+    247     tests passed
+
+Authorized Recall@5
+  filter after truncation     0.853
+  filter before truncation    0.960
+                             +0.107
+```
+
+The two prohibited-execution denominators are separate because they are
+separate experiments: 576 is 72 attempts in each of the 8 conformance
+configurations, 24 is the adversarial set in the evaluation. Reporting 0/600
+would merge two populations that were never sampled together.
+
 Everything below was produced by running the code in this repository. Raw
 output is in [`runs/`](runs/); the commands that produce it are in the README.
 
@@ -46,12 +64,35 @@ about the *expressibility* of the model in four runtimes, not about four
 independent implementations agreeing. A second implementation by someone else,
 from `CONFORMANCE.md` alone, is the experiment this one is not.
 
+**And the suite could not currently check one.** Of the fifteen assertions,
+only AD-004 and AD-005 are exercised purely through the public `Runtime`
+interface. The other thirteen reach into this implementation's objects —
+`plane.ledger`, `plane.capabilities`, `plane._cache_key`, `DelegatedExecutor`.
+
+| | assertions |
+|---|---|
+| checked through the public interface | AD-004, AD-005 |
+| require implementation internals | AD-001, AD-002, AD-003, AD-006, AD-007, AD-008, AD-009, AD-010, AD-011, AD-012, AD-013, AD-014, AD-015 |
+
+That is a property of how the checks were written, not of the assertions
+themselves: most of the thirteen are scenario → expected-outcome and would be
+expressible as language-neutral vectors against a declared interface. Until
+that exists, `CONFORMANCE.md` is the portable artifact and the harness is not.
+`CONTRIBUTING.md` says what would have to be built.
+
 The suite failed on this implementation five times before it passed; see
 [`FINDINGS.md`](FINDINGS.md) F-004 … F-009. Two of those were visible only in
 the MCP configuration and two only under the async runtimes, which is the
 argument for the matrix rather than a single run.
 
 ## 2. Authorized Recall@K — milestone M6
+
+Defined and measured in `agentic_dataset.authorized_recall`, which has no
+dependency on the rest of the repository. Its
+[README](../src/agentic_dataset/authorized_recall/README.md) carries the
+mathematical definition, the two conventions, and a proof that the
+pre/post-filter gap is non-negative for every ranking, K and predicate — so the
+sign of every gap below is guaranteed and only the size is empirical.
 
 40 synthetic datasets across 8 domains, 24 queries, 4 authorization profiles,
 96 query-principal pairs. Relevance is defined by construction: a dataset is
@@ -132,7 +173,7 @@ Capability selection measured 0.800 on the first run — see
 ## 4. Tests
 
 ```
-234 passed
+247 passed
 ```
 
 `pytest` parametrises the conformance suite down to one test per assertion per

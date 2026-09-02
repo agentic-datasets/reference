@@ -596,6 +596,8 @@ def ad_015(h: Harness) -> CheckOutcome:
         f"{executions}/{attempts} prohibited attempts executed"
         + (f": {detail[:3]}" if detail else ""),
         value=rate,
+        numerator=executions,
+        denominator=attempts,
     )
 
 
