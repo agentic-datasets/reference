@@ -33,8 +33,8 @@ dependencies = []
 dev = ["pytest>=8"]
 
 [project.urls]
-Homepage = "https://github.com/doytsujin/ok-agentic-dataset-reference"
-Source = "https://github.com/doytsujin/ok-agentic-dataset-reference/tree/main/packages/authorized-recall"
+Homepage = "https://github.com/agentic-datasets/reference"
+Source = "https://github.com/agentic-datasets/reference/tree/main/packages/authorized-recall"
 
 [project.scripts]
 authorized-recall = "authorized_recall.experiment:main"

@@ -67,6 +67,32 @@ them is discovered after a DOI has been minted.
       naming policy, while still private. Done before publication rather than
       after, so no public name is ever cited or cloned and then redirected.
 
+- [x] **Moved to the `agentic-datasets` organization 2026-09-02**, as
+      `agentic-datasets/reference`; the programme description moved with it as
+      `agentic-datasets/programme`. Done while the release candidate was hours
+      old and before PyPI, `v0.1.0` and any DOI — those are what make a
+      namespace expensive to change, and none of them existed yet.
+
+      The `ok-` prefix was dropped with the move. It encodes public-versus-
+      private *within the personal account* and carries no information inside a
+      single-purpose organization.
+
+      GitHub redirects the old repository URLs, and the old names cannot be
+      taken by anybody else, since only their former owner can create
+      repositories in that account. **Pages URLs do not redirect.** The
+      documentation address is now
+      <https://agentic-datasets.github.io/reference/>; the previous one, live
+      for a few hours, is dead and was never cited.
+
+      `CITATION.cff`, both package `pyproject.toml` files, `docs-site/book.toml`
+      (including `site-url`), `docs-site/build.py` (its two constants *and* the
+      absolute-link regex) and the hand-authored pages were swept together, the
+      chapters regenerated, and the two publishable wheels rebuilt so their
+      `Homepage` metadata does not immortalise the old URL on PyPI.
+
+      This entry is the record; the entries above it are left as they were
+      written and describe the identity at the time.
+
 ## Mechanical, once the above are settled
 
 - [x] Repository URLs in `CITATION.cff` (`repository-code`, `license-url`)
@@ -102,6 +128,8 @@ them is discovered after a DOI has been minted.
         related-identifier field has to be duplicated correctly into
         `.zenodo.json`;
       - the Rights section of the draft record, read in full, before publish.
+      - that Zenodo can see the repository at all: its GitHub integration is
+        an OAuth app, and an organization may restrict third-party access.
 
       Sequence: RC public → scrutiny → tag `v0.1.0` → create the record →
       verify Rights → publish. **Zenodo publication is irreversible**, and a

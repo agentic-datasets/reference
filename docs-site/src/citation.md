@@ -9,7 +9,7 @@ candidate, cite the tag and the commit:
 ```
 Chernov, A. (2026). Agentic Dataset Reference Implementation and
 Conformance Suite (v0.1.0-rc.1) [Computer software].
-https://github.com/doytsujin/ok-agentic-dataset-reference
+https://github.com/agentic-datasets/reference
 ```
 
 A commit SHA is better still, because a release candidate is expected to move:
@@ -31,7 +31,7 @@ Cite the assertion, not a line number:
 ## Citing the metric
 
 Authorized Recall@K is defined in
-[its own package](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/authorized-recall.md), which has no dependency on this
+[its own package](https://github.com/agentic-datasets/reference/blob/main/authorized-recall.md), which has no dependency on this
 architecture. If you use the metric without adopting the control plane, cite
 the package rather than the reference implementation.
 

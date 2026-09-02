@@ -36,8 +36,8 @@ CHAPTERS = {
     "plan.md": "PLAN.md",
 }
 
-GH = "https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/"
-GH_TREE = "https://github.com/doytsujin/ok-agentic-dataset-reference/tree/main/"
+GH = "https://github.com/agentic-datasets/reference/blob/main/"
+GH_TREE = "https://github.com/agentic-datasets/reference/tree/main/"
 
 # Links that resolve to a chapter of this book.
 INTERNAL = {
@@ -65,7 +65,7 @@ LINK = re.compile(r"\]\((?!https?://|#)([^)]+)\)")
 # one, so the book does not bounce the reader out to GitHub for a page it
 # already contains.
 ABSOLUTE = re.compile(
-    r"\]\(https://github\.com/doytsujin/ok-agentic-dataset-reference/"
+    r"\]\(https://github\.com/agentic-datasets/reference/"
     r"(?:blob|tree)/main/([^)#]+)(#[^)]*)?\)"
 )
 

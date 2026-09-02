@@ -34,7 +34,7 @@ An **agentic dataset** describes itself, advertises bounded capabilities,
 accepts a semantic intent, decides whether an action is admissible, executes
 only what was admitted, refuses the rest, and leaves evidence.
 
-The [**specification**](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/specification.md) is fifteen assertions, each naming a
+The [**specification**](https://github.com/agentic-datasets/reference/blob/main/specification.md) is fifteen assertions, each naming a
 failure it rules out. Everything else exists to check them.
 
 ```
@@ -51,8 +51,8 @@ authority nobody exercised.
 
 ```bash
 # Not on PyPI yet. During the release candidate, install from a clone:
-git clone https://github.com/doytsujin/ok-agentic-dataset-reference
-pip install ./ok-agentic-dataset-reference/packages/agentic-dataset-conformance
+git clone https://github.com/agentic-datasets/reference
+pip install ./reference/packages/agentic-dataset-conformance
 
 # Once 0.1.0rc1 is published, pip skips pre-releases unless asked:
 #   pip install --pre agentic-dataset-conformance
@@ -74,7 +74,7 @@ report of itself, so a subject that under-reports passes AD-002 while hiding a
 tool. Conformance is a claim an implementation makes about itself, made
 checkable — not an adversarial audit.
 
-[`Claims`](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/claims.md) is frozen and lists everything asserted, and the one thing
+[`Claims`](https://github.com/agentic-datasets/reference/blob/main/claims.md) is frozen and lists everything asserted, and the one thing
 explicitly not.
 
 ## Status
@@ -86,4 +86,4 @@ person who wrote the specification: that establishes independence from the
 reference *code*, not from its author's reading of the contract.
 
 **Interpretive independence is the next threshold, and it needs somebody else.**
-[How to do it](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/contributing.md).
+[How to do it](https://github.com/agentic-datasets/reference/blob/main/contributing.md).

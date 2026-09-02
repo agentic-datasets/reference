@@ -125,7 +125,7 @@ than "the design was correct from the start" and a more useful one.
 
 Seventeen deliberately broken variants, each removing exactly one guarantee.
 The matrix is what `agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix` prints; the
-committed run is in [`runs/mutation-matrix.txt`](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/runs/mutation-matrix.txt).
+committed run is in [`runs/mutation-matrix.txt`](https://github.com/agentic-datasets/reference/blob/main/runs/mutation-matrix.txt).
 
 ```
 target detection : 17/17 mutants caught by their intended assertion

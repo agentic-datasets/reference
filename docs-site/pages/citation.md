@@ -9,7 +9,7 @@ candidate, cite the tag and the commit:
 ```
 Chernov, A. (2026). Agentic Dataset Reference Implementation and
 Conformance Suite (v0.1.0-rc.1) [Computer software].
-https://github.com/doytsujin/ok-agentic-dataset-reference
+https://github.com/agentic-datasets/reference
 ```
 
 A commit SHA is better still, because a release candidate is expected to move:

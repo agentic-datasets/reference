@@ -40,7 +40,7 @@ Raw output is in [`docs/runs/`](docs/runs/); every number's caveats are in
 > Public **before** `v0.1.0` is tagged, deliberately. Nothing is archived or
 > minted yet, so a finding can still change the artifact rather than becoming
 > errata against a DOI. If you find something,
-> [open an issue](https://github.com/doytsujin/ok-agentic-dataset-reference/issues)
+> [open an issue](https://github.com/agentic-datasets/reference/issues)
 > — a finding that an assertion is ambiguous is more useful here than a passing
 > run.
 >
@@ -267,7 +267,7 @@ docs/                 architecture (three ports), results, findings, raw runs
 ## Documents
 
 Browsable at
-**[doytsujin.github.io/ok-agentic-dataset-reference](https://doytsujin.github.io/ok-agentic-dataset-reference/)**
+**[agentic-datasets.github.io/reference](https://agentic-datasets.github.io/reference/)**
 — the same files, with search and a stable anchor per assertion. The site has
 no content of its own; CI fails if it drifts from the repository.
 
@@ -352,7 +352,7 @@ checked.
 - [`ok-nfcore-admission-gate`](https://github.com/doytsujin/ok-nfcore-admission-gate)
   — the same admission idea as a per-task gate, measured on a real nf-core
   workload.
-- [`ok-agentic-datasets`](https://github.com/doytsujin/ok-agentic-datasets) —
+- [`agentic-datasets/programme`](https://github.com/agentic-datasets/programme) —
   the programme-level description of what agentic datasets are. CC BY 4.0.
 
 The papers above are the citable statements of the model. This repository is

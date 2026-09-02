@@ -96,7 +96,7 @@ packages/agentic-dataset-conformance/src/agentic_dataset_conformance/mutations.p
 tests/test_conformance_vectors.py
 ```
 
-[`LICENSES/Apache-2.0.txt`](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/LICENSES/Apache-2.0.txt)
+[`LICENSES/Apache-2.0.txt`](https://github.com/agentic-datasets/reference/blob/main/LICENSES/Apache-2.0.txt)
 
 A third party must be able to *build and test* an independent implementation,
 commercially or not. `generate.py` is here rather than in Tier 2 because it is
@@ -109,7 +109,7 @@ patent treatment.
 packages/authorized-recall/**
 ```
 
-[`LICENSES/Apache-2.0.txt`](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/LICENSES/Apache-2.0.txt)
+[`LICENSES/Apache-2.0.txt`](https://github.com/agentic-datasets/reference/blob/main/LICENSES/Apache-2.0.txt)
 
 This package imports nothing else in the repository. It is the piece most
 likely to be used by people who never adopt the architecture — authorization-
@@ -124,7 +124,7 @@ evals/**
 examples/**
 ```
 
-[`LICENSES/BUSL-1.1.txt`](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/LICENSES/BUSL-1.1.txt), with parameters filled in:
+[`LICENSES/BUSL-1.1.txt`](https://github.com/agentic-datasets/reference/blob/main/LICENSES/BUSL-1.1.txt), with parameters filled in:
 
 - **Licensor** — Alexander Chernov
 - **Additional Use Grant** — production use permitted where not primarily

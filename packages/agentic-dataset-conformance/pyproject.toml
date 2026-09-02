@@ -40,9 +40,9 @@ dependencies = []
 dev = ["pytest>=8"]
 
 [project.urls]
-Homepage = "https://github.com/doytsujin/ok-agentic-dataset-reference"
-Specification = "https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/CONFORMANCE.md"
-Source = "https://github.com/doytsujin/ok-agentic-dataset-reference/tree/main/packages/agentic-dataset-conformance"
+Homepage = "https://github.com/agentic-datasets/reference"
+Specification = "https://github.com/agentic-datasets/reference/blob/main/CONFORMANCE.md"
+Source = "https://github.com/agentic-datasets/reference/tree/main/packages/agentic-dataset-conformance"
 
 [project.scripts]
 agentic-dataset-conformance = "agentic_dataset_conformance.cli:main"

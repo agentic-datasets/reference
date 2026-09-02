@@ -24,7 +24,7 @@ configurations, 24 is the adversarial set in the evaluation. Reporting 0/600
 would merge two populations that were never sampled together.
 
 Everything below was produced by running the code in this repository. Raw
-output is in [`runs/`](https://github.com/doytsujin/ok-agentic-dataset-reference/tree/main/runs/); the commands that produce it are in the README.
+output is in [`runs/`](https://github.com/agentic-datasets/reference/tree/main/runs/); the commands that produce it are in the README.
 
 Measured 2026-09-01 on Python 3.12.13, Linux, with:
 

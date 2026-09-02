@@ -35,14 +35,14 @@ pip install ./packages/agentic-dataset-conformance
 ```
 
 1. Implement `ConformanceSubject` — four methods, in
-   [`interface.py`](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/packages/agentic-dataset-conformance/src/agentic_dataset_conformance/interface.py).
+   [`interface.py`](https://github.com/agentic-datasets/reference/blob/main/packages/agentic-dataset-conformance/src/agentic_dataset_conformance/interface.py).
    The control verbs are in `verbs.md` beside it.
 2. `agentic-dataset-conformance run --subject yourmodule:your_factory`
 
 You do not need this repository. The harness, the vectors and a worked example
 subject are all in that one package, which imports no implementation at all.
 
-The world and the vectors are JSON under [`conformance/`](https://github.com/doytsujin/ok-agentic-dataset-reference/tree/main/conformance/), so an
+The world and the vectors are JSON under [`conformance/`](https://github.com/agentic-datasets/reference/tree/main/conformance/), so an
 implementation in another language needs a runner for that JSON rather than a
 reimplementation of this harness. `packages/agentic-dataset-conformance/src/agentic_dataset_conformance/toy.py` is a
 250-line worked example that imports the interface and nothing else.

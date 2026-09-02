@@ -89,6 +89,6 @@ audit**, and no interface of this shape could be one.
 
 ## Links
 
-- [The specification](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/specification.md)
-- [What the portable contract can and cannot reach](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/portability.md)
-- [Results, with the caveats attached to each number](https://github.com/doytsujin/ok-agentic-dataset-reference/blob/main/results.md)
+- [The specification](https://github.com/agentic-datasets/reference/blob/main/specification.md)
+- [What the portable contract can and cannot reach](https://github.com/agentic-datasets/reference/blob/main/portability.md)
+- [Results, with the caveats attached to each number](https://github.com/agentic-datasets/reference/blob/main/results.md)
