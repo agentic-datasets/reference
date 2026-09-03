@@ -14,7 +14,7 @@ measurement changes with it.
 | 1 | The governance model is a framework-independent behavioural contract | **Supported** |
 | 2 | It can be expressed as language-neutral executable vectors | **Supported** — 15 vectors, 85 steps, JSON |
 | 3 | Conformance can be evaluated without access to an implementation's internals | **Supported** — the harness imports no implementation, asserted by test |
-| 4 | All 15 assertions are portable | **Supported** — 15/15 through the public interface |
+| 4 | All 15 assertions are portable | **Supported** — 15/15 through the public interface, and in **two languages** since 2026-09-03 |
 | 5 | Four runtimes across two dataset boundaries all conform | **Supported** — 8 configurations, 15/15 each |
 | 6 | An implementation sharing no code with the reference conforms | **Supported, with the limitation stated**: the toy is independent of the reference *code*, not of its author |
 | 7 | The suite detects targeted violations | **Supported** — 17/17 mutants caught by their named assertion |
@@ -24,6 +24,45 @@ measurement changes with it.
 | 11 | No prohibited action executed | **Supported for the measured matrix** — 0/576 white-box, 0/39 per portable subject, 0/24 evaluation |
 | 12 | Authorized Recall@K improves when the filter precedes truncation | **Supported**, sign proved and magnitude measured on one synthetic corpus |
 | 13 | A security guarantee, or exhaustive discovery of an implementation's capabilities | **Explicitly not claimed** |
+
+## On claim 4
+
+**Extended 2026-09-03. This is the freeze working as intended: the claim did not
+change, the measurement did.**
+
+Until now every measured subject was Python, so "language-neutral" described the
+*form* of the vectors — JSON, no Python object semantics — rather than something
+observed. A TypeScript subject in `agentic-datasets/showcase` now runs the same
+suite and reports the same numbers:
+
+| | Python | TypeScript |
+|---|---|---|
+| vectors loaded | 15 | 15 |
+| assertions | 15/15 | 15/15 |
+| observations | 77 | 77 |
+| AD-015 prohibited attempts | 39 | 39 |
+| AD-015 prohibited executions | 0 | 0 |
+
+Seven mutants are each caught by the assertion named for them, in both.
+
+What was checked before recording this, rather than taken from the other
+repository's README: the vectors and worlds in the TypeScript project are
+**byte-identical** to `agentic_dataset_conformance/data/` (`diff -rq`, clean, 15
+files each, CC0 licence file included); its engine has **no non-relative
+imports**, so it shares no runtime with the reference; and the Python baseline was
+re-run here to confirm 15/77/39/0 rather than trusted as a constant.
+
+**What this establishes.** The vectors execute outside Python, through the public
+interface, with no shared runtime. `CONFORMANCE.md` said an implementation "in
+Rust, Go, TypeScript or Java can be checked without reproducing Python object
+semantics — Python is one runner, not the specification." That was a design
+intention; it is now an observation.
+
+**What it does not establish.** The TypeScript subject is a transcription of
+`toy.py` by the same author, not a fresh reading of the specification. **Claim 6
+is unchanged and claim 6's limitation still stands**: interpretive independence
+requires somebody else, and remains the contribution this project most needs. A
+second language is not a second reader.
 
 ## On claim 13
 

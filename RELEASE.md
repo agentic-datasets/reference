@@ -184,6 +184,16 @@ them is discovered after a DOI has been minted.
       reading establishes independence from the author's interpretation of the
       contract. That is the next validation threshold, and writing a third
       implementation here would not cross it.
+- [x] **A second language, 2026-09-03 — and it does not close the item above.**
+      `agentic-datasets/showcase` runs the same CC0 vectors against a TypeScript
+      subject and reports 15/15 assertions, 77 observations and 0/39 prohibited
+      executions: identical to Python, with byte-identical vectors and no shared
+      runtime. `docs/CLAIMS.md` claim 4 is extended accordingly.
+
+      It is a transcription of `toy.py` by the same author, so it is evidence of
+      **language** neutrality and not of **interpretive** independence. Do not let
+      it be read as satisfying the invitation above; claim 6 is untouched.
+
 - [ ] Tag `v0.1.0` and archive that exact tag. **Zenodo publication is
       irreversible** — read the whole draft record, Rights included, in the
       same sitting as pressing publish.
