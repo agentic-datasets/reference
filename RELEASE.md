@@ -184,6 +184,25 @@ them is discovered after a DOI has been minted.
       reading establishes independence from the author's interpretation of the
       contract. That is the next validation threshold, and writing a third
       implementation here would not cross it.
+- [x] **Own domain, 2026-09-03 — <https://agenticdatasets.org/>.** The
+      documentation address above is superseded. `agenticdatasets.org` was
+      registered that morning and its A records already pointed at the Toronto
+      edge, so the domain is served by Caddy there rather than by GitHub Pages —
+      one tree, with the org site at the apex, `/showcase/` and `/reference/`
+      beneath it. No path rewriting was needed because the three builds already
+      agree on their base paths.
+
+      GitHub Pages still serves the same content at the old address and is not
+      disabled. It cannot serve the domain, because DNS points elsewhere, so
+      there is no redirect between them: the two are independent copies and the
+      canonical tags name `agenticdatasets.org`. **Deciding whether Pages stays
+      as a standby or is switched off is still open**, and it should be closed
+      before `v0.1.0` so the citation names one address.
+
+      `make deploy` publishes the book to the edge. Pages rebuilds on push; the
+      edge does not, so a docs change is live in one place before the other
+      until someone runs it.
+
 - [x] **A second language, 2026-09-03 — and it does not close the item above.**
       `agentic-datasets/showcase` runs the same CC0 vectors against a TypeScript
       subject and reports 15/15 assertions, 77 observations and 0/39 prohibited

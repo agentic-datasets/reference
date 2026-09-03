@@ -267,7 +267,7 @@ docs/                 architecture (three ports), results, findings, raw runs
 ## Documents
 
 Browsable at
-**[agentic-datasets.github.io/reference](https://agentic-datasets.github.io/reference/)**
+**[agenticdatasets.org/reference](https://agenticdatasets.org/reference/)**
 — the same files, with search and a stable anchor per assertion. The site has
 no content of its own; CI fails if it drifts from the repository.
 
