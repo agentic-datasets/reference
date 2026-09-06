@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "resource_type": {
+      "id": "software"
+    },
+    "title": "Agentic Dataset Reference Implementation and Conformance Suite",
+    "publisher": "Zenodo",
+    "version": "0.1.0",
+    "creators": [
+      {
+        "person_or_org": {
+          "type": "personal",
+          "family_name": "Chernov",
+          "given_name": "Alexander",
+          "identifiers": [
+            {
+              "scheme": "orcid",
+              "identifier": "0009-0007-3198-2712"
+            }
+          ]
+        }
+      }
+    ],
+    "description": "<p>One behavioural contract for governed agentic datasets, expressed as fifteen conformance assertions (AD-001..AD-015), with a dependency-free reference control plane mapped onto four agent runtimes (a framework-free reference, LangGraph, LlamaIndex Workflows and Google ADK) and exercised across two dataset boundaries (local and MCP). Includes Authorized Recall@K, a retrieval metric defined over the subset of a corpus a principal is authorized to use.</p><p><strong>This release carries four rights regimes and no single licence describes it.</strong> The authoritative file-to-licence map is <code>LICENSE.md</code> in the archived tree. In summary: specification and normative prose CC-BY-4.0; normative worlds and vectors CC0-1.0; conformance software and the Authorized Recall@K package Apache-2.0; the reference implementation BUSL-1.1, converting to Apache-2.0 on 2029-09-02. The mark in <code>brand/</code> is excluded from all of them, all rights reserved.</p>",
+    "rights": [
+      {
+        "id": "cc-by-4.0"
+      },
+      {
+        "id": "cc0-1.0"
+      },
+      {
+        "id": "apache-2.0"
+      },
+      {
+        "id": "busl-1.1"
+      }
+    ],
+    "subjects": [
+      {
+        "subject": "agentic datasets"
+      },
+      {
+        "subject": "data governance"
+      },
+      {
+        "subject": "conformance suite"
+      },
+      {
+        "subject": "authorization-aware retrieval"
+      },
+      {
+        "subject": "Model Context Protocol"
+      }
+    ],
+    "related_identifiers": [
+      {
+        "identifier": "10.1109/CCECE68150.2026.11610344",
+        "scheme": "doi",
+        "relation_type": {
+          "id": "issupplementto"
+        },
+        "resource_type": {
+          "id": "publication-conferencepaper"
+        }
+      },
+      {
+        "identifier": "10.1109/BigDataService70481.2026.00025",
+        "scheme": "doi",
+        "relation_type": {
+          "id": "issupplementto"
+        },
+        "resource_type": {
+          "id": "publication-conferencepaper"
+        }
+      },
+      {
+        "identifier": "https://github.com/agentic-datasets/reference",
+        "scheme": "url",
+        "relation_type": {
+          "id": "issupplementedby"
+        }
+      },
+      {
+        "identifier": "https://agenticdatasets.org/reference/",
+        "scheme": "url",
+        "relation_type": {
+          "id": "isdocumentedby"
+        }
+      }
+    ]
+  }
+}

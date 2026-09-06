@@ -118,11 +118,25 @@ them is discovered after a DOI has been minted.
       the Zenodo record and leave `LICENSE.md` as the authoritative
       file-to-licence map.
 
-      **To verify in Zenodo Sandbox before minting anything** — these are
-      expectations, not confirmed facts, and the schema may have moved:
-      - whether the `.zenodo.json` GitHub-integration schema still exposes a
-        single `license` field, and if so whether a record created that way
-        can be corrected to multiple licences before publishing;
+      **Prepared 2026-09-06 in [`zenodo/`](zenodo/README.md), and the open
+      question is answered.** Verified against the live Zenodo API: all four
+      licence identifiers — `cc-by-4.0`, `cc0-1.0`, `apache-2.0` and
+      `busl-1.1` — exist in Zenodo's vocabulary. `busl-1.1` was the one in
+      doubt, since BSL is not an OSI licence; it is present, so the record can
+      state all four in the machine-readable `rights` field and needs no custom
+      free-text entry.
+
+      **The instrument changes as a result.** `rights` is a list on the REST
+      API and a single `license` string in the `.zenodo.json` GitHub
+      integration, so the record is created through the API and **there is
+      deliberately no `.zenodo.json` in this repository** — if the integration
+      were ever switched on, one would silently override a correct record with
+      a single-licence one. Its absence is the control, which is worth saying
+      because an absent file looks like an oversight.
+
+      Still to verify **on the rendered draft**, not in the payload:
+      - that all four licences appear in the Rights section as displayed, not
+        merely that the JSON was accepted;
       - that **Zenodo ignores `CITATION.cff` entirely when `.zenodo.json` is
         present** — they do not merge, so every creator, ORCID, version and
         related-identifier field has to be duplicated correctly into
@@ -167,11 +181,25 @@ them is discovered after a DOI has been minted.
 
       The two package versions stay at `0.1.0rc1`: they are separate
       distributions with their own numbering, and neither has been published.
-- [ ] **Re-check the paper publication status immediately before `v0.1.0`.**
-      `docs-site/pages/citation.md` states all three conference papers are
-      accepted for 2026 and none is yet in published proceedings. That is
-      inherently time-sensitive and will go stale without anything failing.
-      If any has appeared, add its DOI there and drop the "no DOIs" sentence.
+- [x] **Paper publication status re-checked 2026-09-06 — it had gone stale, as
+      predicted.** Two of the three are now in published proceedings, verified
+      against Crossref:
+
+      | Venue | DOI | Pages |
+      |---|---|---|
+      | IEEE CCECE 2026 | `10.1109/CCECE68150.2026.11610344` | 326–332 |
+      | IEEE BigDataService 2026 | `10.1109/BigDataService70481.2026.00025` | 125–129 |
+
+      `docs-site/pages/citation.md` carried "none is in published proceedings
+      yet, so there are no DOIs to cite" for both of them. Corrected, and the
+      two DOIs are now `issupplementto` related identifiers on the Zenodo
+      record. IEEE EMBC 2026 has not appeared and is marked as awaiting
+      proceedings.
+
+      **Re-check once more immediately before `v0.1.0`.** This is the same
+      failure a second time, not a one-off: nothing in the repository fails
+      when a paper appears, so the claim decays silently and the only defence
+      is to look. EMBC is the entry that will go next.
 
 - [x] **Published the two permissive distributions to PyPI — 2026-09-06.**
       <https://pypi.org/project/agentic-dataset-conformance/0.1.0rc1/> and

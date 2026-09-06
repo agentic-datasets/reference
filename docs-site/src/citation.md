@@ -37,14 +37,19 @@ the package rather than the reference implementation.
 
 ## Papers
 
-Three conference papers argue the model. All were accepted for 2026 and none is
-in published proceedings yet, so there are no DOIs to cite.
+Three conference papers argue the model. **Two are now in published
+proceedings and carry DOIs; cite those rather than this repository when citing
+the argument.** The third is accepted and awaiting its proceedings.
 
-| Venue | Title |
-|---|---|
-| IEEE CCECE 2026 | *Agentic Datasets as an Engineering Control Plane* |
-| IEEE EMBC 2026 | *Dataset Descriptors for Autonomous and Observable Biomedical Data Pipelines* |
-| IEEE BigDataService 2026 | *Agentic Data Services: A Control-Plane Architecture for Adaptive Data Workflows* |
+| Venue | Title | DOI |
+|---|---|---|
+| IEEE CCECE 2026 | *Agentic Datasets as an Engineering Control Plane* | [10.1109/CCECE68150.2026.11610344](https://doi.org/10.1109/CCECE68150.2026.11610344) · pp. 326–332 |
+| IEEE BigDataService 2026 | *Agentic Data Services: A Control-Plane Architecture for Adaptive Data Workflows* | [10.1109/BigDataService70481.2026.00025](https://doi.org/10.1109/BigDataService70481.2026.00025) · pp. 125–129 |
+| IEEE EMBC 2026 | *Dataset Descriptors for Autonomous and Observable Biomedical Data Pipelines* | accepted; not yet in proceedings |
+
+*Verified against Crossref on 2026-09-06. The EMBC entry is the one that will
+go stale next, and it will do so silently — nothing here fails when a paper
+appears.*
 
 Nothing in this repository depends on them: the assertions, the vectors and the
 measurements are reproducible from a clone.
