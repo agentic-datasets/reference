@@ -362,6 +362,24 @@ them is discovered after a DOI has been minted.
       `publication_date` is required and is not supplied by the legacy
       conversion — the first publish attempt failed on it with a 400 after the
       draft was otherwise complete. It is now in `zenodo/metadata.json`.
+
+      **The archive cannot cite itself, and that is accepted rather than
+      fixed.** The zip holds a `CITATION.cff` with no `doi:` field and a
+      citation page reading "There is no DOI yet", because the DOI is minted
+      *from* the tag and reached the tree only in the commit after it. Files on
+      a published record are immutable, so only a new version would change it.
+
+      Decided 2026-09-06 to leave it: the record's metadata is correct, which is
+      what indexers read, and citation happens from the landing page rather than
+      from a file inside the archive. A second DOI to fix a self-reference costs
+      more than the defect does.
+
+      **Next release, reserve the DOI first.** A draft exposes a `reserve_doi`
+      link, so the identifier can exist before the tag does — see
+      [`zenodo/README.md`](zenodo/README.md). Sequence becomes: create draft,
+      reserve, write the DOI into `CITATION.cff` and the citation page, commit,
+      tag, archive *that* tag, publish. This is the one item on this list whose
+      cost is permanent, because a published archive cannot be corrected.
 - [ ] The technical report is a separate repository with its own DOI, which
       cites the software DOI. Do not vendor a `paper/` directory here: the
       software artifact and the scholarly artifact should not become

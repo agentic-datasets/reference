@@ -68,6 +68,30 @@ archived tree stays authoritative for the file-to-licence map; the four
 identifiers say *which* licences apply, not *to what*, and no metadata field can
 carry that mapping.
 
+## Reserve the DOI before tagging, not after
+
+**The `v0.1.0` archive cannot cite itself.** Its `CITATION.cff` carries no `doi:`
+field and its citation page reads *"There is no DOI yet"*, because the DOI was
+minted **from** the tag and could only be written into the tree afterwards. Files
+on a published record are immutable, so this is not fixable in place.
+
+**Decided 2026-09-06: left as it is.** The record's metadata is correct, which is
+what search engines and Crossref read, and people cite from the landing page
+rather than from a file inside the zip. Cutting a version purely to fix a
+self-reference would put a second DOI in the world to solve a problem nobody
+downstream has.
+
+**Do not repeat it.** A draft record exposes a `reserve_doi` link in its `links`
+object — observed on the `v0.1.0` draft, though not yet exercised — which mints
+the identifier before publication. That turns the sequence below from circular
+into linear:
+
+    create draft → reserve DOI → write it into CITATION.cff and the
+    citation page → commit → tag → archive that tag → upload → publish
+
+The cost of getting this wrong is small and permanent, which is the combination
+worth spending ten minutes on next time rather than ten minutes now.
+
 ## Sequence
 
 `RELEASE.md` fixes the order, and it is not negotiable at the last step:
