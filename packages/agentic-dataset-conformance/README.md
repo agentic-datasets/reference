@@ -5,7 +5,7 @@ executable vectors, checkable against any implementation without access to its
 internals.**
 
 ```bash
-pip install --pre agentic-dataset-conformance   # 0.1.0rc1 is a pre-release
+pip install --pre agentic-dataset-conformance   # 0.1.0rc2 is a pre-release
 agentic-dataset-conformance run                 # against the built-in subject
 ```
 

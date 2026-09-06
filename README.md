@@ -162,7 +162,7 @@ Two pieces are published distributions, independently installable and
 permissively licensed:
 
 ```bash
-# Both are on PyPI at 0.1.0rc1. It is a pre-release, so pip needs --pre:
+# Both are on PyPI at 0.1.0rc2. It is a pre-release, so pip needs --pre:
 pip install --pre agentic-dataset-conformance   # contract + vectors + runner
 pip install --pre authorized-recall             # the metric, no dependencies
 

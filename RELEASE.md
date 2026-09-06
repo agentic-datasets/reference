@@ -196,6 +196,30 @@ them is discovered after a DOI has been minted.
       Installing needs `--pre`, or a specifier that names a pre-release:
       `pip install --pre agentic-dataset-conformance`. That is the same trap the
       root `pyproject.toml` already documents for its own dependency pins.
+
+- [x] **`0.1.0rc2` published — 2026-09-06, the same day, to correct a frozen
+      description.** <https://pypi.org/project/agentic-dataset-conformance/0.1.0rc2/>
+      and <https://pypi.org/project/authorized-recall/0.1.0rc2/>.
+
+      `rc1` shipped with `packages/agentic-dataset-conformance/README.md` still
+      reading *"Not yet on PyPI during the release candidate; install from a
+      clone until it is"* — directly beneath a working `pip install` command,
+      on the page a stranger arriving through pip sees first. Seven files in
+      the repository carried that claim; this one was the package long
+      description, and a description is frozen with its version, so the repo
+      and the site could be corrected in place and the package page could not.
+
+      **The lesson is narrow and worth stating.** Pre-upload verification
+      covered the metadata *fields* — name, version, licence, URLs, entry
+      points, a clean-room install — and not the prose inside the README that
+      becomes the page body. Those are the same artifact to PyPI and were two
+      different checks here. For `v0.1.0`, read the rendered description, not
+      only the header.
+
+      `rc1` remains on PyPI as a superseded pre-release, which is what
+      release-candidate numbering is for. Both package versions moved together
+      even though only one carried the stale line: they are released as a pair,
+      and a version skew between them would cost more than the bump saved.
 - [ ] Invite a second implementation rather than writing one. The toy
       establishes independence from the reference *code*; only somebody else's
       reading establishes independence from the author's interpretation of the

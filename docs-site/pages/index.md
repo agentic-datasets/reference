@@ -50,7 +50,7 @@ authority nobody exercised.
 ## Check an implementation
 
 ```bash
-# 0.1.0rc1 is a pre-release, so pip skips it unless asked:
+# 0.1.0rc2 is a pre-release, so pip skips it unless asked:
 pip install --pre agentic-dataset-conformance
 ```
 
