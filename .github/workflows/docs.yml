@@ -39,6 +39,16 @@ jobs:
 
       - run: mdbook build docs-site
 
+      # The book is served from two addresses from this one build, so every
+      # page needs a canonical link naming agenticdatasets.org. mdBook cannot
+      # emit these (head.hbs sees `index.md`, not `index.html`), so it happens
+      # here -- and the --check run is what stops this step being quietly
+      # dropped, since a missing tag is invisible in the rendered page.
+      - name: canonical links
+        run: |
+          python docs-site/postbuild.py
+          python docs-site/postbuild.py --check
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

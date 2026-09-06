@@ -286,17 +286,33 @@ them is discovered after a DOI has been minted.
       text reads correctly from either address, which it has to: one build is
       deployed to both, so there is no per-address copy to diverge.
 
-      **A claim in this entry was wrong and is corrected.** It said "the
-      canonical tags name `agenticdatasets.org`". There are no canonical tags:
+      **Canonical tags added 2026-09-06**, closing the gap this entry
+      recorded. `docs-site/postbuild.py` inserts a `<link rel="canonical">` into
+      every built page after `mdbook build`, pointing at the domain. `index.html`
+      and `print.html` resolve to the site root — print duplicates every page, so
+      pointing it at itself would assert the copy is the original — and
+      `404.html` is skipped. It is idempotent, and `--check` exits 1 on any page
+      without a tag.
+
+      **Two callers, deliberately, and a check that makes the omission loud.**
+      The Makefile's `docs` target and the Pages workflow both run it, because
+      one build serves both addresses; `make deploy` re-runs `--check` before
+      rsync, so a stale `book/` from a bare `mdbook build` cannot reach the edge.
+      Keeping two callers in step is the cost of having the tag at all, and it
+      was the reason for not doing it — `--check` is what makes that cost
+      survivable, since a missing canonical is invisible in a rendered page.
+      Verified by deleting a tag and confirming the check fails.
+
+      **The claim this entry originally made is left visible.** It said "the
+      canonical tags name `agenticdatasets.org`". There were no canonical tags:
       neither address emits `<link rel="canonical">`, verified against both
       live sites on 2026-09-06. Emitting real per-page ones is not free —
       mdbook's `head.hbs` exposes `{{ path }}` as `citation.md` and has no
       string-replace, so a correct tag needs a post-build pass wired into both
       the Makefile and the Pages workflow, which is two places to keep in step
-      in a repository whose CI exists to catch exactly that drift. **Left
-      undone deliberately, and recorded rather than asserted.** The visible
-      cross-link is what a reader needs; the tag is what a crawler needs, and
-      only the first is claimed.
+      in a repository whose CI exists to catch exactly that drift. That
+      was asserted for two weeks without being true. Both are real now: the
+      visible cross-link for a reader, the tag for a crawler.
 
       `make deploy` publishes the book to the edge. Pages rebuilds on push; the
       edge does not, so a docs change is live in one place before the other
@@ -364,3 +380,23 @@ them is discovered after a DOI has been minted.
 so it cannot be an automatic downstream target of the current licensing. Decide
 it as its own question, after the repository has accumulated real public
 history — not as a consequence of this release.
+
+- [x] **`0.1.0.post1` published — 2026-09-06.** Packaging metadata only; the
+      code is byte-identical to `v0.1.0`, which is why it is a PEP 440
+      post-release rather than a patch bump. The `v0.1.0` tag and the Zenodo
+      archive stay accurate.
+
+      `Homepage` pointed at the GitHub repository. It now points at
+      **<https://agenticdatasets.org>**, with `Documentation` at `/reference/`,
+      `Source` at the package's own subtree and, on the conformance package,
+      `Specification` at `CONFORMANCE.md`. All five URLs were checked for a 200
+      before the upload.
+
+      `authorized-recall` deliberately has **no** `Specification` entry:
+      `CONFORMANCE.md` specifies the dataset contract, not the metric, and the
+      metric has no dependency on it. A link there would point at a document
+      that does not specify that package.
+
+      **Package metadata is frozen per version**, so repointing a URL costs a
+      release. Worth knowing before the next one — the URL set is not something
+      that can be tidied later in place.
