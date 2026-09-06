@@ -30,8 +30,7 @@ better outcome than a green tick.
 ### How to do it
 
 ```bash
-# --pre is required: 0.1.0rc2 is a pre-release, and pip skips those by default.
-pip install --pre agentic-dataset-conformance
+pip install agentic-dataset-conformance
 ```
 
 1. Implement `ConformanceSubject` — four methods, in

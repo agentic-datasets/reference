@@ -50,8 +50,7 @@ authority nobody exercised.
 ## Check an implementation
 
 ```bash
-# 0.1.0rc2 is a pre-release, so pip skips it unless asked:
-pip install --pre agentic-dataset-conformance
+pip install agentic-dataset-conformance
 ```
 
 ```bash
@@ -83,3 +82,21 @@ reference *code*, not from its author's reading of the contract.
 
 **Interpretive independence is the next threshold, and it needs somebody else.**
 [How to do it](https://github.com/agentic-datasets/reference/blob/main/contributing.md).
+
+## Where this is published
+
+This documentation is served from two addresses, both maintained and both
+carrying the same build:
+
+| | |
+|---|---|
+| **<https://agenticdatasets.org/reference/>** | canonical — cite this one |
+| <https://agentic-datasets.github.io/reference/> | GitHub Pages mirror |
+
+They are independent copies rather than a redirect pair. The domain resolves to
+its own host, so Pages cannot serve it and neither address forwards to the
+other; if you are reading one of them, the other has identical content.
+
+Use the domain for anything durable — a citation, a DOI, a reference in a paper
+— because it is the address that survives a change of hosting. The mirror
+exists so the documentation stays reachable if the domain does not.

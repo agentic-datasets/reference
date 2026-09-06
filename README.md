@@ -162,9 +162,9 @@ Two pieces are published distributions, independently installable and
 permissively licensed:
 
 ```bash
-# Both are on PyPI at 0.1.0rc2. It is a pre-release, so pip needs --pre:
-pip install --pre agentic-dataset-conformance   # contract + vectors + runner
-pip install --pre authorized-recall             # the metric, no dependencies
+# Both are on PyPI at 0.1.0.
+pip install agentic-dataset-conformance   # contract + vectors + runner
+pip install authorized-recall             # the metric, no dependencies
 
 agentic-dataset-conformance run              # against its own worked example
 agentic-dataset-conformance run --matrix     # and the 17 broken variants
@@ -270,6 +270,18 @@ Browsable at
 **[agenticdatasets.org/reference](https://agenticdatasets.org/reference/)**
 — the same files, with search and a stable anchor per assertion. The site has
 no content of its own; CI fails if it drifts from the repository.
+
+The documentation is served from **two addresses, both maintained**:
+
+| | |
+|---|---|
+| **[agenticdatasets.org/reference](https://agenticdatasets.org/reference/)** | canonical — cite this one |
+| [agentic-datasets.github.io/reference](https://agentic-datasets.github.io/reference/) | GitHub Pages mirror |
+
+They are independent copies of the same build, not a redirect pair: DNS points
+the domain at its own host, so Pages cannot serve it and neither address
+forwards to the other. Prefer the domain in anything durable — a citation, a
+DOI, a paper — because it is the one that survives a change of hosting.
 
 - [`CONFORMANCE.md`](CONFORMANCE.md) — **AD-001 … AD-015**, the fifteen
   assertions any implementation must satisfy in any framework. This is the

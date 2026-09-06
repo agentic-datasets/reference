@@ -8,7 +8,7 @@ security or per-tenant vector namespaces can adopt the measurement without
 adopting anything else here.
 
 ```bash
-pip install --pre authorized-recall   # 0.1.0rc2 is a pre-release
+pip install authorized-recall
 python -m authorized_recall           # or: authorized-recall
 ```
 

@@ -263,10 +263,29 @@ them is discovered after a DOI has been minted.
 
       GitHub Pages still serves the same content at the old address and is not
       disabled. It cannot serve the domain, because DNS points elsewhere, so
-      there is no redirect between them: the two are independent copies and the
-      canonical tags name `agenticdatasets.org`. **Deciding whether Pages stays
-      as a standby or is switched off is still open**, and it should be closed
-      before `v0.1.0` so the citation names one address.
+      there is no redirect between them: the two are independent copies.
+
+      **DECIDED 2026-09-06 — both stay up, and each now names the other.**
+      Pages is a standby rather than a leftover: the mirror exists so the
+      documentation stays reachable if the domain does not. The README and the
+      documentation home both carry a two-row table marking
+      `agenticdatasets.org` **canonical** and the Pages address a **mirror**,
+      with the instruction to prefer the domain in anything durable — a
+      citation, a DOI, a paper — because it survives a change of hosting. The
+      text reads correctly from either address, which it has to: one build is
+      deployed to both, so there is no per-address copy to diverge.
+
+      **A claim in this entry was wrong and is corrected.** It said "the
+      canonical tags name `agenticdatasets.org`". There are no canonical tags:
+      neither address emits `<link rel="canonical">`, verified against both
+      live sites on 2026-09-06. Emitting real per-page ones is not free —
+      mdbook's `head.hbs` exposes `{{ path }}` as `citation.md` and has no
+      string-replace, so a correct tag needs a post-build pass wired into both
+      the Makefile and the Pages workflow, which is two places to keep in step
+      in a repository whose CI exists to catch exactly that drift. **Left
+      undone deliberately, and recorded rather than asserted.** The visible
+      cross-link is what a reader needs; the tag is what a crawler needs, and
+      only the first is claimed.
 
       `make deploy` publishes the book to the edge. Pages rebuilds on push; the
       edge does not, so a docs change is live in one place before the other
@@ -282,9 +301,29 @@ them is discovered after a DOI has been minted.
       **language** neutrality and not of **interpretive** independence. Do not let
       it be read as satisfying the invitation above; claim 6 is untouched.
 
-- [ ] Tag `v0.1.0` and archive that exact tag. **Zenodo publication is
+- [x] **`0.1.0` published to PyPI and tagged `v0.1.0` — 2026-09-06.**
+      <https://pypi.org/project/agentic-dataset-conformance/0.1.0/> and
+      <https://pypi.org/project/authorized-recall/0.1.0/>. `--pre` is no longer
+      needed anywhere and has been removed from every install instruction; the
+      root distribution's dependency pins are plain lower bounds again, and the
+      comment explaining the pre-release trap now records it as past rather
+      than current.
+
+      **The rc1 lesson was applied.** Before uploading, the rendered
+      description *body* was scanned for stale phrasing — "not on PyPI",
+      "--pre", "release candidate", "install from a clone", any `0.1.0rc` — and
+      not merely the metadata header. Zero hits on both packages. That is the
+      check whose absence cost an `rc2`.
+
+      Note for whoever publishes next: PyPI's JSON API and `/simple/` index lag
+      the upload by minutes. `pip install` resolved the previous version twice
+      while the project page for the new one already returned 200. The upload
+      is not broken; the CDN is cold.
+
+- [ ] Archive that exact tag on Zenodo. **Zenodo publication is
       irreversible** — read the whole draft record, Rights included, in the
-      same sitting as pressing publish.
+      same sitting as pressing publish. Metadata is prepared in
+      [`zenodo/`](zenodo/README.md).
 - [ ] The technical report is a separate repository with its own DOI, which
       cites the software DOI. Do not vendor a `paper/` directory here: the
       software artifact and the scholarly artifact should not become
