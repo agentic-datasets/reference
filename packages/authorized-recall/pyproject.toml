@@ -34,6 +34,7 @@ dev = ["pytest>=8"]
 
 [project.urls]
 Homepage = "https://github.com/agentic-datasets/reference"
+Documentation = "https://agenticdatasets.org/reference/"
 Source = "https://github.com/agentic-datasets/reference/tree/main/packages/authorized-recall"
 
 [project.scripts]

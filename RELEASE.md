@@ -173,12 +173,29 @@ them is discovered after a DOI has been minted.
       inherently time-sensitive and will go stale without anything failing.
       If any has appeared, add its DOI there and drop the "no DOIs" sentence.
 
-- [ ] **Publish the two permissive distributions to PyPI.** Blocked on
-      credentials: there is no `~/.pypirc` or PyPI token on this machine, and
-      publication is irreversible — a version number cannot be reused once
-      uploaded, and yanking does not remove it. `agentic-dataset-conformance`
-      and `authorized-recall` are built and verified as wheel and sdist.
-      The reference implementation is **not** published: it is BUSL-1.1.
+- [x] **Published the two permissive distributions to PyPI — 2026-09-06.**
+      <https://pypi.org/project/agentic-dataset-conformance/0.1.0rc1/> and
+      <https://pypi.org/project/authorized-recall/0.1.0rc1/>, each as wheel and
+      sdist. Both names were free and are now held. The reference
+      implementation is **not** published: it is BUSL-1.1.
+
+      Verified before upload rather than after, because a version number cannot
+      be reused once taken and yanking does not remove it: 186 tests pass,
+      `twine check` passes on all four artifacts, and both console scripts run
+      from a clean-room venv holding nothing but the two wheels.
+
+      **One metadata fix went in first.** The packages carried `Homepage` and
+      `Source` but no `Documentation` URL, and the last packaging sweep predates
+      the domain by a day — `agenticdatasets.org` went live 2026-09-03, the
+      wheels were last built 2026-09-02. Package metadata is immortal per
+      version, so a `Documentation` entry pointing at
+      <https://agenticdatasets.org/reference/> was added to both before the
+      build. This is the same failure the 2026-09-02 entry above guarded
+      against, one address later.
+
+      Installing needs `--pre`, or a specifier that names a pre-release:
+      `pip install --pre agentic-dataset-conformance`. That is the same trap the
+      root `pyproject.toml` already documents for its own dependency pins.
 - [ ] Invite a second implementation rather than writing one. The toy
       establishes independence from the reference *code*; only somebody else's
       reading establishes independence from the author's interpretation of the

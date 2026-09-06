@@ -41,6 +41,7 @@ dev = ["pytest>=8"]
 
 [project.urls]
 Homepage = "https://github.com/agentic-datasets/reference"
+Documentation = "https://agenticdatasets.org/reference/"
 Specification = "https://github.com/agentic-datasets/reference/blob/main/CONFORMANCE.md"
 Source = "https://github.com/agentic-datasets/reference/tree/main/packages/agentic-dataset-conformance"
 
