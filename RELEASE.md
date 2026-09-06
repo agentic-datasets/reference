@@ -134,9 +134,20 @@ them is discovered after a DOI has been minted.
       a single-licence one. Its absence is the control, which is worth saying
       because an absent file looks like an oversight.
 
+      **The first attempt to create the record lost three of the four
+      licences, silently.** `POST /api/records` with a plain JSON content type
+      returned 201 and stored `license: {"id": "cc-by-4.0"}` — the first entry
+      of the list — because Zenodo served it through the legacy-deposit
+      compatibility layer, whose schema has a single licence field. Published,
+      that record would have asserted CC-BY-4.0 over the BUSL-1.1 reference
+      implementation: the exact error named above as the worse one. The fix is
+      `Accept: application/vnd.inveniordm.v1+json` on the *write*; with it all
+      four persist. **A 201 meant accepted, not stored as sent.**
+
       Still to verify **on the rendered draft**, not in the payload:
       - that all four licences appear in the Rights section as displayed, not
-        merely that the JSON was accepted;
+        merely that the JSON was accepted — this is the check that caught the
+        loss, and nothing else would have;
       - that **Zenodo ignores `CITATION.cff` entirely when `.zenodo.json` is
         present** — they do not merge, so every creator, ORCID, version and
         related-identifier field has to be duplicated correctly into
@@ -320,10 +331,21 @@ them is discovered after a DOI has been minted.
       while the project page for the new one already returned 200. The upload
       is not broken; the CDN is cold.
 
-- [ ] Archive that exact tag on Zenodo. **Zenodo publication is
-      irreversible** — read the whole draft record, Rights included, in the
-      same sitting as pressing publish. Metadata is prepared in
-      [`zenodo/`](zenodo/README.md).
+- [x] **Archived on Zenodo — 2026-09-06.**
+      Concept DOI **[10.5281/zenodo.22536342](https://doi.org/10.5281/zenodo.22536342)**
+      (cite this; resolves to the newest version), version DOI
+      [10.5281/zenodo.22536343](https://doi.org/10.5281/zenodo.22536343) for
+      `v0.1.0`. The record carries a 324 KB `git archive` of the `v0.1.0` tree,
+      all four licences, the ORCID, and both published paper DOIs as
+      `isSupplementTo`.
+
+      Read back anonymously after publishing, with no token, to confirm the
+      public view matches what was submitted: four rights, version `0.1.0`,
+      one file. Both DOIs resolve.
+
+      `publication_date` is required and is not supplied by the legacy
+      conversion — the first publish attempt failed on it with a 400 after the
+      draft was otherwise complete. It is now in `zenodo/metadata.json`.
 - [ ] The technical report is a separate repository with its own DOI, which
       cites the software DOI. Do not vendor a `paper/` directory here: the
       software artifact and the scholarly artifact should not become

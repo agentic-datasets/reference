@@ -10,6 +10,14 @@ abstract: >-
   retrieval metric defined over the subset of a corpus a principal is
   authorized to use.
 type: software
+doi: "10.5281/zenodo.22536342"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.22536342"
+    description: "Concept DOI — always resolves to the newest version"
+  - type: doi
+    value: "10.5281/zenodo.22536343"
+    description: "Version DOI — v0.1.0"
 authors:
   - family-names: Chernov
     given-names: Alexander

@@ -3,22 +3,25 @@
 The software carries a `CITATION.cff`, which GitHub renders as *Cite this
 repository*.
 
-**`v0.1.0` does not exist yet, so do not cite it.** During the release
-candidate, cite the tag and the commit:
+**`v0.1.0` is released and archived.** Cite the DOI:
 
 ```
 Chernov, A. (2026). Agentic Dataset Reference Implementation and
-Conformance Suite (v0.1.0) [Computer software].
-https://github.com/agentic-datasets/reference
+Conformance Suite (v0.1.0) [Computer software]. Zenodo.
+https://doi.org/10.5281/zenodo.22536342
 ```
 
-A commit SHA is better still, because a release candidate is expected to move:
-the point of the window is that findings change the artifact.
+| | DOI |
+|---|---|
+| **Concept** — always resolves to the newest version. **Cite this.** | [10.5281/zenodo.22536342](https://doi.org/10.5281/zenodo.22536342) |
+| Version — `v0.1.0` specifically, for reproducibility | [10.5281/zenodo.22536343](https://doi.org/10.5281/zenodo.22536343) |
 
 ORCID: [0009-0007-3198-2712](https://orcid.org/0009-0007-3198-2712)
 
-**There is no DOI yet.** One will be minted from the `v0.1.0` tag once the
-window closes.
+**The archive carries four licences and the DOI record names all four.** No
+single identifier describes this release, so `LICENSE.md` inside the archive
+stays authoritative for which licence covers which file. The record says *which*
+licences apply; only that file says *to what*.
 
 ## Citing an assertion
 

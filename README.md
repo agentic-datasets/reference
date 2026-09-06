@@ -271,6 +271,10 @@ Browsable at
 — the same files, with search and a stable anchor per assertion. The site has
 no content of its own; CI fails if it drifts from the repository.
 
+**DOI:** [10.5281/zenodo.22536342](https://doi.org/10.5281/zenodo.22536342)
+(concept — cite this; it resolves to the newest version). `v0.1.0` specifically
+is [10.5281/zenodo.22536343](https://doi.org/10.5281/zenodo.22536343).
+
 The documentation is served from **two addresses, both maintained**:
 
 | | |

@@ -20,10 +20,37 @@ not merely be unused; if the GitHub integration is ever switched on it would
 silently override a correct record with a single-licence one. Its absence is the
 control.
 
-## Use the REST API, where `rights` is a list
+## Use the REST API — and send the InvenioRDM content type, or lose three licences
 
 Verified against the live Zenodo API on 2026-09-06: **all four licence
 identifiers exist in Zenodo's vocabulary**, which was the open question.
+
+**That check was necessary and not sufficient, and the difference nearly shipped.**
+Posting the four-entry `rights` list to `POST /api/records` with a plain
+`Content-Type: application/json` returns **201 Created** and silently collapses
+it: the draft came back holding `metadata.license = {"id": "cc-by-4.0"}` — the
+first entry — with the other three discarded and no warning anywhere in the
+response. Zenodo served the request through its legacy-deposit compatibility
+layer, whose schema has one licence field.
+
+Had that been published, the record would have asserted **CC-BY-4.0 over the
+BUSL-1.1 reference implementation** — precisely the error this file calls the
+worse of the two, because it invites the commercial use the licence withholds
+until 2029-09-02.
+
+**The fix is a header.** Send `Accept: application/vnd.inveniordm.v1+json` on
+the write. With it, all four persist; a subsequent read with the same header
+shows `rights` as a four-element list. Without it, reads show `rights: null`
+and `license` singular, which is how the loss is visible at all.
+
+    curl -H "Authorization: Bearer $TOKEN" \
+         -H "Accept: application/vnd.inveniordm.v1+json" \
+         -H "Content-Type: application/json" \
+         -X PUT --data @body.json \
+         https://zenodo.org/api/records/<id>/draft
+
+**Verify by reading the draft back, never by trusting the status code.** A 201
+here meant "accepted", not "stored as sent".
 
 | Tier | Licence | `rights` id | In vocabulary |
 |---|---|---|---|
@@ -55,7 +82,9 @@ something to fix afterwards.
 Two things to confirm on the draft before publishing, because neither is
 guaranteed by the payload being correct:
 
-1. all four licences appear in the rendered Rights section, not just the first;
+1. all four licences appear in the rendered Rights section, not just the first
+   — this is the one that actually failed on the first attempt, and it fails
+   quietly;
 2. `version` matches the tag exactly — `metadata.json` pins `0.1.0`, and it
    must be bumped in step with any retag rather than left behind.
 
