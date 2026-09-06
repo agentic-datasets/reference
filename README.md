@@ -162,9 +162,9 @@ Two pieces are published distributions, independently installable and
 permissively licensed:
 
 ```bash
-# Neither is on PyPI yet -- 0.1.0rc1 is built and waiting. From a clone:
-pip install ./packages/agentic-dataset-conformance   # contract + vectors + runner
-pip install ./packages/authorized-recall             # the metric, no dependencies
+# Both are on PyPI at 0.1.0rc1. It is a pre-release, so pip needs --pre:
+pip install --pre agentic-dataset-conformance   # contract + vectors + runner
+pip install --pre authorized-recall             # the metric, no dependencies
 
 agentic-dataset-conformance run              # against its own worked example
 agentic-dataset-conformance run --matrix     # and the 17 broken variants

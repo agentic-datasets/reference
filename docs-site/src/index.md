@@ -50,12 +50,8 @@ authority nobody exercised.
 ## Check an implementation
 
 ```bash
-# Not on PyPI yet. During the release candidate, install from a clone:
-git clone https://github.com/agentic-datasets/reference
-pip install ./reference/packages/agentic-dataset-conformance
-
-# Once 0.1.0rc1 is published, pip skips pre-releases unless asked:
-#   pip install --pre agentic-dataset-conformance
+# 0.1.0rc1 is a pre-release, so pip skips it unless asked:
+pip install --pre agentic-dataset-conformance
 ```
 
 ```bash

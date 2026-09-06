@@ -7,8 +7,9 @@ a predicate, not a `Principal`, so a system using RBAC, ABAC, row-level
 security or per-tenant vector namespaces can adopt the measurement without
 adopting anything else here.
 
-```
-python -m authorized_recall
+```bash
+pip install --pre authorized-recall   # 0.1.0rc1 is a pre-release
+python -m authorized_recall           # or: authorized-recall
 ```
 
 ---
