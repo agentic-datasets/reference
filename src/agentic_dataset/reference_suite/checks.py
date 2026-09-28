@@ -627,9 +627,9 @@ CHECKS: tuple[tuple[Check, Callable[[Harness], CheckOutcome]], ...] = (
     (Check("AD-012", "policy_version_recorded",
            "evidence that cannot identify which rules applied"), ad_012),
     (Check("AD-013", "remote_execution_preserves_scope",
-           "MCP or A2A delegation as an escalation path"), ad_013),
+           "MCP delegation as an escalation path"), ad_013),
     (Check("AD-014", "agent_handoff_preserves_scope",
-           "sub-agent or multi-agent handoff as an escalation path"), ad_014),
+           "sub-agent or multi-agent handoff, over A2A, as an escalation path"), ad_014),
     (Check("AD-015", "prohibited_execution_rate_zero",
            "any prohibited action executing at all, ever", "rate"), ad_015),
 )

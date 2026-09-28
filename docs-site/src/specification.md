@@ -60,9 +60,11 @@ this file alone is the experiment this artifact does not run.
 | **AD-010** | `refusal_recorded` | A refusal that leaves no evidence |
 | **AD-011** | `dataset_revision_recorded` | Evidence that cannot identify which data was used |
 | **AD-012** | `policy_version_recorded` | Evidence that cannot identify which rules applied |
-| **AD-013** | `remote_execution_preserves_scope` | MCP or A2A delegation as an escalation path |
-| **AD-014** | `agent_handoff_preserves_scope` | Sub-agent or multi-agent handoff as an escalation path |
+| **AD-013** | `remote_execution_preserves_scope` | MCP delegation as an escalation path |
+| **AD-014** | `agent_handoff_preserves_scope` | Sub-agent or multi-agent handoff, over A2A, as an escalation path |
 | **AD-015** | `prohibited_execution_rate_zero` | Any prohibited action executing at all, ever |
+
+AD-013 and AD-014 are one rule at two seams: a delegate may run under the caller's scope or a narrowing of it, never a wider one. AD-013 is the seam to a remote tool server (MCP); AD-014 is the handoff to another agent, which the reference carries over A2A. That is why their vectors are `ad-013-mcp-preserves-scope.json` and `ad-014-a2a-preserves-scope.json`.
 
 ---
 

@@ -1,7 +1,7 @@
 """The two seams where authority is most often lost.
 
-AD-013 (MCP or A2A delegation) and AD-014 (sub-agent handoff) are the same
-assertion at two places: a delegate may execute under the caller's scope or a
+AD-013 (MCP delegation) and AD-014 (sub-agent handoff, carried over A2A) are
+the same assertion at two places: a delegate may execute under the caller's scope or a
 narrowing of it, and never under a wider one. Both are enforced here rather
 than in the adapters, because a boundary check that each runtime implements for
 itself is a boundary check with four chances to be wrong.
