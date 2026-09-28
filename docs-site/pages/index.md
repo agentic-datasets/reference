@@ -74,9 +74,7 @@ explicitly not.
 
 ## Status
 
-**Release candidate.** Public before `v0.1.0` is tagged, deliberately, so a
-finding can still change the artifact rather than becoming errata against a
-DOI. The independent implementation is a 250-line toy written by the same
+**Released.** `v0.2.0` is the current version, on PyPI and archived with its own DOI ([citation](citation.md)); `v0.1.0` was the first. A finding changes the next version rather than an old one. The independent implementation is a 250-line toy written by the same
 person who wrote the specification: that establishes independence from the
 reference *code*, not from its author's reading of the contract.
 

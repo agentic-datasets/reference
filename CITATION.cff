@@ -16,13 +16,17 @@ identifiers:
     value: "10.5281/zenodo.22536342"
     description: "Concept DOI — always resolves to the newest version"
   - type: doi
+    value: "10.5281/zenodo.23005806"
+    description: "Version DOI — v0.2.0"
+  - type: doi
     value: "10.5281/zenodo.22536343"
     description: "Version DOI — v0.1.0"
 authors:
   - family-names: Chernov
     given-names: Alexander
     orcid: "https://orcid.org/0009-0007-3198-2712"
-version: 0.1.0
+version: 0.2.0
+date-released: 2026-09-27
 license-url: "https://github.com/agentic-datasets/reference/blob/main/LICENSE.md"
 repository-code: "https://github.com/agentic-datasets/reference"
 keywords:

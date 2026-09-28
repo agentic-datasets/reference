@@ -29,6 +29,7 @@ from mcp.client import Client
 from mcp.server.mcpserver import MCPServer
 from mcp.server.mcpserver.resources import FunctionResource
 
+from . import __version__
 from .capabilities import BoundCapability, CapabilityRegistry
 from .descriptor import DatasetDescriptor, DescriptorRegistry
 from .grant import Grant, GrantAuthority, UnauthorizedExecution
@@ -48,7 +49,7 @@ def build_dataset_server(
     authority: GrantAuthority,
     name: str = "agentic-dataset",
 ) -> MCPServer:
-    server = MCPServer(name=name, version="0.1.0")
+    server = MCPServer(name=name, version=__version__)
 
     for descriptor in descriptors.all():
         _add_resources(server, descriptor)
