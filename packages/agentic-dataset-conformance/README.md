@@ -59,7 +59,7 @@ all fifteen.
 agentic-dataset-conformance run --matrix
 ```
 
-Seventeen deliberately broken variants, each removing exactly one guarantee.
+Nineteen deliberately broken variants, each removing exactly one guarantee.
 Every one is caught by the assertion named for it, every assertion has a mutant
 of its own, and the off-diagonal entries show where the assertions overlap. A
 suite that cannot fail is decoration.

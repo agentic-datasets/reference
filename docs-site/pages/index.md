@@ -14,12 +14,12 @@ datasets.**
 
 reference architecture      4 runtimes x 2 dataset boundaries   15/15 each
 independent implementation  shares no code with the above       15/15
-mutation analysis           17 / 17 targeted violations detected
+mutation analysis           19 / 19 targeted violations detected
                             15 / 15 assertions independently exercised
                              2.2 detecting assertions per mutant (mean)
 execution safety            0 / 576 prohibited executions
                             0 /  24 in the evaluation set
-tests                       405 passed
+tests                       407 passed
 
 Authorized Recall@5         filter after truncation     0.853
                             filter before truncation    0.960

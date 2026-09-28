@@ -123,12 +123,12 @@ than "the design was correct from the start" and a more useful one.
 
 ## Mutation results
 
-Seventeen deliberately broken variants, each removing exactly one guarantee.
+Nineteen deliberately broken variants, each removing exactly one guarantee.
 The matrix is what `agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix` prints; the
 committed run is in [`runs/mutation-matrix.txt`](https://github.com/agentic-datasets/reference/blob/main/runs/mutation-matrix.txt).
 
 ```
-target detection : 17/17 mutants caught by their intended assertion
+target detection : 19/19 mutants caught by their intended assertion
 cross-detection  : 2.2 assertions per mutant on average
 coverage         : 15/15 assertions have a mutant of their own
 ```
@@ -138,6 +138,8 @@ version of this analysis had thirteen mutants covering eleven assertions, which
 meant AD-002, AD-009, AD-013 and AD-014 were exercised only as cross-detectors
 — never as the assertion under test. Nothing in the pass/fail output showed
 that. Drawing the matrix showed it immediately, and four mutants were added.
+Full coverage of the assertions still left two checks that no vector reached;
+see [`FINDINGS.md`](findings.md) F-012.
 
 **The off-diagonal entries are a result, not noise.** They say the fifteen
 assertions are not orthogonal, which is what safety invariants ought to look

@@ -270,6 +270,34 @@ def vectors() -> dict[str, dict]:
             ],
         }
 
+    # Two sub-properties the first fifteen vectors never exercised: a
+    # principal entitled to a capability above their clearance, and a grant
+    # used after the data it was issued for has changed.
+    v["ad-003-stale-grant-executes-nothing"] = {
+        "assertion": "AD-003",
+        "rules_out": "a grant for data the dataset no longer holds still opening execution",
+        "steps": [
+            req("process_engineer", expect={"decision": "GRANTED", "granted": True, "executed": True}),
+            {"op": "set_revision", "dataset": "purification-batches", "revision": "rev-after-grant"},
+            {"op": "delegate", "channel": "mcp", "dataset": "purification-batches",
+             "capability": "compare_batches", "scope": same,
+             "expect": {"executed": False, "error_contains": "revision"}},
+        ],
+    }
+
+    v["ad-004-clearance-refusal-has-no-grant"] = {
+        "assertion": "AD-004",
+        "rules_out": "an entitlement above a principal's clearance minting authority",
+        "steps": [
+            {"op": "grant", "principal": "analyst", "dataset": "purification-batches",
+             "capability": "detect_outliers"},
+            req("analyst", "detect outliers in recovery", dataset="purification-batches",
+                capability="detect_outliers",
+                expect={"decision": "REFUSED", "reason": "CLASSIFICATION_EXCEEDS_CLEARANCE",
+                        "policy_id": "AD-POL-006", "granted": False, "executed": False}),
+        ],
+    }
+
     v["ad-015-prohibited-execution-rate-zero"] = {
         "assertion": "AD-015",
         "rules_out": "any prohibited action executing at all, ever",
