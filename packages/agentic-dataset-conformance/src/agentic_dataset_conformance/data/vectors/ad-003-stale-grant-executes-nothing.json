@@ -1,0 +1,40 @@
+{
+  "assertion": "AD-003",
+  "rules_out": "a grant for data the dataset no longer holds still opening execution",
+  "steps": [
+    {
+      "op": "request",
+      "principal": "process_engineer",
+      "text": "Compare the recovery of batches B001 and B002",
+      "expect": {
+        "decision": "GRANTED",
+        "granted": true,
+        "executed": true
+      }
+    },
+    {
+      "op": "set_revision",
+      "dataset": "purification-batches",
+      "revision": "rev-after-grant"
+    },
+    {
+      "op": "delegate",
+      "channel": "mcp",
+      "dataset": "purification-batches",
+      "capability": "compare_batches",
+      "scope": {
+        "principal_class": "process-engineer",
+        "dataset": "purification-batches",
+        "capabilities": [
+          "compare_batches"
+        ],
+        "max_sensitivity": "internal"
+      },
+      "expect": {
+        "executed": false,
+        "error_contains": "revision"
+      }
+    }
+  ],
+  "world": "reference"
+}

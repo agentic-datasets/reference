@@ -10,7 +10,7 @@ Two kinds of check, because the assertions come in two kinds:
 * **cross-vector invariants** -- properties that must hold of *every*
   observation the subject ever produced. AD-003 ("execution implies a grant")
   is not a scenario, it is a universally quantified statement, and checking it
-  over all 84 steps is stronger than checking it in one.
+  over every step of every vector is stronger than checking it in one.
 """
 
 from __future__ import annotations

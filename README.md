@@ -11,7 +11,7 @@ without access to their internals.**
 
 reference architecture      4 runtimes x 2 dataset boundaries   15/15 each
 independent implementation  shares no code with the above       15/15
-mutation analysis           17 / 17 targeted violations detected
+mutation analysis           19 / 19 targeted violations detected
                             15 / 15 assertions independently exercised
                              2.2 detecting assertions per mutant (mean)
                             not treated as an optimization metric
@@ -19,7 +19,7 @@ defects exposed by the
 conversion to vectors       F-010, F-011
 execution safety            0 / 576 prohibited executions
                             0 /  24 in the evaluation set
-tests                       405 passed
+tests                       407 passed
 
 Authorized Recall@5         filter after truncation     0.853
                             filter before truncation    0.960
@@ -167,7 +167,7 @@ pip install agentic-dataset-conformance   # contract + vectors + runner
 pip install authorized-recall             # the metric, no dependencies
 
 agentic-dataset-conformance run              # against its own worked example
-agentic-dataset-conformance run --matrix     # and the 17 broken variants
+agentic-dataset-conformance run --matrix     # and the 19 broken variants
 agentic-dataset-conformance vectors --export ./vectors   # CC0, take them
 ```
 
@@ -180,10 +180,10 @@ For the reference implementation itself, from a clone:
 pip install -e ./packages/authorized-recall -e ./packages/agentic-dataset-conformance -e ".[all]"
 
 agentic-dataset-conformance run --subject conformance.subjects:subjects           # portable suite, every subject
-agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix  # the 17-mutant detection matrix
+agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix  # the 19-mutant detection matrix
 python -m agentic_dataset.reference_suite       # white-box suite, 8 configurations
 python conformance/generate.py                  # regenerate world and vectors
-pytest -q                                       # 405 tests
+pytest -q                                       # 407 tests
 
 python -m authorized_recall  # milestone M6, the metric
 python evals/evaluate.py                     # milestone M5, six evaluators
@@ -257,9 +257,9 @@ src/agentic_dataset/
 packages/
     authorized-recall/  the metric as its own Apache-2.0 distribution
 conformance/          the normative artifact: world, vectors, verbs,
-                      an independent implementation and 17 broken variants
+                      an independent implementation and 19 broken variants
 examples/             one runnable script per runtime, plus the MCP boundary
-tests/                405 tests
+tests/                407 tests
 evals/                the M5 evaluators and the committed corpus record
 docs/                 architecture (three ports), results, findings, raw runs
 ```

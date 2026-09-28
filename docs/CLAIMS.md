@@ -12,12 +12,12 @@ measurement changes with it.
 | # | Claim | Status |
 |---|---|---|
 | 1 | The governance model is a framework-independent behavioural contract | **Supported** |
-| 2 | It can be expressed as language-neutral executable vectors | **Supported** — 15 vectors, 85 steps, JSON |
+| 2 | It can be expressed as language-neutral executable vectors | **Supported** — 17 vectors, 90 steps, JSON |
 | 3 | Conformance can be evaluated without access to an implementation's internals | **Supported** — the harness imports no implementation, asserted by test |
 | 4 | All 15 assertions are portable | **Supported** — 15/15 through the public interface, and in **two languages** since 2026-09-03 |
 | 5 | Four runtimes across two dataset boundaries all conform | **Supported** — 8 configurations, 15/15 each |
 | 6 | An implementation sharing no code with the reference conforms | **Supported, with the limitation stated**: the toy is independent of the reference *code*, not of its author |
-| 7 | The suite detects targeted violations | **Supported** — 17/17 mutants caught by their named assertion |
+| 7 | The suite detects targeted violations | **Supported** — 19/19 mutants caught by their named assertion |
 | 8 | Every assertion is exercised as the assertion under test | **Supported** — 15/15 coverage |
 | 9 | The portability conversion exposed a real defect | **Strong evidence** — F-010, invisible to the white-box suite |
 | 10 | The suite catches unplanned implementation mistakes, not only planted ones | **Strong evidence** — F-011, made by the toy in earnest |

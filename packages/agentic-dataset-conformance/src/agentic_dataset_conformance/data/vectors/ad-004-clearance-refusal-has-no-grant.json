@@ -1,0 +1,27 @@
+{
+  "assertion": "AD-004",
+  "rules_out": "an entitlement above a principal's clearance minting authority",
+  "steps": [
+    {
+      "op": "grant",
+      "principal": "analyst",
+      "dataset": "purification-batches",
+      "capability": "detect_outliers"
+    },
+    {
+      "op": "request",
+      "principal": "analyst",
+      "text": "detect outliers in recovery",
+      "dataset": "purification-batches",
+      "capability": "detect_outliers",
+      "expect": {
+        "decision": "REFUSED",
+        "reason": "CLASSIFICATION_EXCEEDS_CLEARANCE",
+        "policy_id": "AD-POL-006",
+        "granted": false,
+        "executed": false
+      }
+    }
+  ],
+  "world": "reference"
+}

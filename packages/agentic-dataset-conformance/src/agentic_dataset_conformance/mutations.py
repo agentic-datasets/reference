@@ -24,6 +24,8 @@ invariants that do not cover much.
 
 from __future__ import annotations
 
+import time
+
 from .toy import SENSITIVITY, ToyImplementation
 
 __all__ = ["MUTANTS", "TARGETS"]
@@ -201,6 +203,36 @@ class ExpiredTokensAccepted(ToyImplementation):
         return {"dataset": dataset, "capability": capability, "rows": 2}
 
 
+class StaleGrantsAccepted(ToyImplementation):
+    """A grant is honoured after the data it was issued for has changed."""
+
+    name = "mutant:stale-grants-accepted"
+
+    def _execute(self, grant_id, dataset, capability):
+        grant = self._grants.get(grant_id)
+        if grant is None:
+            raise PermissionError("no approval token: execution is unreachable")
+        if time.time() > grant["expires_at"]:
+            raise PermissionError("approval token has expired")
+        if grant["dataset"] != dataset or grant["capability"] != capability:
+            raise PermissionError("approval token is for a different dataset or capability")
+        # The one check left out: the grant's revision against the data's now.
+        if (dataset, capability) not in self._implemented:
+            raise PermissionError(f"{dataset}.{capability} is not a registered capability")
+        return {"dataset": dataset, "capability": capability, "rows": 2}
+
+
+class ClearanceIgnored(ToyImplementation):
+    """Entitlement is checked, clearance is not."""
+
+    name = "mutant:clearance-ignored"
+
+    def _evaluate(self, step, principal, descriptor, capability_name):
+        return super()._evaluate(
+            step, dict(principal, clearance="restricted"), descriptor, capability_name
+        )
+
+
 class AdvertisedMeansImplemented(ToyImplementation):
     """Every advertised capability is treated as implemented.
 
@@ -265,7 +297,9 @@ TARGETS: dict[type, str] = {
     AdvertisedMeansImplemented: "AD-002",
     ExecutesWithoutAGrant: "AD-003",
     ExpiredTokensAccepted: "AD-003",
+    StaleGrantsAccepted: "AD-003",
     RefusalStillMintsAuthority: "AD-004",
+    ClearanceIgnored: "AD-004",
     IndeterminateBecomesRefusal: "AD-005",
     DefaultAllow: "AD-006",
     DelegationWidensScope: "AD-007",

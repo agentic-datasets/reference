@@ -1,17 +1,17 @@
 # Results
 
 ```
-15 normative assertions, 85 language-neutral vector steps
+15 normative assertions, 17 vectors, 90 language-neutral vector steps
 
 reference architecture      4 runtimes x 2 dataset boundaries   15/15 each
 independent implementation  shares no code with the above       15/15
-mutation analysis           17 targeted violations              17/17 detected
+mutation analysis           19 targeted violations              19/19 detected
                             15/15 assertions covered             2.2 assertions
                                                                  per mutant
 execution safety            0 / 39  prohibited steps, per subject
                             0 / 576 prohibited executions, white-box matrix
                             0 /  24 prohibited executions, evaluation
-tests                       405 passed
+tests                       407 passed
 
 Authorized Recall@5         filter after truncation     0.853
                             filter before truncation    0.960
@@ -31,6 +31,15 @@ Measured 2026-09-01 on Python 3.12.13, Linux, with:
 ```
 langgraph 1.2.11 · langchain-core 1.6.1 · llama-index-core 0.14.24
 google-adk 2.8.0 · mcp 2.1.1 · pytest 9.1.1
+```
+
+The conformance matrix, the mutation analysis and the tests were measured again
+on 2026-09-28, after two vectors and two mutants were added
+([`FINDINGS.md`](FINDINGS.md) F-012), with:
+
+```
+langgraph 1.2.12 · langchain-core 1.6.5 · llama-index-core 0.14.25
+google-adk 2.10.0 · mcp 2.2.0 · pytest 9.1.1
 ```
 
 ---
@@ -80,18 +89,21 @@ the same person who wrote the specification, and one person's reading of their
 own document is the weakest kind of independence. The outstanding experiment is
 a second reading by somebody else.
 
-**And the suite would now notice a broken implementation.** Seventeen variants,
+**And the suite would now notice a broken implementation.** Nineteen variants,
 each removing exactly one guarantee, are each caught by the assertion named for
 them, and every one of the fifteen assertions has a mutant of its own —
 `agentic-dataset-conformance run --subject conformance.subjects:subjects --matrix`.
 
 The detection matrix in `PORTABILITY.md` reports two separate things, because
-they mean different things: **target detection** (17/17) says the suite is
+they mean different things: **target detection** (19/19) says the suite is
 sensitive to each named violation, and **cross-detection** (2.2 assertions per
 mutant) says the assertions are not orthogonal. The second is a characterisation
 rather than a score. It is also how the coverage gap was found: the first
 version of the analysis had 13 mutants covering 11 assertions, and nothing in
-the pass/fail output revealed that four assertions were never under test.
+the pass/fail output revealed that four assertions were never under test. Two
+checks were later found that no vector reached at all, clearance and a grant
+used after its data changed; F-012 records them and the two vectors that close
+them.
 
 The move outside cost something, and `PORTABILITY.md` records it: AD-003 and
 AD-007 became universally quantified invariants over every observation rather
@@ -106,48 +118,50 @@ argument for the matrix rather than a single run.
 
 ## 1a. Mutation analysis
 
-Seventeen variants, each removing exactly one guarantee, run against the same
+Nineteen variants, each removing exactly one guarantee, run against the same
 vectors. `T` is the assertion the mutant was written for; `x` is a redundant
 detection.
 
 ```
-        M01 M02 M03 M04 M05 M06 M07 M08 M09 M10 M11 M12 M13 M14 M15 M16 M17
-        --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
-AD-001   T   .   .   .   x   .   .   .   .   .   .   .   .   .   .   .   .    2
-AD-002   .   T   x   .   .   .   .   .   .   .   .   .   .   .   .   .   .    2
-AD-003   .   .   T   T   .   .   .   .   .   .   .   .   .   .   .   .   .    2
-AD-004   .   .   .   .   T   .   .   .   .   .   .   .   .   .   .   .   x    2
-AD-005   .   .   .   .   .   T   .   .   .   .   .   .   .   .   .   .   .    1
-AD-006   .   .   .   .   x   .   T   .   .   .   .   .   .   .   .   .   .    2
-AD-007   .   .   .   .   .   .   .   T   .   .   .   .   .   .   x   x   .    3
-AD-008   .   .   .   .   .   .   .   .   T   T   .   .   .   .   .   .   .    2
-AD-009   .   .   .   .   .   .   .   .   .   .   T   x   x   x   .   .   x    5
-AD-010   .   .   .   .   .   .   .   .   .   .   x   T   x   x   .   .   x    5
-AD-011   .   .   .   .   .   .   .   .   .   .   .   .   T   .   .   .   .    1
-AD-012   .   .   .   .   .   .   .   .   .   .   .   .   .   T   .   .   .    1
-AD-013   .   .   x   x   .   .   .   x   .   .   .   .   .   .   T   .   .    4
-AD-014   .   .   x   x   .   .   .   x   .   .   .   .   .   .   .   T   .    4
-AD-015   .   .   .   .   x   .   .   .   .   .   .   .   .   .   .   .   T    2
+        M01 M02 M03 M04 M05 M06 M07 M08 M09 M10 M11 M12 M13 M14 M15 M16 M17 M18 M19
+        --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+AD-001   T   .   .   .   .   x   .   .   .   .   .   .   .   .   .   .   .   .   .    2
+AD-002   .   T   x   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .    2
+AD-003   .   .   T   T   T   .   .   .   .   .   .   .   .   .   .   .   x   .   .    4
+AD-004   .   .   .   .   .   T   T   .   .   .   .   .   .   .   .   .   .   .   x    3
+AD-005   .   .   .   .   .   .   .   T   .   .   .   .   .   .   .   .   .   .   .    1
+AD-006   .   .   .   .   .   x   .   .   T   .   .   .   .   .   .   .   .   .   .    2
+AD-007   .   .   .   .   .   .   .   .   .   T   .   .   .   .   .   .   x   x   .    3
+AD-008   .   .   .   .   .   .   .   .   .   .   T   T   .   .   .   .   .   .   .    2
+AD-009   .   .   .   .   .   .   .   .   .   .   .   .   T   x   x   x   .   .   x    5
+AD-010   .   .   .   .   .   .   .   .   .   .   .   .   x   T   x   x   .   .   x    5
+AD-011   .   .   .   .   .   .   .   .   .   .   .   .   .   .   T   .   .   .   .    1
+AD-012   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   T   .   .   .    1
+AD-013   .   .   x   x   .   .   .   .   .   x   .   .   .   .   .   .   T   .   .    4
+AD-014   .   .   x   x   .   .   .   .   .   x   .   .   .   .   .   .   .   T   .    4
+AD-015   .   .   .   .   .   x   .   .   .   .   .   .   .   .   .   .   .   .   T    2
 
 M01  AD-001  descriptor-not-validated
 M02  AD-002  advertised-means-implemented
 M03  AD-003  executes-without-a-grant
 M04  AD-003  expired-tokens-accepted
-M05  AD-004  refusal-still-mints-authority
-M06  AD-005  indeterminate-becomes-refusal
-M07  AD-006  default-allow
-M08  AD-007  delegation-widens-scope
-M09  AD-008  cache-ignores-principal
-M10  AD-008  cache-ignores-revision
-M11  AD-009  evidence-omits-principal
-M12  AD-010  refusal-leaves-no-evidence
-M13  AD-011  evidence-omits-revision
-M14  AD-012  evidence-omits-policy-version
-M15  AD-013  remote-delegation-unchecked
-M16  AD-014  handoff-unchecked
-M17  AD-015  prohibitions-ignored
+M05  AD-003  stale-grants-accepted
+M06  AD-004  refusal-still-mints-authority
+M07  AD-004  clearance-ignored
+M08  AD-005  indeterminate-becomes-refusal
+M09  AD-006  default-allow
+M10  AD-007  delegation-widens-scope
+M11  AD-008  cache-ignores-principal
+M12  AD-008  cache-ignores-revision
+M13  AD-009  evidence-omits-principal
+M14  AD-010  refusal-leaves-no-evidence
+M15  AD-011  evidence-omits-revision
+M16  AD-012  evidence-omits-policy-version
+M17  AD-013  remote-delegation-unchecked
+M18  AD-014  handoff-unchecked
+M19  AD-015  prohibitions-ignored
 
-target detection : 17/17 mutants caught by their intended assertion
+target detection : 19/19 mutants caught by their intended assertion
 cross-detection  : 2.2 assertions per mutant on average
 coverage         : 15/15 assertions have a mutant of their own
 
@@ -257,7 +271,7 @@ Capability selection measured 0.800 on the first run — see
 ## 4. Tests
 
 ```
-405 passed
+407 passed
 ```
 
 `pytest` parametrises the conformance suite down to one test per assertion per

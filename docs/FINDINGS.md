@@ -147,8 +147,29 @@ run.
 
 This is a finding about the *suite* rather than about the implementation: it is
 the only direct evidence that the assertions catch a real mistake made in
-earnest rather than one planted to be found. The seventeen mutants in
+earnest rather than one planted to be found. The nineteen mutants in
 `agentic_dataset_conformance.mutations` are planted; this one was not.
+
+### F-012 — two checks no vector reached
+
+Every assertion had a mutant of its own and every mutant was caught, and still
+two checks every implementation makes were never exercised: refusing a
+principal whose clearance is below the capability's sensitivity
+(`CLASSIFICATION_EXCEEDS_CLEARANCE`), and refusing a grant used after the data
+it was issued for has changed. Each refusal in the AD-004 vector is decided
+before clearance is reached, and each revision change in the vectors is
+followed by a fresh request, never by use of the grant issued before it. An
+implementation without either check passed all fifteen vectors, and the
+mutants that remove them (`clearance-ignored`, `stale-grants-accepted`) were
+caught by no assertion.
+
+Two vectors close it: `ad-004-clearance-refusal-has-no-grant` entitles a
+principal to a capability above their clearance and expects the refusal, and
+`ad-003-stale-grant-executes-nothing` changes the revision between a grant and
+its use across the MCP boundary. With them both mutants are caught by the
+assertion named for them, and every subject still conforms. The fifteen
+original vectors are unchanged. Found by mutating each check an implementation
+makes, not only each assertion.
 
 ---
 
