@@ -34,7 +34,7 @@ Cite the assertion, not a line number:
 ## Citing the metric
 
 Authorized Recall@K is defined in
-[its own package](https://github.com/agentic-datasets/reference/blob/main/authorized-recall.md), which has no dependency on this
+[its own package](authorized-recall.md), which has no dependency on this
 architecture. If you use the metric without adopting the control plane, cite
 the package rather than the reference implementation.
 

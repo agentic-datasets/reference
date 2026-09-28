@@ -12,6 +12,7 @@ two drift.
 
 from __future__ import annotations
 
+import posixpath
 import re
 import shutil
 from pathlib import Path
@@ -39,25 +40,10 @@ CHAPTERS = {
 GH = "https://github.com/agentic-datasets/reference/blob/main/"
 GH_TREE = "https://github.com/agentic-datasets/reference/tree/main/"
 
-# Links that resolve to a chapter of this book.
-INTERNAL = {
-    "CONFORMANCE.md": "specification.md",
-    "docs/PORTABILITY.md": "portability.md",
-    "PORTABILITY.md": "portability.md",
-    "docs/RESULTS.md": "results.md",
-    "RESULTS.md": "results.md",
-    "docs/FINDINGS.md": "findings.md",
-    "FINDINGS.md": "findings.md",
-    "docs/CLAIMS.md": "claims.md",
-    "CLAIMS.md": "claims.md",
-    "CONTRIBUTING.md": "contributing.md",
-    "LICENSE.md": "licensing.md",
-    "../LICENSE.md": "licensing.md",
-    "PLAN.md": "plan.md",
-    "brand/README.md": "brand.md",
-    "../packages/authorized-recall/README.md": "authorized-recall.md",
-    "packages/authorized-recall/README.md": "authorized-recall.md",
-}
+# Links that resolve to a chapter of this book, by repository path. A relative
+# link is resolved against the file it appears in before it is looked up here:
+# `runs/` in docs/RESULTS.md is docs/runs/, not a runs/ at the root.
+INTERNAL = {source: chapter for chapter, source in CHAPTERS.items()}
 
 LINK = re.compile(r"\]\((?!https?://|#)([^)]+)\)")
 
@@ -70,19 +56,34 @@ ABSOLUTE = re.compile(
 )
 
 
-def rewrite(text: str) -> str:
+def rewrite(text: str, base: str | None) -> str:
+    """Rewrite the links of a file in directory `base`, relative to the
+    repository root; `None` for a hand-authored page, which links to the
+    book's chapters by their own names."""
+    pages = set(CHAPTERS) | {p.name for p in PAGES.glob("*.md")}
+
     def sub(m: re.Match) -> str:
         target = m.group(1)
         anchor = ""
         if "#" in target:
             target, anchor = target.split("#", 1)
             anchor = "#" + anchor
-        target = target.lstrip("./")
-        if target in INTERNAL:
-            return f"]({INTERNAL[target]}{anchor})"
-        # Everything else points at the repository, so the link still works.
-        base = GH_TREE if target.endswith("/") else GH
-        return f"]({base}{target}{anchor})"
+        if base is None:
+            if target in pages:
+                return m.group(0)
+            raise SystemExit(f"a page links to {target!r}, which is not a "
+                             f"page of this book")
+        slash = "/" if target.endswith("/") else ""
+        path = posixpath.normpath(posixpath.join(base, target))
+        if path in INTERNAL:
+            return f"]({INTERNAL[path]}{anchor})"
+        # Everything else points at the repository, so the link still works --
+        # provided the file is there. A link out of the book to a path that
+        # does not exist is a 404 on GitHub, so it stops the build instead.
+        if path.startswith("..") or not (ROOT / path).exists():
+            raise SystemExit(f"{base or '.'}: link to {target!r} resolves to "
+                             f"{path!r}, which is not in the repository")
+        return f"]({GH_TREE if slash else GH}{path}{slash}{anchor})"
 
     def absolute(m: re.Match) -> str:
         target, anchor = m.group(1), m.group(2) or ""
@@ -90,7 +91,9 @@ def rewrite(text: str) -> str:
             return f"]({INTERNAL[target]}{anchor})"
         return m.group(0)
 
-    return LINK.sub(sub, ABSOLUTE.sub(absolute, text))
+    # Relative links first: the absolute pass produces chapter names, which
+    # the relative pass would otherwise try to resolve a second time.
+    return ABSOLUTE.sub(absolute, LINK.sub(sub, text))
 
 
 def main() -> None:
@@ -108,7 +111,7 @@ def main() -> None:
     mark = mark.replace('width="64" height="64"', 'width="96" height="96"')
     for page in sorted(PAGES.glob("*.md")):
         body = page.read_text().replace("<!-- MARK -->", mark)
-        (SRC / page.name).write_text(rewrite(body))
+        (SRC / page.name).write_text(rewrite(body, None))
         print(f"  {'pages/' + page.name:<52} -> src/{page.name}")
 
     for chapter, source in CHAPTERS.items():
@@ -116,7 +119,7 @@ def main() -> None:
         # The mark is referenced relatively from README-style files.
         body = body.replace('src="agentic-dataset-mark-128.png"',
                             'src="mark.png"')
-        (SRC / chapter).write_text(rewrite(body))
+        (SRC / chapter).write_text(rewrite(body, posixpath.dirname(source)))
         print(f"  {source:<52} -> src/{chapter}")
     shutil.copy(ROOT / "brand/agentic-dataset-mark-256.png", SRC / "mark.png")
     print(f"\n{len(CHAPTERS)} chapters generated, "
