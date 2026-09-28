@@ -92,6 +92,8 @@ into linear:
 The cost of getting this wrong is small and permanent, which is the combination
 worth spending ten minutes on next time rather than ten minutes now.
 
+**Exercised for `v0.2.0` on 2026-09-27.** `POST /api/records/22536343/versions` created the new-version draft 23005806 under the same concept (22536342), and `POST /api/records/23005806/draft/pids/doi` reserved `10.5281/zenodo.23005806` before the tag existed. A reserved DOI is not registered with DataCite until the record is published: `doi.org` answered 404 for it at reservation, so a tree citing it points at nothing until publish. The new-version draft starts with no files and no `version`, so both have to be supplied again.
+
 ## Sequence
 
 `RELEASE.md` fixes the order, and it is not negotiable at the last step:
@@ -109,8 +111,8 @@ guaranteed by the payload being correct:
 1. all four licences appear in the rendered Rights section, not just the first
    — this is the one that actually failed on the first attempt, and it fails
    quietly;
-2. `version` matches the tag exactly — `metadata.json` pins `0.1.0`, and it
-   must be bumped in step with any retag rather than left behind.
+2. `version` matches the tag exactly — `metadata.json` pins it, and it
+   must be bumped in step with every tag rather than left behind.
 
 ## What is not archived here
 

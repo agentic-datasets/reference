@@ -3,18 +3,19 @@
 The software carries a `CITATION.cff`, which GitHub renders as *Cite this
 repository*.
 
-**`v0.1.0` is released and archived.** Cite the DOI:
+**`v0.2.0` is the current release, archived with its own DOI.** Cite the concept DOI:
 
 ```
 Chernov, A. (2026). Agentic Dataset Reference Implementation and
-Conformance Suite (v0.1.0) [Computer software]. Zenodo.
+Conformance Suite (v0.2.0) [Computer software]. Zenodo.
 https://doi.org/10.5281/zenodo.22536342
 ```
 
 | | DOI |
 |---|---|
 | **Concept** — always resolves to the newest version. **Cite this.** | [10.5281/zenodo.22536342](https://doi.org/10.5281/zenodo.22536342) |
-| Version — `v0.1.0` specifically, for reproducibility | [10.5281/zenodo.22536343](https://doi.org/10.5281/zenodo.22536343) |
+| Version — `v0.2.0` specifically, for reproducibility | [10.5281/zenodo.23005806](https://doi.org/10.5281/zenodo.23005806) |
+| Version — `v0.1.0` | [10.5281/zenodo.22536343](https://doi.org/10.5281/zenodo.22536343) |
 
 ORCID: [0009-0007-3198-2712](https://orcid.org/0009-0007-3198-2712)
 
@@ -34,7 +35,7 @@ Cite the assertion, not a line number:
 ## Citing the metric
 
 Authorized Recall@K is defined in
-[its own package](https://github.com/agentic-datasets/reference/blob/main/authorized-recall.md), which has no dependency on this
+[its own package](authorized-recall.md), which has no dependency on this
 architecture. If you use the metric without adopting the control plane, cite
 the package rather than the reference implementation.
 
@@ -50,7 +51,7 @@ the argument.** The third is accepted and awaiting its proceedings.
 | IEEE BigDataService 2026 | *Agentic Data Services: A Control-Plane Architecture for Adaptive Data Workflows* | [10.1109/BigDataService70481.2026.00025](https://doi.org/10.1109/BigDataService70481.2026.00025) · pp. 125–129 |
 | IEEE EMBC 2026 | *Dataset Descriptors for Autonomous and Observable Biomedical Data Pipelines* | accepted; not yet in proceedings |
 
-*Verified against Crossref on 2026-09-06. The EMBC entry is the one that will
+*Verified against Crossref on 2026-09-27. The EMBC entry is the one that will
 go stale next, and it will do so silently — nothing here fails when a paper
 appears.*
 

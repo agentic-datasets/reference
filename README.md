@@ -35,14 +35,9 @@ Reproduce with `agentic-dataset-conformance run --subject conformance.subjects:s
 Raw output is in [`docs/runs/`](docs/runs/); every number's caveats are in
 [`docs/RESULTS.md`](docs/RESULTS.md).
 
-> ## Status: release candidate
+> ## Status: released
 >
-> Public **before** `v0.1.0` is tagged, deliberately. Nothing is archived or
-> minted yet, so a finding can still change the artifact rather than becoming
-> errata against a DOI. If you find something,
-> [open an issue](https://github.com/agentic-datasets/reference/issues)
-> — a finding that an assertion is ambiguous is more useful here than a passing
-> run.
+> **`v0.2.0`** is the current release, on PyPI and archived on Zenodo; `v0.1.0` was the first. Each version is immutable and has its own DOI, so a finding changes the next version rather than an old one. If you find something, [open an issue](https://github.com/agentic-datasets/reference/issues) — a finding that an assertion is ambiguous is more useful here than a passing run.
 >
 > **What this is not.** No deployment, no real data, no model in the loop by
 > default, no latency or cost claim, and no security guarantee — see
@@ -162,7 +157,7 @@ Two pieces are published distributions, independently installable and
 permissively licensed:
 
 ```bash
-# Both are on PyPI at 0.1.0.
+# Both are on PyPI at 0.2.0.
 pip install agentic-dataset-conformance   # contract + vectors + runner
 pip install authorized-recall             # the metric, no dependencies
 
@@ -272,8 +267,8 @@ Browsable at
 no content of its own; CI fails if it drifts from the repository.
 
 **DOI:** [10.5281/zenodo.22536342](https://doi.org/10.5281/zenodo.22536342)
-(concept — cite this; it resolves to the newest version). `v0.1.0` specifically
-is [10.5281/zenodo.22536343](https://doi.org/10.5281/zenodo.22536343).
+(concept — cite this; it resolves to the newest version). `v0.2.0` specifically
+is [10.5281/zenodo.23005806](https://doi.org/10.5281/zenodo.23005806), and `v0.1.0` is [10.5281/zenodo.22536343](https://doi.org/10.5281/zenodo.22536343).
 
 The documentation is served from **two addresses, both maintained**:
 

@@ -36,7 +36,7 @@ from .runner import (
 )
 from .toy import ToyImplementation
 
-__version__ = "0.1.0.post1"
+__version__ = "0.2.0"
 
 #: The fifteen assertion identifiers, in order.
 ASSERTIONS = tuple(f"AD-{i:03d}" for i in range(1, 16))

@@ -418,3 +418,11 @@ history — not as a consequence of this release.
       **Package metadata is frozen per version**, so repointing a URL costs a
       release. Worth knowing before the next one — the URL set is not something
       that can be tidied later in place.
+
+- [ ] **`v0.2.0` — prepared 2026-09-27.** Two vectors for checks no vector reached before: `ad-003-stale-grant-executes-nothing` and `ad-004-clearance-refusal-has-no-grant` (F-012), with the mutants `StaleGrantsAccepted` and `ClearanceIgnored` that only they catch. The suite goes from 15 to 17 vectors and from 84 to 90 steps; the matrix is 19/19. **A minor bump, not a patch:** an implementation that passed `0.1.0` can fail `0.2.0`, which is the point of the two vectors. Both distributions move to `0.2.0` together, as a pair, though `authorized-recall` has no code change; the root distribution's lower bounds follow.
+
+      **The DOI was reserved before the tag, as the `v0.1.0` entry above asked.** New-version draft 23005806 under concept 22536342; version DOI `10.5281/zenodo.23005806`, written into `CITATION.cff`, the README and the citation page before tagging, so this archive can cite itself.
+
+      Also in this release: the README's *release candidate* status block, stale since `v0.1.0` was tagged on 2026-09-06, is replaced; the docs generator no longer emits links to GitHub paths that do not exist (eight on the live site did); the MCP server reports the library's version instead of a literal `0.1.0`. EMBC 2026 re-checked against Crossref: still not in proceedings.
+
+      Remaining, in order: build and `twine check`; read the rendered description; clean-room install of both wheels; push; tag `v0.2.0`; upload to PyPI; archive the tag's `git archive` on the draft; verify Rights and version on the rendered draft; publish.
